@@ -1,0 +1,27 @@
+12.9s 1 0.00s - Debugger warning: It seems that frozen modules are being used, which may
+12.9s 2 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+12.9s 3 0.00s - to python to disable frozen modules.
+12.9s 4 0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+14.0s 5 0.00s - Debugger warning: It seems that frozen modules are being used, which may
+14.0s 6 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+14.0s 7 0.00s - to python to disable frozen modules.
+14.0s 8 0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+23.8s 9 [31mERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+23.8s 10 dopamine-rl 4.1.2 requires gym<=0.25.2, but you have gym 0.26.2 which is incompatible.
+23.8s 11 gradio 5.50.0 requires pillow<12.0,>=8.0, but you have pillow 12.1.1 which is incompatible.[0m[31m
+24.1s 12 [0mWriting /kaggle/working/my_agent.py
+175.4s 13 
+175.4s 14 ================================================================================
+175.4s 15 Overall score: 0.005710
+175.4s 16 ================================================================================
+175.4s 17 Run dir: /kaggle/working/runs-20260403-110444-random-baseline-v1
+175.4s 18 
+175.4s 19 {'exit_code': 0, 'overall_score': 0.00571007402055847, 'run_dir': '/kaggle/working/runs-20260403-110444-random-baseline-v1', 'recordings_dir': '/kaggle/working/runs-20260403-110444-random-baseline-v1/recordings', 'summary_csv': '/kaggle/working/runs-20260403-110444-random-baseline-v1/summary.csv', 'summary_txt': '/kaggle/working/runs-20260403-110444-random-baseline-v1/summary.txt', 'scorecard_json': '/kaggle/working/runs-20260403-110444-random-baseline-v1/scorecard.json', 'agent_copy': '/kaggle/working/runs-20260403-110444-random-baseline-v1/my_agent.py', 'log_path': '/kaggle/working/runs-20260403-110444-random-baseline-v1/run.log', 'repo_dst': '/kaggle/working/ARC-AGI-3-Agents', 'env_dir': '/kaggle/input/competitions/arc-prize-2026-arc-agi-3/environment_files', 'root_url': 'http://127.0.0.1:8765', 'agent_module_name': 'my_agent', 'agent_class_name': 'MyAgent', 'agent_cli_name': 'myagent', 'run_game': 'all', 'description': 'random-baseline-v1'}
+179.5s 20 /usr/local/lib/python3.12/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
+179.5s 21 cells[i][c] = re.sub('\\\\\|', '|', cell)
+179.7s 22 /usr/local/lib/python3.12/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
+179.7s 23 text = re.sub(r'_', '\_', text) # Escape underscores in display text
+180.7s 24 [NbConvertApp] Converting notebook __notebook__.ipynb to notebook
+181.4s 25 [NbConvertApp] Writing 779466 bytes to __notebook__.ipynb
+185.0s 26 [NbConvertApp] Converting notebook __notebook__.ipynb to html
+186.6s 27 [NbConvertApp] Writing 1051312 bytes to __results__.html
