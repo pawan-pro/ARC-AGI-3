@@ -26,9 +26,18 @@ So local validation should be treated as directional only. Public Kaggle submiss
 
 ## Useful evidence from ls20 visual inspection
 
-The public demo for task ls20 shows a maze-like game where the blue/orange player can move through corridors and collect yellow target blocks. A human can solve this by planning movement paths, not by random clicking.
+The public demo for task ls20 shows a maze-like game where the blue/orange player can move through corridors and interact with multiple element types. A human can solve this by planning movement paths and understanding object roles, not by random clicking.
 
-Implication for EXP-002: random visible pixels are not enough. We need simple state tracking and movement/object heuristics.
+User-observed ls20 level mechanics:
+
+- The blue/orange block is the controllable player.
+- Up/down/left/right actions move the player.
+- The black/blue block is the goal block.
+- The goal condition depends on matching the goal block orientation to the orientation shown in the bottom-left reference icon.
+- The gray plus sign changes the orientation of the goal block when touched by the player.
+- Yellow blocks increase remaining time/energy, shown by the yellow bar, and disappear after being consumed.
+
+Implication for EXP-002: random visible pixels are not enough. We need element discovery, affordance testing, state tracking, and a simple planner.
 
 ## Engine/action knowledge
 
@@ -44,16 +53,29 @@ Known action conventions from ARCEngine documentation:
 
 This suggests EXP-002 should stop treating action IDs as opaque random tokens. At minimum, movement actions should be interpreted as directional actions.
 
-## EXP-002 hypothesis
+## EXP-002 updated hypothesis
 
-A small heuristic explorer should beat EXP-001 if it:
+A small heuristic explorer should beat EXP-001 if it first learns the role of visible elements, then plans toward the goal.
 
-1. detects the likely player/object blob,
-2. detects non-background target objects,
-3. uses directional actions to reduce distance to targets,
-4. avoids repeated no-op movements,
-5. avoids ACTION7 unless explicitly useful,
-6. uses ACTION6 click only when a clickable object is likely.
+The high-level loop should be:
+
+1. Parse frame into objects.
+2. Identify controllable player by testing directional actions.
+3. Identify consumables by touching small objects and watching whether a resource bar increases.
+4. Identify state-changing objects by touching them and watching whether another object changes orientation/color/shape.
+5. Identify goal/reference relationship by comparing target-like object to UI/reference icon.
+6. Optimize path: collect useful resource/time blocks only when beneficial, then trigger orientation-changing object as needed, then enter the goal.
+
+## EXP-002 first implementation scope
+
+Do not try to fully solve ls20 immediately. First implement generic mechanics that can help multiple games:
+
+1. Object parser: connected components by color, excluding background and huge static regions.
+2. Player detector: object/blob whose centroid moves after ACTION1/ACTION2/ACTION3/ACTION4.
+3. No-op detector: suppress moves that do not change the frame or player position.
+4. Target candidates: small non-background blobs, plus unusual UI-like or goal-like objects.
+5. Short-horizon greedy planner: move toward nearest useful candidate with directional actions.
+6. Affordance log: record whether touching each candidate caused level progress, frame change, score proxy, resource-bar increase, or object disappearance.
 
 ## EXP-002 proposed files
 
@@ -84,9 +106,19 @@ If EXP-002 local score is below EXP-001, do not submit. Keep EXP-001 as the Kagg
 2. Add frame parser:
    - count colors,
    - identify background colors by large area,
-   - identify small colored blobs as possible player/targets.
+   - identify connected components,
+   - detect small colored blobs as possible player/targets/keys/resources.
 3. Add movement policy:
    - prefer ACTION1/ACTION2/ACTION3/ACTION4 toward nearest target-like blob,
-   - if frame does not change after a movement, suppress that action briefly.
-4. Keep random fallback for unknown states.
+   - if frame or player position does not change after a movement, suppress that action briefly,
+   - use random fallback among movement actions when stuck.
+4. Add minimal affordance memory:
+   - object disappeared = consumable or collected,
+   - resource bar increased = time/energy pickup,
+   - other object orientation changed = switch/rotator/trigger,
+   - level count changed = goal/progress condition.
 5. Run local validation and compare with EXP-001.
+
+## Research note
+
+This is the transition from random exploration to adaptive game understanding. The key research artifact is not just score, but a replay/log showing the agent identifies elements, tests them, and updates object roles from observed effects.
