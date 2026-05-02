@@ -24,6 +24,12 @@ The local-to-public gap is material:
 
 So local validation should be treated as directional only. Public Kaggle submissions remain the real validation source.
 
+## Scoring / task-coverage clarification
+
+Kaggle competition scoring is not a random single-task assignment. The agent is evaluated across all available competition environments. Locally, the public demo set contains 25 task IDs; the hidden/public leaderboard set is aggregated similarly through the competition runner.
+
+Implication: do not hard-code only ls20. Use ls20 as one observed example of a broader family: movement + objects + affordances + goal/reference matching.
+
 ## Useful evidence from ls20 visual inspection
 
 The public demo for task ls20 shows a maze-like game where the blue/orange player can move through corridors and interact with multiple element types. A human can solve this by planning movement paths and understanding object roles, not by random clicking.
@@ -77,8 +83,39 @@ Do not try to fully solve ls20 immediately. First implement generic mechanics th
 5. Short-horizon greedy planner: move toward nearest useful candidate with directional actions.
 6. Affordance log: record whether touching each candidate caused level progress, frame change, score proxy, resource-bar increase, or object disappearance.
 
+## Profiler-first decision
+
+Before submitting a new heuristic agent, create and run a profiler notebook over all 25 public demo tasks.
+
+Profiler notebook created:
+
+- notebooks/02_analysis/exp002_task_profiler_and_replay_analysis.ipynb
+
+Purpose:
+
+- list games, titles, tags, and action spaces,
+- save initial frame color histograms,
+- save connected components and candidate objects,
+- run one-step probes for simple actions,
+- click candidate object centers where ACTION6 is available,
+- infer coarse task families and hints,
+- save CSV/JSON artifacts for later EXP-002 agent design.
+
+Expected profiler artifacts:
+
+- /kaggle/working/exp002_profiler_artifacts/game_metadata.csv
+- /kaggle/working/exp002_profiler_artifacts/action_space_by_game.csv
+- /kaggle/working/exp002_profiler_artifacts/initial_frame_color_histograms.csv
+- /kaggle/working/exp002_profiler_artifacts/initial_connected_components.csv
+- /kaggle/working/exp002_profiler_artifacts/initial_target_candidates.csv
+- /kaggle/working/exp002_profiler_artifacts/probe_action_effects.csv
+- /kaggle/working/exp002_profiler_artifacts/task_family_summary.csv
+- /kaggle/working/exp002_profiler_artifacts/profiler_summary.json
+- /kaggle/working/exp002_profiler_artifacts/artifact_manifest.csv
+
 ## EXP-002 proposed files
 
+- notebooks/02_analysis/exp002_task_profiler_and_replay_analysis.ipynb
 - notebooks/01_exploration/exp002_visible_object_heuristic_explorer.ipynb
 - experiments/EXP-002_visible_object_heuristic_explorer/README.md
 - experiments/EXP-002_visible_object_heuristic_explorer/results_2026-05-02.md after validation
@@ -102,21 +139,10 @@ If EXP-002 local score is below EXP-001, do not submit. Keep EXP-001 as the Kagg
 
 ## Next implementation plan
 
-1. Create EXP-002 notebook as a copy-independent experiment, not an edit to EXP-001.
-2. Add frame parser:
-   - count colors,
-   - identify background colors by large area,
-   - identify connected components,
-   - detect small colored blobs as possible player/targets/keys/resources.
-3. Add movement policy:
-   - prefer ACTION1/ACTION2/ACTION3/ACTION4 toward nearest target-like blob,
-   - if frame or player position does not change after a movement, suppress that action briefly,
-   - use random fallback among movement actions when stuck.
-4. Add minimal affordance memory:
-   - object disappeared = consumable or collected,
-   - resource bar increased = time/energy pickup,
-   - other object orientation changed = switch/rotator/trigger,
-   - level count changed = goal/progress condition.
+1. Run notebooks/02_analysis/exp002_task_profiler_and_replay_analysis.ipynb in Kaggle with internet disabled and ARC-AGI-3 competition data attached.
+2. Download/share profiler artifacts.
+3. Analyze task families and probe effects.
+4. Use findings to finish/adjust notebooks/01_exploration/exp002_visible_object_heuristic_explorer.ipynb.
 5. Run local validation and compare with EXP-001.
 
 ## Research note
