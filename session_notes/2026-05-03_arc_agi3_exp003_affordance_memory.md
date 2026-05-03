@@ -8,7 +8,7 @@ Begin the next durable generalization stage after EXP-002C failed to improve the
 
 Yesterday we found that lucky random seeds can help on practice games but do not necessarily help on the real scoreboard. Today we started teaching the robot to keep notes while it plays.
 
-The first attempt made the robot too eager to click things that changed the picture, so it got worse. Then we made the robot only write notes while playing normally, and it matched the baseline exactly. Finally, we gave the robot a very small action preference based on real progress signals. That produced the best local score so far, but it has now been submitted and we are waiting for the Kaggle result.
+The first attempt made the robot too eager to click things that changed the picture, so it got worse. Then we made the robot only write notes while playing normally, and it matched the baseline exactly. Finally, we gave the robot a very small action preference based on real progress signals. That produced the best local score so far and, after submission, improved the Kaggle public score from `0.11` to `0.12`.
 
 ## Starting state
 
@@ -24,7 +24,7 @@ Yesterday's EXP-002C result:
 - EXP-002C local levels: `9 / 183`
 - EXP-002C public score: `0.11`
 
-Interpretation: EXP-002C improved local practice games but not the Kaggle public score. It was likely public-demo/game-id seed overfit. EXP-001 remains the current confirmed public baseline.
+Interpretation: EXP-002C improved local practice games but not the Kaggle public score. It was likely public-demo/game-id seed overfit. EXP-001 was the confirmed public baseline entering the session.
 
 ## Key strategic shift
 
@@ -153,25 +153,32 @@ Local result:
 - progress-prior actions: `1,411`
 - resets: `295`
 
+Public Kaggle result:
+
+- notebook: `EXP-003B — progress-weighted action prior`
+- version: `2`
+- status: `Succeeded`
+- public score: `0.12`
+- current reported leaderboard position: `544 / 700+ participants`
+
 Status:
 
-- Strongest local score so far.
-- Submitted to Kaggle for scoring.
-- Awaiting public score.
+- Completed.
+- Current confirmed public baseline.
 
 Important interpretation:
 
-EXP-003B completed fewer levels than EXP-001 (`6` vs `7`) but more than doubled local score (`0.4849` vs `0.2124`). This suggests ARC-AGI-3 scoring is sensitive to action efficiency, level weighting, and the quality of completed progress, not just raw level count.
+EXP-003B completed fewer local levels than EXP-001 (`6` vs `7`) but more than doubled local score (`0.4849` vs `0.2124`). On Kaggle, the improvement was much smaller but directionally correct: public score moved from `0.11` to `0.12`.
 
 K-12 version:
 
 ```text
-The robot finished fewer rooms, but it finished the important rooms better, so the practice scoreboard gave it more points.
+The robot did not suddenly become smart, but its tiny progress-aware habit helped a little on the real scoreboard.
 ```
 
-Caution:
+Analysis vs expectations:
 
-This must be validated by Kaggle. Local score can still be misleading. EXP-003B is a strong local candidate, not yet a confirmed public baseline.
+This result is broadly in line with expectations. We expected the large local jump to shrink on Kaggle because previous experiments showed local-public mismatch. However, unlike EXP-002C, EXP-003B still improved public score. That is important because EXP-003B is not public game-id hard-coded and keeps most of EXP-001's fallback behavior. It is the first confirmed public signal that progress-weighted online adaptation can help.
 
 ## EXP-003B action distribution
 
@@ -192,6 +199,7 @@ This shows the online prior shifted behavior strongly toward `ACTION6` while sti
 
 - EXP-003A validated a safe logging scaffold.
 - EXP-003B produced the strongest local score so far.
+- EXP-003B produced the first confirmed public improvement since EXP-001: `0.11 -> 0.12`.
 - The project now has a clean way to collect effect logs without damaging baseline behavior.
 - The experiments clarified that frame-change-only memory is harmful, but progress-weighted priors can be valuable.
 - The experiment tracker was updated after each meaningful result.
@@ -200,7 +208,8 @@ This shows the online prior shifted behavior strongly toward `ACTION6` while sti
 
 - EXP-003 object/component memory failed because it overvalued frame changes.
 - A small amount of policy bias can strongly alter the action distribution.
-- More levels completed does not always mean higher score.
+- More local levels completed does not always mean higher score.
+- Local improvements can shrink substantially on Kaggle.
 - Public Kaggle score remains the source of truth.
 - We should avoid broad heuristic changes and keep testing one controlled idea at a time.
 
@@ -208,16 +217,17 @@ This shows the online prior shifted behavior strongly toward `ACTION6` while sti
 
 Confirmed public baseline:
 
+- EXP-003B public score: `0.12`
+- leaderboard position reported: `544 / 700+ participants`
+
+Prior public baseline:
+
 - EXP-001 public score: `0.11`
 
 Best local score:
 
 - EXP-003B local score: `0.48491096178440257`
 - EXP-003B local levels: `6 / 183`
-
-Pending:
-
-- EXP-003B Kaggle public score
 
 ## Files created / changed today
 
@@ -255,6 +265,7 @@ Session note:
 - `a88b1c85a9aabf8a510dcd93794dbbefef84cf5a` — experiments: add EXP-003B progress-weighted prior README
 - `9170626cb828ce67b68b28323e923125ad943aa4` — experiments: add EXP-003B progress-weighted action prior notebook
 - `e7e901df385ffadbf0f241aaa7046cf29618648c` — experiments: record EXP-003B strong local score candidate
+- `dc3752866ee49dd75d36590761788fba70aa59ba` — experiments: record EXP-003B public improvement to 0.12
 
 ## Overall medal/top-position strategy update
 
@@ -262,10 +273,11 @@ The most promising path remains hybrid, not pure random, pure RL, or pure LLM.
 
 Near-term stack:
 
-1. Keep EXP-001 as clean public baseline until Kaggle confirms a better notebook.
-2. Use EXP-003A-style logging as the safe analysis scaffold.
-3. Use EXP-003B-style progress-weighted priors as the first promising online learning layer.
-4. Add stricter state-aware rules only after each ablation passes.
+1. Treat EXP-003B as the current public baseline.
+2. Keep EXP-001 available as the clean fallback baseline.
+3. Use EXP-003A-style logging as the safe analysis scaffold.
+4. Refine EXP-003B-style progress-weighted priors as the first online learning layer.
+5. Add stricter state-aware rules only after each ablation passes.
 
 Medium-term stack:
 
@@ -292,27 +304,27 @@ random visible interaction -> safe logging -> online progress priors -> affordan
 
 This is a clean paper-track story because each experiment is measurable, reproducible, and explains a failure mode.
 
-## Next session plan
+## Next session plan — Friday
 
-1. Ingest EXP-003B Kaggle public result.
-2. If EXP-003B public score > `0.11`:
-   - mark EXP-003B as new public baseline,
-   - analyze which public/hidden task families likely improved,
-   - prepare EXP-003C as a refinement rather than a rewrite.
-3. If EXP-003B public score <= `0.11`:
-   - keep EXP-001 as public baseline,
-   - use EXP-003B as local-overfit/evaluation-mismatch evidence,
-   - inspect why local score rose despite fewer levels.
-4. Next candidate experiment after result:
-   - EXP-003C: stricter progress prior with lower GAME_OVER exposure and reduced repeated ACTION6 loops.
-5. Continue to avoid submitting notebooks that fail local validation unless the experiment is deliberately diagnostic.
+1. Start from EXP-003B as the current confirmed public baseline: `0.12`.
+2. Review the Kaggle run log and local artifacts for EXP-003B.
+3. Create EXP-003C as a refinement, not a rewrite.
+4. Candidate EXP-003C changes:
+   - test lower prior probabilities: `0.03`, `0.05`, and maybe `0.08`;
+   - strengthen GAME_OVER penalty;
+   - reduce repeated ACTION6 loops;
+   - add a cap on consecutive same-action prior choices;
+   - require stronger evidence before prior selection, possibly actual `level_delta` or sustained positive utility with low GAME_OVER risk;
+   - preserve EXP-001 fallback behavior.
+5. Run local validation.
+6. Submit only if it beats or is very close to EXP-003B locally and remains conceptually more robust.
 
 ## Fallback plan
 
-If EXP-003B does not improve Kaggle:
+If EXP-003C underperforms:
 
+- keep EXP-003B as public baseline,
 - return to EXP-003A logging scaffold,
 - create an offline analyzer that identifies exactly where level deltas occurred,
 - design action priors only after actual `level_delta` events, not weak utility,
-- test with lower prior probabilities such as `0.03` or `0.05`,
 - evaluate per-family rather than per-game hard-coding.
