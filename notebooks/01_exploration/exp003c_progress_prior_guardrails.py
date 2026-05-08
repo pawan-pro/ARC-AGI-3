@@ -2,17 +2,56 @@
 # Kaggle notebook-source scaffold.
 # Start from EXP-003B and change only prior-selection guardrails.
 
-# Cell 1 — install competition wheels
-# !python -m pip install -q --no-index --find-links /kaggle/input/competitions/arc-prize-2026-arc-agi-3/arc_agi_3_wheels arc-agi python-dotenv pyarrow
-
-# Cell 2 — run EXP-003C
 import os
+import sys
+import subprocess
 import json
 import random
 import zlib
 import math
 from pathlib import Path
 from collections import defaultdict
+
+
+def ensure_arc_packages() -> None:
+    """Install ARC competition packages from Kaggle's local wheel directory when needed.
+
+    This keeps the notebook robust when the pulled source is run as one cell and the
+    original pip-install cell has not been executed separately.
+    """
+    try:
+        import arc_agi  # noqa: F401
+        import arcengine  # noqa: F401
+        return
+    except ModuleNotFoundError:
+        pass
+
+    wheel_dir = Path("/kaggle/input/competitions/arc-prize-2026-arc-agi-3/arc_agi_3_wheels")
+    if not wheel_dir.exists():
+        raise ModuleNotFoundError(
+            "arc_agi is not installed and the Kaggle wheel directory was not found. "
+            "Attach the ARC Prize 2026 / ARC-AGI-3 competition dataset to the notebook, "
+            "or run this inside the Kaggle competition notebook environment."
+        )
+
+    cmd = [
+        sys.executable,
+        "-m",
+        "pip",
+        "install",
+        "-q",
+        "--no-index",
+        "--find-links",
+        str(wheel_dir),
+        "arc-agi",
+        "python-dotenv",
+        "pyarrow",
+    ]
+    print("Installing ARC packages from local wheels:", " ".join(cmd))
+    subprocess.check_call(cmd)
+
+
+ensure_arc_packages()
 
 import numpy as np
 import pandas as pd
