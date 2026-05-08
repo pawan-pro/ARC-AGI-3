@@ -49,11 +49,27 @@ ACTION6_BAD_GAME_OVER_RATE = 0.04
 ACTION6_THROTTLE_KEEP_PROB = 0.15
 ```
 
-## Notebook-source target
+## Runtime fix
 
-`notebooks/01_exploration/exp003e_soft_action6_throttle.py`
+Initial EXP-003E was implemented as a wrapper over EXP-003D and failed in Kaggle when only the EXP-003E file was available:
 
-The source uses EXP-003D as the base implementation and rewrites the experiment ID, artifact prefix, artifact directory, and no-op threshold at runtime. It requires the EXP-003D source file to be present in the same repo checkout.
+```text
+FileNotFoundError: EXP-003D source file was not found
+```
+
+EXP-003E is now standalone and Kaggle-safe. It no longer requires copying `exp003d_policy_action_diagnostics_action6_throttle.py` alongside it.
+
+Standalone source:
+
+```text
+notebooks/01_exploration/exp003e_soft_action6_throttle.py
+```
+
+Fix commit:
+
+```text
+f3e24453d54f5729eb3a8da1043ae2a1514ae2a3 — notebooks: make EXP-003E standalone Kaggle-safe
+```
 
 ## Validation gate
 
