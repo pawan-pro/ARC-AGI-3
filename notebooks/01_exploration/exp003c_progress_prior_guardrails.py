@@ -1,481 +1,684 @@
-# EXP-003C — progress prior guardrails
-# Kaggle notebook-source scaffold.
-# Start from EXP-003B and change only prior-selection guardrails.
-
-import os
-import sys
-import subprocess
-import json
-import random
-import zlib
-import math
-from pathlib import Path
-from collections import defaultdict
-
-
-def ensure_arc_packages() -> None:
-    """Install ARC competition packages from Kaggle's local wheel directory when needed.
-
-    This keeps the notebook robust when the pulled source is run as one cell and the
-    original pip-install cell has not been executed separately.
-    """
-    try:
-        import arc_agi  # noqa: F401
-        import arcengine  # noqa: F401
-        return
-    except ModuleNotFoundError:
-        pass
-
-    wheel_dir = Path("/kaggle/input/competitions/arc-prize-2026-arc-agi-3/arc_agi_3_wheels")
-    if not wheel_dir.exists():
-        raise ModuleNotFoundError(
-            "arc_agi is not installed and the Kaggle wheel directory was not found. "
-            "Attach the ARC Prize 2026 / ARC-AGI-3 competition dataset to the notebook, "
-            "or run this inside the Kaggle competition notebook environment."
-        )
-
-    cmd = [
-        sys.executable,
-        "-m",
-        "pip",
-        "install",
-        "-q",
-        "--no-index",
-        "--find-links",
-        str(wheel_dir),
-        "arc-agi",
-        "python-dotenv",
-        "pyarrow",
-    ]
-    print("Installing ARC packages from local wheels:", " ".join(cmd))
-    subprocess.check_call(cmd)
-
-
-ensure_arc_packages()
-
-import numpy as np
-import pandas as pd
-import dotenv
-import arc_agi
-from arcengine import GameAction, GameState
-
-EXP_ID = "EXP-003C"
-MAX_MOVES = 1000
-SEED = 42
-USE_PER_GAME_SEED = False
-
-# Controlled change vs EXP-003B:
-# EXP-003B used PRIOR_PROB=0.10 and MIN_PRIOR_OBS=8.
-# EXP-003C starts with a safer 0.05 prior and stronger evidence requirement.
-PRIOR_PROB = 0.05
-MIN_PRIOR_OBS = 12
-
-# New EXP-003C guardrails.
-GAME_OVER_PENALTY = 30.0
-NOOP_RATE_PENALTY = 0.75
-GAME_OVER_RATE_PENALTY = 8.0
-MIN_PRIOR_SCORE = 0.02
-MAX_CONSECUTIVE_SAME_PRIOR = 2
-ACTION6_EXTRA_REPEAT_PENALTY = 0.25
-
-WORK = Path("/kaggle/working")
-ART = WORK / "exp003c_artifacts"
-ART.mkdir(exist_ok=True)
-
-if os.getenv("KAGGLE_IS_COMPETITION_RERUN"):
-    get_ipython().system(
-        "curl --fail --retry 999 --retry-all-errors --retry-delay 5 --retry-max-time 600 http://gateway:8001/api/games"
-    )
-    mode = "online"
-    envdir = ""
-else:
-    mode = "offline"
-    envdir = "/kaggle/input/competitions/arc-prize-2026-arc-agi-3/environment_files/"
-
-(WORK / ".env").write_text(
-    f"""SCHEME=http
-HOST=gateway
-PORT=8001
-ARC_API_KEY=test-key-123
-ARC_BASE_URL=http://gateway:8001/
-OPERATION_MODE={mode}
-ENVIRONMENTS_DIR={envdir}
-RECORDINGS_DIR=/kaggle/working/server_recording
-"""
-)
-dotenv.load_dotenv(WORK / ".env", override=True)
-
-
-def rng_for(game_id: str) -> random.Random:
-    if not USE_PER_GAME_SEED:
-        return random.Random(SEED)
-    return random.Random(SEED + (zlib.adler32(game_id.encode()) & 0xFFFFFFFF))
-
-
-def get_frame(obs):
-    if obs is None or not getattr(obs, "frame", None):
-        return None
-    return np.asarray(obs.frame[-1])
-
-
-def diff_summary(before, after):
-    if before is None or after is None or before.shape != after.shape:
-        return {"frame_changed": None, "diff_pixels": None, "diff_cx": None, "diff_cy": None}
-    diff = before != after
-    ys, xs = np.where(diff)
-    if len(xs) == 0:
-        return {"frame_changed": False, "diff_pixels": 0, "diff_cx": None, "diff_cy": None}
-    return {
-        "frame_changed": True,
-        "diff_pixels": int(len(xs)),
-        "diff_cx": float(xs.mean()),
-        "diff_cy": float(ys.mean()),
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "c0f56fc6",
+   "metadata": {
+    "_cell_guid": "a1132fec-3d01-4b06-b471-b2659ce6ffab",
+    "_uuid": "dce9f6ea-33b1-4745-864b-5cc5b42a5d49",
+    "collapsed": false,
+    "execution": {
+     "iopub.execute_input": "2026-05-08T10:44:27.423654Z",
+     "iopub.status.busy": "2026-05-08T10:44:27.423336Z",
+     "iopub.status.idle": "2026-05-08T10:45:05.918122Z",
+     "shell.execute_reply": "2026-05-08T10:45:05.917180Z"
+    },
+    "jupyter": {
+     "outputs_hidden": false
+    },
+    "papermill": {
+     "duration": 38.501761,
+     "end_time": "2026-05-08T10:45:05.920294+00:00",
+     "exception": false,
+     "start_time": "2026-05-08T10:44:27.418533+00:00",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Installing ARC packages from local wheels: /usr/bin/python3 -m pip install -q --no-index --find-links /kaggle/input/competitions/arc-prize-2026-arc-agi-3/arc_agi_3_wheels arc-agi python-dotenv pyarrow\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n",
+      "dopamine-rl 4.1.2 requires gym<=0.25.2, but you have gym 0.26.2 which is incompatible.\n",
+      "gradio 5.50.0 requires pillow<12.0,>=8.0, but you have pillow 12.2.0 which is incompatible.\n"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "INFO:arc_agi.scorecard:Initialized ScorecardManager with idle_for=0:15:00 and max_open_for=3 days, 0:00:00\n",
+      "EXP-003C envs= 25 MAX_MOVES= 1000 SEED= 42 PRIOR_PROB= 0.05 MIN_PRIOR_OBS= 12\n",
+      "2026-05-08 10:44:37 | INFO | Created new scorecard: d5adb08b-78bd-492d-979c-1289ed99de19\n",
+      "2026-05-08 10:44:37 | INFO | Successfully loaded game class Sk48 from /kaggle/input/competitions/arc-prize-2026-arc-agi-3/environment_files/sk48/d8078629/sk48.py\n",
+      "[001/025] {'game_id': 'sk48-d8078629', 'moves': 1000, 'state': 'NOT_FINISHED', 'levels_completed': 0, 'last_action': 'ACTION4', 'last_policy': 'exp001_random_visible_pixel_fallback'}\n",
+      "2026-05-08 10:44:38 | INFO | Successfully loaded game class Tn36 from /kaggle/input/competitions/arc-prize-2026-arc-agi-3/environment_files/tn36/ef4dde99/tn36.py\n",
+      "[002/025] {'game_id': 'tn36-ef4dde99', 'moves': 1000, 'state': 'NOT_FINISHED', 'levels_completed': 1, 'last_action': 'ACTION6', 'last_policy': 'exp001_random_visible_pixel_fallback'}\n",
+      "2026-05-08 10:44:40 | INFO | Successfully loaded game class M0r0 from /kaggle/input/competitions/arc-prize-2026-arc-agi-3/environment_files/m0r0/492f87ba/m0r0.py\n",
+      "[003/025] {'game_id': 'm0r0-492f87ba', 'moves': 1000, 'state': 'NOT_FINISHED', 'levels_completed': 1, 'last_action': 'ACTION1', 'last_policy': 'exp001_random_visible_pixel_fallback'}\n",
+      "2026-05-08 10:44:41 | INFO | Successfully loaded game class Bp35 from /kaggle/input/competitions/arc-prize-2026-arc-agi-3/environment_files/bp35/0a0ad940/bp35.py\n",
+      "[004/025] {'game_id': 'bp35-0a0ad940', 'moves': 1000, 'state': 'NOT_FINISHED', 'levels_completed': 0, 'last_action': 'ACTION6', 'last_policy': 'exp001_random_visible_pixel_fallback'}\n",
+      "2026-05-08 10:44:44 | INFO | Successfully loaded game class Cn04 from /kaggle/input/competitions/arc-prize-2026-arc-agi-3/environment_files/cn04/2fe56bfb/cn04.py\n",
+      "[005/025] {'game_id': 'cn04-2fe56bfb', 'moves': 1000, 'state': 'NOT_FINISHED', 'levels_completed': 0, 'last_action': 'ACTION1', 'last_policy': 'exp001_random_visible_pixel_fallback'}\n",
+      "2026-05-08 10:44:45 | INFO | Successfully loaded game class Dc22 from /kaggle/input/competitions/arc-prize-2026-arc-agi-3/environment_files/dc22/fdcac232/dc22.py\n",
+      "[006/025] {'game_id': 'dc22-fdcac232', 'moves': 1000, 'state': 'NOT_FINISHED', 'levels_completed': 0, 'last_action': 'ACTION1', 'last_policy': 'exp001_random_visible_pixel_fallback'}\n",
+      "2026-05-08 10:44:46 | INFO | Successfully loaded game class Tu93 from /kaggle/input/competitions/arc-prize-2026-arc-agi-3/environment_files/tu93/0768757b/tu93.py\n",
+      "[007/025] {'game_id': 'tu93-0768757b', 'moves': 1000, 'state': 'NOT_FINISHED', 'levels_completed': 0, 'last_action': 'ACTION4', 'last_policy': 'exp001_random_visible_pixel_fallback'}\n",
+      "2026-05-08 10:44:46 | INFO | Successfully loaded game class Lp85 from /kaggle/input/competitions/arc-prize-2026-arc-agi-3/environment_files/lp85/305b61c3/lp85.py\n",
+      "[008/025] {'game_id': 'lp85-305b61c3', 'moves': 1000, 'state': 'NOT_FINISHED', 'levels_completed': 1, 'last_action': 'ACTION6', 'last_policy': 'exp001_random_visible_pixel_fallback'}\n",
+      "2026-05-08 10:44:47 | INFO | Successfully loaded game class Ka59 from /kaggle/input/competitions/arc-prize-2026-arc-agi-3/environment_files/ka59/38d34dbb/ka59.py\n",
+      "[009/025] {'game_id': 'ka59-38d34dbb', 'moves': 1000, 'state': 'NOT_FINISHED', 'levels_completed': 0, 'last_action': 'ACTION2', 'last_policy': 'exp001_random_visible_pixel_fallback'}\n",
+      "2026-05-08 10:44:48 | INFO | Successfully loaded game class Wa30 from /kaggle/input/competitions/arc-prize-2026-arc-agi-3/environment_files/wa30/ee6fef47/wa30.py\n",
+      "[010/025] {'game_id': 'wa30-ee6fef47', 'moves': 1000, 'state': 'NOT_FINISHED', 'levels_completed': 0, 'last_action': 'ACTION2', 'last_policy': 'exp001_random_visible_pixel_fallback'}\n",
+      "2026-05-08 10:44:48 | INFO | Successfully loaded game class Vc33 from /kaggle/input/competitions/arc-prize-2026-arc-agi-3/environment_files/vc33/5430563c/vc33.py\n",
+      "[011/025] {'game_id': 'vc33-5430563c', 'moves': 1000, 'state': 'NOT_FINISHED', 'levels_completed': 1, 'last_action': 'ACTION6', 'last_policy': 'exp001_random_visible_pixel_fallback'}\n",
+      "2026-05-08 10:44:49 | INFO | Successfully loaded game class Lf52 from /kaggle/input/competitions/arc-prize-2026-arc-agi-3/environment_files/lf52/271a04aa/lf52.py\n",
+      "[012/025] {'game_id': 'lf52-271a04aa', 'moves': 1000, 'state': 'NOT_FINISHED', 'levels_completed': 0, 'last_action': 'ACTION6', 'last_policy': 'exp001_random_visible_pixel_fallback'}\n",
+      "2026-05-08 10:44:50 | INFO | Successfully loaded game class R11l from /kaggle/input/competitions/arc-prize-2026-arc-agi-3/environment_files/r11l/495a7899/r11l.py\n",
+      "[013/025] {'game_id': 'r11l-495a7899', 'moves': 1000, 'state': 'NOT_FINISHED', 'levels_completed': 1, 'last_action': 'ACTION6', 'last_policy': 'exp001_random_visible_pixel_fallback'}\n",
+      "2026-05-08 10:44:52 | INFO | Successfully loaded game class Sc25 from /kaggle/input/competitions/arc-prize-2026-arc-agi-3/environment_files/sc25/635fd71a/sc25.py\n",
+      "[014/025] {'game_id': 'sc25-635fd71a', 'moves': 1000, 'state': 'NOT_FINISHED', 'levels_completed': 0, 'last_action': 'ACTION3', 'last_policy': 'exp001_random_visible_pixel_fallback'}\n",
+      "2026-05-08 10:44:54 | INFO | Successfully loaded game class Sp80 from /kaggle/input/competitions/arc-prize-2026-arc-agi-3/environment_files/sp80/589a99af/sp80.py\n",
+      "[015/025] {'game_id': 'sp80-589a99af', 'moves': 1000, 'state': 'GAME_OVER', 'levels_completed': 1, 'last_action': 'ACTION5', 'last_policy': 'exp001_random_visible_pixel_fallback'}\n",
+      "2026-05-08 10:44:55 | INFO | Successfully loaded game class Ar25 from /kaggle/input/competitions/arc-prize-2026-arc-agi-3/environment_files/ar25/0c556536/ar25.py\n",
+      "[016/025] {'game_id': 'ar25-0c556536', 'moves': 1000, 'state': 'NOT_FINISHED', 'levels_completed': 0, 'last_action': 'ACTION7', 'last_policy': 'exp001_random_visible_pixel_fallback'}\n",
+      "2026-05-08 10:44:56 | INFO | Successfully loaded game class Sb26 from /kaggle/input/competitions/arc-prize-2026-arc-agi-3/environment_files/sb26/7fbdac44/sb26.py\n",
+      "[017/025] {'game_id': 'sb26-7fbdac44', 'moves': 1000, 'state': 'NOT_FINISHED', 'levels_completed': 0, 'last_action': 'ACTION7', 'last_policy': 'exp001_random_visible_pixel_fallback'}\n",
+      "2026-05-08 10:44:58 | INFO | Successfully loaded game class Cd82 from /kaggle/input/competitions/arc-prize-2026-arc-agi-3/environment_files/cd82/fb555c5d/cd82.py\n",
+      "[018/025] {'game_id': 'cd82-fb555c5d', 'moves': 1000, 'state': 'NOT_FINISHED', 'levels_completed': 1, 'last_action': 'ACTION2', 'last_policy': 'exp001_random_visible_pixel_fallback'}\n",
+      "2026-05-08 10:44:58 | INFO | Successfully loaded game class Re86 from /kaggle/input/competitions/arc-prize-2026-arc-agi-3/environment_files/re86/8af5384d/re86.py\n",
+      "[019/025] {'game_id': 're86-8af5384d', 'moves': 1000, 'state': 'NOT_FINISHED', 'levels_completed': 0, 'last_action': 'ACTION1', 'last_policy': 'exp001_random_visible_pixel_fallback'}\n",
+      "2026-05-08 10:44:59 | INFO | Successfully loaded game class S5i5 from /kaggle/input/competitions/arc-prize-2026-arc-agi-3/environment_files/s5i5/18d95033/s5i5.py\n",
+      "[020/025] {'game_id': 's5i5-18d95033', 'moves': 1000, 'state': 'NOT_FINISHED', 'levels_completed': 0, 'last_action': 'ACTION6', 'last_policy': 'exp001_random_visible_pixel_fallback'}\n",
+      "2026-05-08 10:45:00 | INFO | Successfully loaded game class Ls20 from /kaggle/input/competitions/arc-prize-2026-arc-agi-3/environment_files/ls20/9607627b/ls20.py\n",
+      "[021/025] {'game_id': 'ls20-9607627b', 'moves': 1000, 'state': 'NOT_FINISHED', 'levels_completed': 0, 'last_action': 'ACTION1', 'last_policy': 'exp001_random_visible_pixel_fallback'}\n",
+      "2026-05-08 10:45:01 | INFO | Successfully loaded game class Ft09 from /kaggle/input/competitions/arc-prize-2026-arc-agi-3/environment_files/ft09/0d8bbf25/ft09.py\n",
+      "[022/025] {'game_id': 'ft09-0d8bbf25', 'moves': 1000, 'state': 'NOT_FINISHED', 'levels_completed': 0, 'last_action': 'ACTION6', 'last_policy': 'exp001_random_visible_pixel_fallback'}\n",
+      "2026-05-08 10:45:02 | INFO | Successfully loaded game class Su15 from /kaggle/input/competitions/arc-prize-2026-arc-agi-3/environment_files/su15/1944f8ab/su15.py\n",
+      "[023/025] {'game_id': 'su15-1944f8ab', 'moves': 1000, 'state': 'NOT_FINISHED', 'levels_completed': 0, 'last_action': 'ACTION6', 'last_policy': 'exp001_random_visible_pixel_fallback'}\n",
+      "2026-05-08 10:45:03 | INFO | Successfully loaded game class Tr87 from /kaggle/input/competitions/arc-prize-2026-arc-agi-3/environment_files/tr87/cd924810/tr87.py\n",
+      "[024/025] {'game_id': 'tr87-cd924810', 'moves': 1000, 'state': 'NOT_FINISHED', 'levels_completed': 0, 'last_action': 'ACTION4', 'last_policy': 'progress_prior_guardrailed'}\n",
+      "2026-05-08 10:45:04 | INFO | Successfully loaded game class G50t from /kaggle/input/competitions/arc-prize-2026-arc-agi-3/environment_files/g50t/5849a774/g50t.py\n",
+      "[025/025] {'game_id': 'g50t-5849a774', 'moves': 1000, 'state': 'NOT_FINISHED', 'levels_completed': 0, 'last_action': 'ACTION2', 'last_policy': 'exp001_random_visible_pixel_fallback'}\n",
+      "Score: 0.4820 Levels: 7/183 Actions: 25000\n",
+      "submission: /kaggle/working/submission.parquet True\n",
+      "artifacts: /kaggle/working/exp003c_artifacts\n",
+      "{\n",
+      "  \"exp_id\": \"EXP-003C\",\n",
+      "  \"max_moves\": 1000,\n",
+      "  \"seed\": 42,\n",
+      "  \"use_per_game_seed\": false,\n",
+      "  \"prior_prob\": 0.05,\n",
+      "  \"min_prior_obs\": 12,\n",
+      "  \"game_over_penalty\": 30.0,\n",
+      "  \"max_consecutive_same_prior\": 2,\n",
+      "  \"change\": \"EXP-003B refinement with lower prior probability and repeated-prior guardrails\",\n",
+      "  \"score\": 0.481950521305291,\n",
+      "  \"total_environments_completed\": 0,\n",
+      "  \"total_environments\": 25,\n",
+      "  \"total_levels_completed\": 7,\n",
+      "  \"total_levels\": 183,\n",
+      "  \"total_actions\": 25000\n",
+      "}\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "{'exp_id': 'EXP-003C',\n",
+       " 'max_moves': 1000,\n",
+       " 'seed': 42,\n",
+       " 'use_per_game_seed': False,\n",
+       " 'prior_prob': 0.05,\n",
+       " 'min_prior_obs': 12,\n",
+       " 'game_over_penalty': 30.0,\n",
+       " 'max_consecutive_same_prior': 2,\n",
+       " 'change': 'EXP-003B refinement with lower prior probability and repeated-prior guardrails',\n",
+       " 'score': 0.481950521305291,\n",
+       " 'total_environments_completed': 0,\n",
+       " 'total_environments': 25,\n",
+       " 'total_levels_completed': 7,\n",
+       " 'total_levels': 183,\n",
+       " 'total_actions': 25000}"
+      ]
+     },
+     "execution_count": 1,
+     "metadata": {},
+     "output_type": "execute_result"
     }
-
-
-def random_visible_pixel(frame, rng: random.Random):
-    color = rng.choice(np.unique(frame).tolist())
-    ys, xs = np.where(frame == color)
-    idx = rng.randint(0, len(xs) - 1)
-    return {"x": int(xs[idx]), "y": int(ys[idx])}
-
-
-def init_stats():
-    return {
-        "count": 0,
-        "frame_changed": 0,
-        "noops": 0,
-        "level_delta": 0,
-        "game_over": 0,
-        "state_changed": 0,
-        "diff_pixels": 0,
-        "utility": 0.0,
+   ],
+   "source": [
+    "# EXP-003C — progress prior guardrails\n",
+    "# Kaggle notebook-source scaffold.\n",
+    "# Start from EXP-003B and change only prior-selection guardrails.\n",
+    "\n",
+    "import os\n",
+    "import sys\n",
+    "import subprocess\n",
+    "import json\n",
+    "import random\n",
+    "import zlib\n",
+    "import math\n",
+    "from pathlib import Path\n",
+    "from collections import defaultdict\n",
+    "\n",
+    "\n",
+    "def ensure_arc_packages() -> None:\n",
+    "    \"\"\"Install ARC competition packages from Kaggle's local wheel directory when needed.\n",
+    "\n",
+    "    This keeps the notebook robust when the pulled source is run as one cell and the\n",
+    "    original pip-install cell has not been executed separately.\n",
+    "    \"\"\"\n",
+    "    try:\n",
+    "        import arc_agi  # noqa: F401\n",
+    "        import arcengine  # noqa: F401\n",
+    "        return\n",
+    "    except ModuleNotFoundError:\n",
+    "        pass\n",
+    "\n",
+    "    wheel_dir = Path(\"/kaggle/input/competitions/arc-prize-2026-arc-agi-3/arc_agi_3_wheels\")\n",
+    "    if not wheel_dir.exists():\n",
+    "        raise ModuleNotFoundError(\n",
+    "            \"arc_agi is not installed and the Kaggle wheel directory was not found. \"\n",
+    "            \"Attach the ARC Prize 2026 / ARC-AGI-3 competition dataset to the notebook, \"\n",
+    "            \"or run this inside the Kaggle competition notebook environment.\"\n",
+    "        )\n",
+    "\n",
+    "    cmd = [\n",
+    "        sys.executable,\n",
+    "        \"-m\",\n",
+    "        \"pip\",\n",
+    "        \"install\",\n",
+    "        \"-q\",\n",
+    "        \"--no-index\",\n",
+    "        \"--find-links\",\n",
+    "        str(wheel_dir),\n",
+    "        \"arc-agi\",\n",
+    "        \"python-dotenv\",\n",
+    "        \"pyarrow\",\n",
+    "    ]\n",
+    "    print(\"Installing ARC packages from local wheels:\", \" \".join(cmd))\n",
+    "    subprocess.check_call(cmd)\n",
+    "\n",
+    "\n",
+    "ensure_arc_packages()\n",
+    "\n",
+    "import numpy as np\n",
+    "import pandas as pd\n",
+    "import dotenv\n",
+    "import arc_agi\n",
+    "from arcengine import GameAction, GameState\n",
+    "\n",
+    "EXP_ID = \"EXP-003C\"\n",
+    "MAX_MOVES = 1000\n",
+    "SEED = 42\n",
+    "USE_PER_GAME_SEED = False\n",
+    "\n",
+    "# Controlled change vs EXP-003B:\n",
+    "# EXP-003B used PRIOR_PROB=0.10 and MIN_PRIOR_OBS=8.\n",
+    "# EXP-003C starts with a safer 0.05 prior and stronger evidence requirement.\n",
+    "PRIOR_PROB = 0.05\n",
+    "MIN_PRIOR_OBS = 12\n",
+    "\n",
+    "# New EXP-003C guardrails.\n",
+    "GAME_OVER_PENALTY = 30.0\n",
+    "NOOP_RATE_PENALTY = 0.75\n",
+    "GAME_OVER_RATE_PENALTY = 8.0\n",
+    "MIN_PRIOR_SCORE = 0.02\n",
+    "MAX_CONSECUTIVE_SAME_PRIOR = 2\n",
+    "ACTION6_EXTRA_REPEAT_PENALTY = 0.25\n",
+    "\n",
+    "WORK = Path(\"/kaggle/working\")\n",
+    "ART = WORK / \"exp003c_artifacts\"\n",
+    "ART.mkdir(exist_ok=True)\n",
+    "\n",
+    "if os.getenv(\"KAGGLE_IS_COMPETITION_RERUN\"):\n",
+    "    get_ipython().system(\n",
+    "        \"curl --fail --retry 999 --retry-all-errors --retry-delay 5 --retry-max-time 600 http://gateway:8001/api/games\"\n",
+    "    )\n",
+    "    mode = \"online\"\n",
+    "    envdir = \"\"\n",
+    "else:\n",
+    "    mode = \"offline\"\n",
+    "    envdir = \"/kaggle/input/competitions/arc-prize-2026-arc-agi-3/environment_files/\"\n",
+    "\n",
+    "(WORK / \".env\").write_text(\n",
+    "    f\"\"\"SCHEME=http\n",
+    "HOST=gateway\n",
+    "PORT=8001\n",
+    "ARC_API_KEY=test-key-123\n",
+    "ARC_BASE_URL=http://gateway:8001/\n",
+    "OPERATION_MODE={mode}\n",
+    "ENVIRONMENTS_DIR={envdir}\n",
+    "RECORDINGS_DIR=/kaggle/working/server_recording\n",
+    "\"\"\"\n",
+    ")\n",
+    "dotenv.load_dotenv(WORK / \".env\", override=True)\n",
+    "\n",
+    "\n",
+    "def rng_for(game_id: str) -> random.Random:\n",
+    "    if not USE_PER_GAME_SEED:\n",
+    "        return random.Random(SEED)\n",
+    "    return random.Random(SEED + (zlib.adler32(game_id.encode()) & 0xFFFFFFFF))\n",
+    "\n",
+    "\n",
+    "def get_frame(obs):\n",
+    "    if obs is None or not getattr(obs, \"frame\", None):\n",
+    "        return None\n",
+    "    return np.asarray(obs.frame[-1])\n",
+    "\n",
+    "\n",
+    "def diff_summary(before, after):\n",
+    "    if before is None or after is None or before.shape != after.shape:\n",
+    "        return {\"frame_changed\": None, \"diff_pixels\": None, \"diff_cx\": None, \"diff_cy\": None}\n",
+    "    diff = before != after\n",
+    "    ys, xs = np.where(diff)\n",
+    "    if len(xs) == 0:\n",
+    "        return {\"frame_changed\": False, \"diff_pixels\": 0, \"diff_cx\": None, \"diff_cy\": None}\n",
+    "    return {\n",
+    "        \"frame_changed\": True,\n",
+    "        \"diff_pixels\": int(len(xs)),\n",
+    "        \"diff_cx\": float(xs.mean()),\n",
+    "        \"diff_cy\": float(ys.mean()),\n",
+    "    }\n",
+    "\n",
+    "\n",
+    "def random_visible_pixel(frame, rng: random.Random):\n",
+    "    color = rng.choice(np.unique(frame).tolist())\n",
+    "    ys, xs = np.where(frame == color)\n",
+    "    idx = rng.randint(0, len(xs) - 1)\n",
+    "    return {\"x\": int(xs[idx]), \"y\": int(ys[idx])}\n",
+    "\n",
+    "\n",
+    "def init_stats():\n",
+    "    return {\n",
+    "        \"count\": 0,\n",
+    "        \"frame_changed\": 0,\n",
+    "        \"noops\": 0,\n",
+    "        \"level_delta\": 0,\n",
+    "        \"game_over\": 0,\n",
+    "        \"state_changed\": 0,\n",
+    "        \"diff_pixels\": 0,\n",
+    "        \"utility\": 0.0,\n",
+    "    }\n",
+    "\n",
+    "\n",
+    "def utility_from_effect(effect):\n",
+    "    \"\"\"Progress-first utility.\n",
+    "\n",
+    "    Main EXP-003C change: GAME_OVER penalty is stronger than EXP-003B.\n",
+    "    Frame change remains a weak signal only.\n",
+    "    \"\"\"\n",
+    "    utility = 0.0\n",
+    "    level_delta = effect.get(\"level_delta\")\n",
+    "    if level_delta and level_delta > 0:\n",
+    "        utility += 50.0 * level_delta\n",
+    "    if effect.get(\"state_after\") == \"WIN\":\n",
+    "        utility += 50.0\n",
+    "    if effect.get(\"state_after\") == \"GAME_OVER\":\n",
+    "        utility -= GAME_OVER_PENALTY\n",
+    "    elif effect.get(\"state_changed\"):\n",
+    "        utility += 1.0\n",
+    "    if effect.get(\"frame_changed\") is True:\n",
+    "        utility += min(0.5, math.log1p(effect.get(\"diff_pixels\") or 0) / 20.0)\n",
+    "    elif effect.get(\"frame_changed\") is False:\n",
+    "        utility -= 0.35\n",
+    "    return float(utility)\n",
+    "\n",
+    "\n",
+    "def choose_prior_action(valid_actions, rng, action_stats, last_prior_action, same_prior_count):\n",
+    "    \"\"\"Choose a cautious prior action or return None to fall back to EXP-001 behavior.\"\"\"\n",
+    "    candidates = []\n",
+    "\n",
+    "    for action in valid_actions:\n",
+    "        stats = action_stats.get(action.name)\n",
+    "        if not stats or stats.get(\"count\", 0) < MIN_PRIOR_OBS:\n",
+    "            continue\n",
+    "\n",
+    "        # Cap repeated same-action prior choices.\n",
+    "        if action.name == last_prior_action and same_prior_count >= MAX_CONSECUTIVE_SAME_PRIOR:\n",
+    "            continue\n",
+    "\n",
+    "        count = max(1, stats[\"count\"])\n",
+    "        avg_utility = stats[\"utility\"] / count\n",
+    "        noop_rate = stats[\"noops\"] / count\n",
+    "        game_over_rate = stats[\"game_over\"] / count\n",
+    "\n",
+    "        score = avg_utility - NOOP_RATE_PENALTY * noop_rate - GAME_OVER_RATE_PENALTY * game_over_rate\n",
+    "\n",
+    "        # EXP-003B shifted heavily toward ACTION6. Do not ban ACTION6, but make repeated ACTION6\n",
+    "        # prior selection slightly harder unless utility remains clearly positive.\n",
+    "        if action.name == \"ACTION6\" and action.name == last_prior_action:\n",
+    "            score -= ACTION6_EXTRA_REPEAT_PENALTY\n",
+    "\n",
+    "        if score >= MIN_PRIOR_SCORE:\n",
+    "            candidates.append((score, action))\n",
+    "\n",
+    "    if not candidates:\n",
+    "        return None\n",
+    "\n",
+    "    candidates.sort(key=lambda item: item[0], reverse=True)\n",
+    "    top = candidates[:3]\n",
+    "\n",
+    "    # Soft top-3 choice: avoids a brittle greedy loop but still favors stronger actions.\n",
+    "    floor = top[-1][0]\n",
+    "    weights = [max(0.01, score - floor + 0.05) for score, _ in top]\n",
+    "    total = sum(weights)\n",
+    "    draw = rng.random() * total\n",
+    "    acc = 0.0\n",
+    "    for weight, (_, action) in zip(weights, top):\n",
+    "        acc += weight\n",
+    "        if draw <= acc:\n",
+    "            return action\n",
+    "    return top[0][1]\n",
+    "\n",
+    "\n",
+    "def play_one_environment(env, game_id: str):\n",
+    "    rng = rng_for(game_id)\n",
+    "    response = env._last_response\n",
+    "    action_counts = defaultdict(int)\n",
+    "    policy_counts = defaultdict(int)\n",
+    "    effect_summary = defaultdict(init_stats)\n",
+    "    action_stats = defaultdict(init_stats)\n",
+    "    effect_tail = []\n",
+    "    base_actions = [action for action in GameAction if action is not GameAction.RESET]\n",
+    "\n",
+    "    last_action = None\n",
+    "    last_policy = None\n",
+    "    last_prior_action = None\n",
+    "    same_prior_count = 0\n",
+    "\n",
+    "    for move_idx in range(1, MAX_MOVES + 1):\n",
+    "        if response is None or response.state == GameState.WIN:\n",
+    "            break\n",
+    "\n",
+    "        if response.state in (GameState.GAME_OVER, GameState.NOT_PLAYED):\n",
+    "            response = env.step(GameAction.RESET, {})\n",
+    "            last_action = \"RESET\"\n",
+    "            last_policy = \"reset\"\n",
+    "            last_prior_action = None\n",
+    "            same_prior_count = 0\n",
+    "            action_counts[\"RESET\"] += 1\n",
+    "            policy_counts[\"reset\"] += 1\n",
+    "            continue\n",
+    "\n",
+    "        frame = get_frame(response)\n",
+    "        before_frame = frame.copy() if frame is not None else None\n",
+    "        before_levels = int(response.levels_completed)\n",
+    "        before_state = response.state.name\n",
+    "\n",
+    "        valid_actions = list(getattr(env, \"action_space\", [])) or base_actions\n",
+    "        valid_actions = [action for action in valid_actions if action is not GameAction.RESET]\n",
+    "        if not valid_actions:\n",
+    "            valid_actions = base_actions\n",
+    "\n",
+    "        use_prior = rng.random() < PRIOR_PROB\n",
+    "        action = choose_prior_action(valid_actions, rng, action_stats, last_prior_action, same_prior_count) if use_prior else None\n",
+    "\n",
+    "        if action is None:\n",
+    "            action = rng.choice(valid_actions)\n",
+    "            policy = \"exp001_random_visible_pixel_fallback\"\n",
+    "        else:\n",
+    "            policy = \"progress_prior_guardrailed\"\n",
+    "\n",
+    "        data = random_visible_pixel(frame, rng) if action.is_complex() and frame is not None else {}\n",
+    "        response = env.step(\n",
+    "            action,\n",
+    "            data,\n",
+    "            reasoning={\n",
+    "                \"exp_id\": EXP_ID,\n",
+    "                \"policy\": policy,\n",
+    "                \"prior_prob\": PRIOR_PROB,\n",
+    "                \"min_prior_obs\": MIN_PRIOR_OBS,\n",
+    "                \"max_consecutive_same_prior\": MAX_CONSECUTIVE_SAME_PRIOR,\n",
+    "            },\n",
+    "        )\n",
+    "\n",
+    "        after_frame = get_frame(response)\n",
+    "        diff = diff_summary(before_frame, after_frame)\n",
+    "        after_levels = int(response.levels_completed)\n",
+    "        after_state = response.state.name\n",
+    "        level_delta = after_levels - before_levels\n",
+    "        state_changed = after_state != before_state\n",
+    "\n",
+    "        record = {\n",
+    "            \"step\": move_idx,\n",
+    "            \"action\": action.name,\n",
+    "            \"policy\": policy,\n",
+    "            \"data\": data,\n",
+    "            \"frame_changed\": diff.get(\"frame_changed\"),\n",
+    "            \"diff_pixels\": diff.get(\"diff_pixels\"),\n",
+    "            \"diff_cx\": diff.get(\"diff_cx\"),\n",
+    "            \"diff_cy\": diff.get(\"diff_cy\"),\n",
+    "            \"levels_before\": before_levels,\n",
+    "            \"levels_after\": after_levels,\n",
+    "            \"level_delta\": level_delta,\n",
+    "            \"state_before\": before_state,\n",
+    "            \"state_after\": after_state,\n",
+    "            \"state_changed\": state_changed,\n",
+    "        }\n",
+    "        record[\"utility\"] = utility_from_effect(record)\n",
+    "\n",
+    "        effect_tail.append(record)\n",
+    "        if len(effect_tail) > 100:\n",
+    "            effect_tail = effect_tail[-100:]\n",
+    "\n",
+    "        for table in (effect_summary, action_stats):\n",
+    "            stats = table[action.name]\n",
+    "            stats[\"count\"] += 1\n",
+    "            if record[\"frame_changed\"] is True:\n",
+    "                stats[\"frame_changed\"] += 1\n",
+    "            if record[\"frame_changed\"] is False:\n",
+    "                stats[\"noops\"] += 1\n",
+    "            if level_delta > 0:\n",
+    "                stats[\"level_delta\"] += int(level_delta)\n",
+    "            if after_state == \"GAME_OVER\":\n",
+    "                stats[\"game_over\"] += 1\n",
+    "            if state_changed:\n",
+    "                stats[\"state_changed\"] += 1\n",
+    "            stats[\"diff_pixels\"] += int(record.get(\"diff_pixels\") or 0)\n",
+    "            stats[\"utility\"] += float(record[\"utility\"])\n",
+    "\n",
+    "        last_action = action.name\n",
+    "        last_policy = policy\n",
+    "        action_counts[action.name] += 1\n",
+    "        policy_counts[policy] += 1\n",
+    "\n",
+    "        if policy == \"progress_prior_guardrailed\":\n",
+    "            if action.name == last_prior_action:\n",
+    "                same_prior_count += 1\n",
+    "            else:\n",
+    "                last_prior_action = action.name\n",
+    "                same_prior_count = 1\n",
+    "        else:\n",
+    "            same_prior_count = 0\n",
+    "\n",
+    "    return {\n",
+    "        \"game_id\": game_id,\n",
+    "        \"moves\": int(move_idx),\n",
+    "        \"state\": response.state.name if response else \"unknown\",\n",
+    "        \"levels_completed\": int(response.levels_completed) if response else 0,\n",
+    "        \"last_action\": last_action,\n",
+    "        \"last_policy\": last_policy,\n",
+    "        \"action_counts\": dict(action_counts),\n",
+    "        \"policy_counts\": dict(policy_counts),\n",
+    "        \"effect_summary\": dict(effect_summary),\n",
+    "        \"action_prior\": dict(action_stats),\n",
+    "        \"effect_tail\": effect_tail,\n",
+    "    }\n",
+    "\n",
+    "\n",
+    "arcade = arc_agi.Arcade()\n",
+    "environments = list(arcade.available_environments)\n",
+    "rows = []\n",
+    "details = []\n",
+    "effect_summary_rows = []\n",
+    "prior_by_game = {}\n",
+    "\n",
+    "print(\n",
+    "    EXP_ID,\n",
+    "    \"envs=\",\n",
+    "    len(environments),\n",
+    "    \"MAX_MOVES=\",\n",
+    "    MAX_MOVES,\n",
+    "    \"SEED=\",\n",
+    "    SEED,\n",
+    "    \"PRIOR_PROB=\",\n",
+    "    PRIOR_PROB,\n",
+    "    \"MIN_PRIOR_OBS=\",\n",
+    "    MIN_PRIOR_OBS,\n",
+    ")\n",
+    "\n",
+    "for idx, info in enumerate(environments, 1):\n",
+    "    result = play_one_environment(arcade.make(info.game_id), info.game_id)\n",
+    "    details.append(result)\n",
+    "    flat = {key: value for key, value in result.items() if key not in (\"action_counts\", \"policy_counts\", \"effect_summary\", \"action_prior\", \"effect_tail\")}\n",
+    "    rows.append(flat)\n",
+    "    prior_by_game[result[\"game_id\"]] = result[\"action_prior\"]\n",
+    "\n",
+    "    for action, stats in result[\"effect_summary\"].items():\n",
+    "        output = {\"game_id\": result[\"game_id\"], \"action\": action}\n",
+    "        output.update(stats)\n",
+    "        effect_summary_rows.append(output)\n",
+    "\n",
+    "    print(f\"[{idx:03d}/{len(environments):03d}] {flat}\")\n",
+    "\n",
+    "pd.DataFrame(rows).to_csv(ART / \"exp003c_run_results.csv\", index=False)\n",
+    "pd.DataFrame(effect_summary_rows).to_csv(ART / \"exp003c_effect_summary_by_game.csv\", index=False)\n",
+    "(ART / \"exp003c_run_details.json\").write_text(json.dumps(details, indent=2))\n",
+    "(ART / \"exp003c_action_prior_by_game.json\").write_text(json.dumps(prior_by_game, indent=2, sort_keys=True))\n",
+    "\n",
+    "action_totals = defaultdict(int)\n",
+    "policy_totals = defaultdict(int)\n",
+    "for detail in details:\n",
+    "    for key, value in detail[\"action_counts\"].items():\n",
+    "        action_totals[key] += int(value)\n",
+    "    for key, value in detail[\"policy_counts\"].items():\n",
+    "        policy_totals[key] += int(value)\n",
+    "\n",
+    "(ART / \"exp003c_action_counts.json\").write_text(json.dumps(dict(action_totals), indent=2, sort_keys=True))\n",
+    "(ART / \"exp003c_policy_counts.json\").write_text(json.dumps(dict(policy_totals), indent=2, sort_keys=True))\n",
+    "\n",
+    "summary = {\n",
+    "    \"exp_id\": EXP_ID,\n",
+    "    \"max_moves\": MAX_MOVES,\n",
+    "    \"seed\": SEED,\n",
+    "    \"use_per_game_seed\": USE_PER_GAME_SEED,\n",
+    "    \"prior_prob\": PRIOR_PROB,\n",
+    "    \"min_prior_obs\": MIN_PRIOR_OBS,\n",
+    "    \"game_over_penalty\": GAME_OVER_PENALTY,\n",
+    "    \"max_consecutive_same_prior\": MAX_CONSECUTIVE_SAME_PRIOR,\n",
+    "    \"change\": \"EXP-003B refinement with lower prior probability and repeated-prior guardrails\",\n",
+    "}\n",
+    "\n",
+    "if not os.getenv(\"KAGGLE_IS_COMPETITION_RERUN\"):\n",
+    "    scorecard = arcade.get_scorecard()\n",
+    "    summary.update(\n",
+    "        score=float(scorecard.score),\n",
+    "        total_environments_completed=int(scorecard.total_environments_completed),\n",
+    "        total_environments=int(scorecard.total_environments),\n",
+    "        total_levels_completed=int(scorecard.total_levels_completed),\n",
+    "        total_levels=int(scorecard.total_levels),\n",
+    "        total_actions=int(scorecard.total_actions),\n",
+    "    )\n",
+    "    pd.DataFrame(\n",
+    "        [\n",
+    "            {\n",
+    "                \"game\": env.id,\n",
+    "                \"score\": float(env.score),\n",
+    "                \"levels_completed\": int(env.levels_completed),\n",
+    "                \"actions\": int(env.actions),\n",
+    "                \"completed\": bool(env.completed),\n",
+    "            }\n",
+    "            for env in scorecard.environments\n",
+    "        ]\n",
+    "    ).to_csv(ART / \"exp003c_scorecard_by_environment.csv\", index=False)\n",
+    "    pd.DataFrame(\n",
+    "        [\n",
+    "            {\n",
+    "                \"tag\": tag.id,\n",
+    "                \"score\": float(tag.score),\n",
+    "                \"levels_completed\": int(tag.levels_completed),\n",
+    "                \"number_of_environments\": int(tag.number_of_environments),\n",
+    "            }\n",
+    "            for tag in (scorecard.tags_scores or [])\n",
+    "        ]\n",
+    "    ).to_csv(ART / \"exp003c_scorecard_by_tag.csv\", index=False)\n",
+    "    print(\n",
+    "        \"Score:\",\n",
+    "        f\"{scorecard.score:.4f}\",\n",
+    "        \"Levels:\",\n",
+    "        f\"{scorecard.total_levels_completed}/{scorecard.total_levels}\",\n",
+    "        \"Actions:\",\n",
+    "        scorecard.total_actions,\n",
+    "    )\n",
+    "\n",
+    "(ART / \"exp003c_scorecard_summary.json\").write_text(json.dumps(summary, indent=2))\n",
+    "\n",
+    "submission_path = WORK / \"submission.parquet\"\n",
+    "if not submission_path.exists():\n",
+    "    pd.DataFrame(\n",
+    "        [[\"1_0\", \"1\", True, 1]],\n",
+    "        columns=[\"row_id\", \"game_id\", \"end_of_game\", \"score\"],\n",
+    "    ).to_parquet(submission_path, index=False)\n",
+    "\n",
+    "manifest = sorted(str(path) for path in ART.glob(\"*\"))\n",
+    "pd.DataFrame({\"artifact\": manifest}).to_csv(ART / \"artifact_manifest.csv\", index=False)\n",
+    "\n",
+    "print(\"submission:\", submission_path, submission_path.exists())\n",
+    "print(\"artifacts:\", ART)\n",
+    "print(json.dumps(summary, indent=2))\n",
+    "summary"
+   ]
+  }
+ ],
+ "metadata": {
+  "kaggle": {
+   "accelerator": "none",
+   "dataSources": [
+    {
+     "databundleVersionId": 16741059,
+     "isSourceIdPinned": false,
+     "sourceId": 133468,
+     "sourceType": "competition"
     }
-
-
-def utility_from_effect(effect):
-    """Progress-first utility.
-
-    Main EXP-003C change: GAME_OVER penalty is stronger than EXP-003B.
-    Frame change remains a weak signal only.
-    """
-    utility = 0.0
-    level_delta = effect.get("level_delta")
-    if level_delta and level_delta > 0:
-        utility += 50.0 * level_delta
-    if effect.get("state_after") == "WIN":
-        utility += 50.0
-    if effect.get("state_after") == "GAME_OVER":
-        utility -= GAME_OVER_PENALTY
-    elif effect.get("state_changed"):
-        utility += 1.0
-    if effect.get("frame_changed") is True:
-        utility += min(0.5, math.log1p(effect.get("diff_pixels") or 0) / 20.0)
-    elif effect.get("frame_changed") is False:
-        utility -= 0.35
-    return float(utility)
-
-
-def choose_prior_action(valid_actions, rng, action_stats, last_prior_action, same_prior_count):
-    """Choose a cautious prior action or return None to fall back to EXP-001 behavior."""
-    candidates = []
-
-    for action in valid_actions:
-        stats = action_stats.get(action.name)
-        if not stats or stats.get("count", 0) < MIN_PRIOR_OBS:
-            continue
-
-        # Cap repeated same-action prior choices.
-        if action.name == last_prior_action and same_prior_count >= MAX_CONSECUTIVE_SAME_PRIOR:
-            continue
-
-        count = max(1, stats["count"])
-        avg_utility = stats["utility"] / count
-        noop_rate = stats["noops"] / count
-        game_over_rate = stats["game_over"] / count
-
-        score = avg_utility - NOOP_RATE_PENALTY * noop_rate - GAME_OVER_RATE_PENALTY * game_over_rate
-
-        # EXP-003B shifted heavily toward ACTION6. Do not ban ACTION6, but make repeated ACTION6
-        # prior selection slightly harder unless utility remains clearly positive.
-        if action.name == "ACTION6" and action.name == last_prior_action:
-            score -= ACTION6_EXTRA_REPEAT_PENALTY
-
-        if score >= MIN_PRIOR_SCORE:
-            candidates.append((score, action))
-
-    if not candidates:
-        return None
-
-    candidates.sort(key=lambda item: item[0], reverse=True)
-    top = candidates[:3]
-
-    # Soft top-3 choice: avoids a brittle greedy loop but still favors stronger actions.
-    floor = top[-1][0]
-    weights = [max(0.01, score - floor + 0.05) for score, _ in top]
-    total = sum(weights)
-    draw = rng.random() * total
-    acc = 0.0
-    for weight, (_, action) in zip(weights, top):
-        acc += weight
-        if draw <= acc:
-            return action
-    return top[0][1]
-
-
-def play_one_environment(env, game_id: str):
-    rng = rng_for(game_id)
-    response = env._last_response
-    action_counts = defaultdict(int)
-    policy_counts = defaultdict(int)
-    effect_summary = defaultdict(init_stats)
-    action_stats = defaultdict(init_stats)
-    effect_tail = []
-    base_actions = [action for action in GameAction if action is not GameAction.RESET]
-
-    last_action = None
-    last_policy = None
-    last_prior_action = None
-    same_prior_count = 0
-
-    for move_idx in range(1, MAX_MOVES + 1):
-        if response is None or response.state == GameState.WIN:
-            break
-
-        if response.state in (GameState.GAME_OVER, GameState.NOT_PLAYED):
-            response = env.step(GameAction.RESET, {})
-            last_action = "RESET"
-            last_policy = "reset"
-            last_prior_action = None
-            same_prior_count = 0
-            action_counts["RESET"] += 1
-            policy_counts["reset"] += 1
-            continue
-
-        frame = get_frame(response)
-        before_frame = frame.copy() if frame is not None else None
-        before_levels = int(response.levels_completed)
-        before_state = response.state.name
-
-        valid_actions = list(getattr(env, "action_space", [])) or base_actions
-        valid_actions = [action for action in valid_actions if action is not GameAction.RESET]
-        if not valid_actions:
-            valid_actions = base_actions
-
-        use_prior = rng.random() < PRIOR_PROB
-        action = choose_prior_action(valid_actions, rng, action_stats, last_prior_action, same_prior_count) if use_prior else None
-
-        if action is None:
-            action = rng.choice(valid_actions)
-            policy = "exp001_random_visible_pixel_fallback"
-        else:
-            policy = "progress_prior_guardrailed"
-
-        data = random_visible_pixel(frame, rng) if action.is_complex() and frame is not None else {}
-        response = env.step(
-            action,
-            data,
-            reasoning={
-                "exp_id": EXP_ID,
-                "policy": policy,
-                "prior_prob": PRIOR_PROB,
-                "min_prior_obs": MIN_PRIOR_OBS,
-                "max_consecutive_same_prior": MAX_CONSECUTIVE_SAME_PRIOR,
-            },
-        )
-
-        after_frame = get_frame(response)
-        diff = diff_summary(before_frame, after_frame)
-        after_levels = int(response.levels_completed)
-        after_state = response.state.name
-        level_delta = after_levels - before_levels
-        state_changed = after_state != before_state
-
-        record = {
-            "step": move_idx,
-            "action": action.name,
-            "policy": policy,
-            "data": data,
-            "frame_changed": diff.get("frame_changed"),
-            "diff_pixels": diff.get("diff_pixels"),
-            "diff_cx": diff.get("diff_cx"),
-            "diff_cy": diff.get("diff_cy"),
-            "levels_before": before_levels,
-            "levels_after": after_levels,
-            "level_delta": level_delta,
-            "state_before": before_state,
-            "state_after": after_state,
-            "state_changed": state_changed,
-        }
-        record["utility"] = utility_from_effect(record)
-
-        effect_tail.append(record)
-        if len(effect_tail) > 100:
-            effect_tail = effect_tail[-100:]
-
-        for table in (effect_summary, action_stats):
-            stats = table[action.name]
-            stats["count"] += 1
-            if record["frame_changed"] is True:
-                stats["frame_changed"] += 1
-            if record["frame_changed"] is False:
-                stats["noops"] += 1
-            if level_delta > 0:
-                stats["level_delta"] += int(level_delta)
-            if after_state == "GAME_OVER":
-                stats["game_over"] += 1
-            if state_changed:
-                stats["state_changed"] += 1
-            stats["diff_pixels"] += int(record.get("diff_pixels") or 0)
-            stats["utility"] += float(record["utility"])
-
-        last_action = action.name
-        last_policy = policy
-        action_counts[action.name] += 1
-        policy_counts[policy] += 1
-
-        if policy == "progress_prior_guardrailed":
-            if action.name == last_prior_action:
-                same_prior_count += 1
-            else:
-                last_prior_action = action.name
-                same_prior_count = 1
-        else:
-            same_prior_count = 0
-
-    return {
-        "game_id": game_id,
-        "moves": int(move_idx),
-        "state": response.state.name if response else "unknown",
-        "levels_completed": int(response.levels_completed) if response else 0,
-        "last_action": last_action,
-        "last_policy": last_policy,
-        "action_counts": dict(action_counts),
-        "policy_counts": dict(policy_counts),
-        "effect_summary": dict(effect_summary),
-        "action_prior": dict(action_stats),
-        "effect_tail": effect_tail,
-    }
-
-
-arcade = arc_agi.Arcade()
-environments = list(arcade.available_environments)
-rows = []
-details = []
-effect_summary_rows = []
-prior_by_game = {}
-
-print(
-    EXP_ID,
-    "envs=",
-    len(environments),
-    "MAX_MOVES=",
-    MAX_MOVES,
-    "SEED=",
-    SEED,
-    "PRIOR_PROB=",
-    PRIOR_PROB,
-    "MIN_PRIOR_OBS=",
-    MIN_PRIOR_OBS,
-)
-
-for idx, info in enumerate(environments, 1):
-    result = play_one_environment(arcade.make(info.game_id), info.game_id)
-    details.append(result)
-    flat = {key: value for key, value in result.items() if key not in ("action_counts", "policy_counts", "effect_summary", "action_prior", "effect_tail")}
-    rows.append(flat)
-    prior_by_game[result["game_id"]] = result["action_prior"]
-
-    for action, stats in result["effect_summary"].items():
-        output = {"game_id": result["game_id"], "action": action}
-        output.update(stats)
-        effect_summary_rows.append(output)
-
-    print(f"[{idx:03d}/{len(environments):03d}] {flat}")
-
-pd.DataFrame(rows).to_csv(ART / "exp003c_run_results.csv", index=False)
-pd.DataFrame(effect_summary_rows).to_csv(ART / "exp003c_effect_summary_by_game.csv", index=False)
-(ART / "exp003c_run_details.json").write_text(json.dumps(details, indent=2))
-(ART / "exp003c_action_prior_by_game.json").write_text(json.dumps(prior_by_game, indent=2, sort_keys=True))
-
-action_totals = defaultdict(int)
-policy_totals = defaultdict(int)
-for detail in details:
-    for key, value in detail["action_counts"].items():
-        action_totals[key] += int(value)
-    for key, value in detail["policy_counts"].items():
-        policy_totals[key] += int(value)
-
-(ART / "exp003c_action_counts.json").write_text(json.dumps(dict(action_totals), indent=2, sort_keys=True))
-(ART / "exp003c_policy_counts.json").write_text(json.dumps(dict(policy_totals), indent=2, sort_keys=True))
-
-summary = {
-    "exp_id": EXP_ID,
-    "max_moves": MAX_MOVES,
-    "seed": SEED,
-    "use_per_game_seed": USE_PER_GAME_SEED,
-    "prior_prob": PRIOR_PROB,
-    "min_prior_obs": MIN_PRIOR_OBS,
-    "game_over_penalty": GAME_OVER_PENALTY,
-    "max_consecutive_same_prior": MAX_CONSECUTIVE_SAME_PRIOR,
-    "change": "EXP-003B refinement with lower prior probability and repeated-prior guardrails",
+   ],
+   "dockerImageVersionId": 31328,
+   "isGpuEnabled": false,
+   "isInternetEnabled": false,
+   "language": "python",
+   "sourceType": "notebook"
+  },
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.12.12"
+  },
+  "papermill": {
+   "default_parameters": {},
+   "duration": 43.166639,
+   "end_time": "2026-05-08T10:45:06.646950+00:00",
+   "environment_variables": {},
+   "exception": null,
+   "input_path": "__notebook__.ipynb",
+   "output_path": "__notebook__.ipynb",
+   "parameters": {},
+   "start_time": "2026-05-08T10:44:23.480311+00:00",
+   "version": "2.7.0"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
 }
-
-if not os.getenv("KAGGLE_IS_COMPETITION_RERUN"):
-    scorecard = arcade.get_scorecard()
-    summary.update(
-        score=float(scorecard.score),
-        total_environments_completed=int(scorecard.total_environments_completed),
-        total_environments=int(scorecard.total_environments),
-        total_levels_completed=int(scorecard.total_levels_completed),
-        total_levels=int(scorecard.total_levels),
-        total_actions=int(scorecard.total_actions),
-    )
-    pd.DataFrame(
-        [
-            {
-                "game": env.id,
-                "score": float(env.score),
-                "levels_completed": int(env.levels_completed),
-                "actions": int(env.actions),
-                "completed": bool(env.completed),
-            }
-            for env in scorecard.environments
-        ]
-    ).to_csv(ART / "exp003c_scorecard_by_environment.csv", index=False)
-    pd.DataFrame(
-        [
-            {
-                "tag": tag.id,
-                "score": float(tag.score),
-                "levels_completed": int(tag.levels_completed),
-                "number_of_environments": int(tag.number_of_environments),
-            }
-            for tag in (scorecard.tags_scores or [])
-        ]
-    ).to_csv(ART / "exp003c_scorecard_by_tag.csv", index=False)
-    print(
-        "Score:",
-        f"{scorecard.score:.4f}",
-        "Levels:",
-        f"{scorecard.total_levels_completed}/{scorecard.total_levels}",
-        "Actions:",
-        scorecard.total_actions,
-    )
-
-(ART / "exp003c_scorecard_summary.json").write_text(json.dumps(summary, indent=2))
-
-submission_path = WORK / "submission.parquet"
-if not submission_path.exists():
-    pd.DataFrame(
-        [["1_0", "1", True, 1]],
-        columns=["row_id", "game_id", "end_of_game", "score"],
-    ).to_parquet(submission_path, index=False)
-
-manifest = sorted(str(path) for path in ART.glob("*"))
-pd.DataFrame({"artifact": manifest}).to_csv(ART / "artifact_manifest.csv", index=False)
-
-print("submission:", submission_path, submission_path.exists())
-print("artifacts:", ART)
-print(json.dumps(summary, indent=2))
-summary
