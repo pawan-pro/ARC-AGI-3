@@ -27,14 +27,35 @@ Safety fallback:
 
 A lower and safer progress-prior probability may preserve EXP-003B's useful online adaptation while reducing over-commitment to noisy action utilities and repeated `ACTION6` loops.
 
-## Planned controlled changes
+## Implemented scaffold
+
+Committed source scaffold:
+
+- `notebooks/01_exploration/exp003c_progress_prior_guardrails.py`
+
+Notebook conversion / Kaggle target:
+
+- `notebooks/01_exploration/exp003c_progress_prior_guardrails.ipynb`
+
+Implemented first variant constants:
+
+- `PRIOR_PROB = 0.05`
+- `MIN_PRIOR_OBS = 12`
+- `GAME_OVER_PENALTY = 30.0`
+- `NOOP_RATE_PENALTY = 0.75`
+- `GAME_OVER_RATE_PENALTY = 8.0`
+- `MIN_PRIOR_SCORE = 0.02`
+- `MAX_CONSECUTIVE_SAME_PRIOR = 2`
+- `ACTION6_EXTRA_REPEAT_PENALTY = 0.25`
+
+## Controlled changes
 
 Start from EXP-003B and change only the prior-selection guardrails:
 
-1. Test lower prior probabilities: `0.03`, `0.05`, and optionally `0.08`.
+1. Lower prior probability from `0.10` to `0.05` for the first run.
 2. Strengthen `GAME_OVER` penalty.
 3. Add a cap on consecutive same-action prior choices.
-4. Reduce repeated `ACTION6` loops.
+4. Reduce repeated `ACTION6` loops with a small repeat penalty, not a ban.
 5. Require stronger evidence before prior selection.
 6. Preserve EXP-001 fallback behavior.
 
@@ -45,10 +66,6 @@ Start from EXP-003B and change only the prior-selection guardrails:
 - Do not add object/component targeting.
 - Do not rewrite the agent architecture.
 - Do not claim improvement before local or Kaggle validation.
-
-## Notebook target
-
-`notebooks/01_exploration/exp003c_progress_prior_guardrails.ipynb`
 
 ## Validation gate before Kaggle submission
 
