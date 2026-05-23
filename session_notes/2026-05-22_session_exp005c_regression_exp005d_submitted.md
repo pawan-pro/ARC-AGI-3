@@ -151,8 +151,38 @@ Current status:
 
 ```text
 EXP-005D: submitted for scoring
-Public score: pending
+Public score: pending at session close
 ```
+
+### 5. EXP-005D result collected after session
+
+Follow-up result:
+
+```text
+EXP-005D — Deterministic EXP-005A Replay Control
+Version: 13
+Status: Succeeded
+Public score: 0.10
+Best score remained: EXP-005A / V9 public score 0.17
+```
+
+Interpretation:
+
+- EXP-005D did not reproduce EXP-005A's `0.17`.
+- Because EXP-005D preserved the EXP-005A source-BFS backbone, hidden scalar probing, frame+hidden-field hashing, and simple scan, the most likely differentiator is deterministic seeding/fallback trajectory.
+- The result supports the decision-rule branch that EXP-005A may depend materially on stochastic fallback behavior.
+- Do not promote EXP-005D as the clean baseline.
+- Do not proceed to EXP-005E gated scan until fallback/BFS contribution is measured.
+
+The downloaded EXP-005D output artifacts were placeholder-only visible-notebook artifacts. They prove only that the visible notebook ran in non-rerun mode:
+
+```text
+KAGGLE_IS_COMPETITION_RERUN was not set
+main.py --agent myagent did not run
+dummy submission.parquet was written
+```
+
+They do not contain scoring-time BFS diagnostics, so they cannot identify whether the competition rerun fell back because of source load failure, no effective actions, BFS timeout/exhaustion, BFS error, or no solution for the level.
 
 ## What worked
 
@@ -161,12 +191,15 @@ Public score: pending
 - We created a clean deterministic control notebook from EXP-005A.
 - The notebook was committed to a separate branch.
 - The experiment was submitted for scoring.
+- The follow-up public result gave a useful control signal: deterministic replay did not preserve EXP-005A performance.
 
 ## What failed / unresolved
 
 - EXP-005C failed to improve over EXP-005A.
 - Real scoring-time artifacts for EXP-005C were not available.
-- EXP-005D public score is still pending.
+- EXP-005D scored `0.10`, below EXP-005A's `0.17`.
+- Real scoring-time artifacts for EXP-005D are not available; downloaded artifacts are placeholder-only visible-run artifacts.
+- It is still unknown how many EXP-005A/EXP-005D actions came from BFS replay versus fallback.
 - The exact long branch name requested could not be created through the connector; a shorter namespaced branch was used.
 
 ## Current best score/result
@@ -182,8 +215,9 @@ Pending:
 
 ```text
 EXP-005D — Deterministic EXP-005A Replay Control
-Submitted for scoring
-Score pending
+Version 13
+Public score: 0.10
+Result: regression / deterministic control did not reproduce EXP-005A
 ```
 
 ## Files changed this session
@@ -203,20 +237,9 @@ Commits:
 
 This session note is committed separately with this file.
 
-## Next session plan
+## Follow-up decision matrix
 
-### Step 1 — collect EXP-005D result
-
-Record:
-
-- Public score.
-- Kaggle version.
-- Succeeded or error.
-- Runtime.
-- Output size.
-- Whether any real scoring-time diagnostics are available.
-
-### Step 2 — decision rule
+The planned decision rule was:
 
 ```text
 If EXP-005D ≈ 0.17:
@@ -229,15 +252,42 @@ If EXP-005D > 0.17:
     Deterministic seeding helped. Promote EXP-005D as the new baseline.
 ```
 
-### Step 3 — possible next experiment
-
-Likely next candidate if EXP-005D is stable:
+Actual outcome:
 
 ```text
-EXP-005E — gated effective-action scan from deterministic EXP-005A
+EXP-005D = 0.10 < 0.17
 ```
 
-Do not continue EXP-005C2 until transfer diagnostics prove that transfer reliably helps.
+Decision:
+
+```text
+Keep EXP-005A V9 as current best.
+Do not promote EXP-005D.
+Do not continue EXP-005C2.
+Do not start EXP-005E gated scan yet.
+Investigate fallback stability and BFS/fallback attribution first.
+```
+
+Recommended next controlled experiment:
+
+```text
+EXP-005A/005D attribution diagnostic
+```
+
+Requirements:
+
+- Preserve EXP-005A behavior as closely as possible.
+- Add explicit scoring-time logs for:
+  - source lookup success/failure,
+  - game class load success/failure,
+  - scan effective action count,
+  - hidden fields detected,
+  - BFS status,
+  - solution length,
+  - fallback reason,
+  - fallback action distribution,
+  - BFS replay count versus fallback count.
+- Avoid planner feature additions until the source of the `0.17 -> 0.10` drop is isolated.
 
 ## Strategic principle
 
