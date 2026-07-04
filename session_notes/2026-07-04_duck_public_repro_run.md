@@ -66,7 +66,11 @@ Recommended run settings:
 GPU: RTX Pro 6000
 Internet: off
 Mode: Save & Run / Commit
-Expected artifact: /kaggle/working/diagnostics.html
+Expected artifacts:
+- /kaggle/working/diagnostics.html
+- /kaggle/working/benchmark.json
+- /kaggle/working/summary.txt or equivalent summary output
+- /kaggle/working/submission.parquet
 ```
 
 ### 3. User started the Kaggle run
@@ -103,19 +107,19 @@ Therefore, the large printed values such as:
 total wallclock: 85878.0s
 ```
 
-should not be interpreted as 23.85 Kaggle GPU-hours consumed. Dividing by roughly 25 concurrent game jobs gives a much more realistic per-game average runtime:
+should not be interpreted as 23.85 Kaggle GPU-hours consumed. Dividing by roughly 25 concurrent game jobs gives a more realistic per-game average runtime:
 
 ```text
 85878 / 25 ≈ 3435 seconds ≈ 57 minutes average per game-run
 ```
 
-This is compatible with the user's observed live runtime of about 1.5 hours.
+This was compatible with the user's observed live runtime of about 1.5 hours.
 
-## Run progress observed
+## In-progress run observations
 
 The user shared repeated diagnostics snapshots while the run was still in progress.
 
-Score progression:
+Score progression during the run:
 
 | Snapshot | Mean score | Total actions | Total tokens | Generated tokens/sec | Printed total wallclock |
 |---:|---:|---:|---:|---:|---:|
@@ -126,21 +130,15 @@ Score progression:
 | 5 | 0.56 | 1,083 | 537,665 | 178.41 | 67,524.8s |
 | 6 | 0.58 | 1,276 | 688,578 | 190.41 | 85,878.0s |
 
-The key positive sign is that the run was not stuck: the mean score improved over time:
+The key positive sign was that the run was not stuck:
 
 ```text
 0.11 -> 0.38 -> 0.56 -> 0.58
 ```
 
-The run was still marked:
+## Final Duck-Repro-A public benchmark result
 
-```text
-ended: in progress
-```
-
-## Per-game progress at latest snapshot
-
-Latest snapshot:
+The final uploaded diagnostics and summary show that the run completed successfully.
 
 ```text
 benchmark: duck-harness-kaggle-duck-public-repro-20260704
@@ -149,71 +147,149 @@ games:     25
 passes:    1
 runs:      25 (won: 0)
 started:   2026-07-04 16:48:59
-ended:     in progress
-mean score:    0.58
-median score:  0.00
-total actions: 1276
-total tokens:  688578
-generated tokens/sec: 190.41
-total wallclock: 85878.0s
+ended:     2026-07-04 19:01:35
+duration:  2h 12m 36s
+mean score:    1.68
+median score:  0.20
+total actions: 3545
+total tokens:  1576578
+generated tokens/sec: 198.15 (job wallclock)
+total wallclock: 198107.2s
 ```
 
-Games with level progress in the latest snapshot:
+Additional score views from the diagnostics PDFs:
 
-| Game | Score | Levels | Actions | Tokens |
-|---|---:|---:|---:|---:|
-| ka59-38d34dbb | 1.94 | 1.0 / 7 | 53 | 28,354 |
-| lf52-271a04aa | 1.82 | 1.0 / 10 | 41 | 28,363 |
-| lp85-305b61c3 | 2.78 | 1.0 / 8 | 9 | 25,359 |
-| sb26-7fbdac44 | 2.78 | 1.0 / 8 | 59 | 28,493 |
-| su15-1944f8ab | 0.37 | 1.0 / 9 | 55 | 29,067 |
-| tn36-ef4dde99 | 3.57 | 1.0 / 7 | 19 | 26,706 |
-| tu93-0768757b | 0.12 | 1.0 / 9 | 86 | 28,610 |
-| vc33-5430563c | 1.22 | 1.0 / 7 | 21 | 25,094 |
+| Scorer view | Mean |
+|---|---:|
+| Official ARC | 1.68 |
+| Weighted `(1, 2, 2, ...)` | 3.61 |
+| Raw levels beaten | 0.72 levels per game |
 
-All other games remained at zero levels in the latest snapshot.
-
-## Runtime / quota interpretation
-
-The user asked whether the runtime implied a problem, given the estimated Kaggle quota of about 30 GPU-hours/week.
-
-Assessment:
+Interpretation:
 
 ```text
-The runtime does not look abnormal for Duck.
-This is a local multimodal/coding LLM harness, not a lightweight heuristic notebook.
-A full 25-game public reproduction can reasonably take around 1.5 to 2.5 real GPU-hours.
+This is a successful reproduction of the public Duck harness on the 25 public games.
+The result is in line with the Tufa reported public-train mean of about 1.6002 +/- 0.4475.
 ```
 
 Important distinction:
 
 ```text
-Actual Kaggle GPU quota should be tied to real notebook job runtime, not the aggregate benchmark wallclock printed across concurrent game jobs.
+This is a public benchmark reproduction result, not yet the official Kaggle leaderboard result for our submitted notebook.
+Kaggle submission scoring is awaited.
 ```
 
-Practical budget rule:
+## Per-game final results
+
+| Game | State | Score | Levels | Actions | Tokens |
+|---|---|---:|---:|---:|---:|
+| ar25-0c556536 | gave_up | 0.43 | 1 / 8 | 156 | 66,225 |
+| bp35-0a0ad940 | gave_up | 0.03 | 1 / 9 | 197 | 65,505 |
+| cd82-fb555c5d | gave_up | 0.00 | 0 / 6 | 243 | 64,967 |
+| cn04-2fe56bfb | gave_up | 0.00 | 0 / 6 | 515 | 64,179 |
+| dc22-fdcac232 | gave_up | 0.00 | 0 / 6 | 247 | 65,466 |
+| ft09-0d8bbf25 | gave_up | 14.21 | 2 / 6 | 63 | 50,154 / note 63,676 |
+| g50t-5849a774 | gave_up | 0.00 | 0 / 7 | 72 | 65,736 / note 67,954 |
+| ka59-38d34dbb | gave_up | 1.94 | 1 / 7 | 166 | 60,092 / note 66,945 |
+| lf52-271a04aa | gave_up | 1.82 | 1 / 10 | 83 | 66,622 |
+| lp85-305b61c3 | gave_up | 2.78 | 1 / 8 | 89 | 67,084 |
+| ls20-9607627b | gave_up | 0.00 | 0 / 7 | 70 | 65,910 / note 66,744 |
+| m0r0-492f87ba | gave_up | 0.00 | 0 / 6 | 238 | 61,789 / note 65,002 |
+| r11l-495a7899 | gave_up | 0.00 | 0 / 6 | 154 | 65,106 |
+| re86-8af5384d | gave_up | 0.21 | 1 / 8 | 99 | 64,036 / note 67,070 |
+| s5i5-18d95033 | gave_up | 0.00 | 0 / 8 | 65 | 65,531 / note 66,034 |
+| sb26-7fbdac44 | gave_up | 2.78 | 1 / 8 | 195 | 64,391 / note 65,807 |
+| sc25-635fd71a | gave_up | 3.48 | 2 / 6 | 131 | 66,266 |
+| sk48-d8078629 | gave_up | 0.00 | 0 / 8 | 37 | 62,075 / note 67,205 |
+| sp80-589a99af | gave_up | 0.20 | 1 / 6 | 208 | 65,583 / note 65,744 |
+| su15-1944f8ab | gave_up | 0.37 | 1 / 9 | 67 | 44,506 / note 67,095 |
+| tn36-ef4dde99 | gave_up | 10.71 | 2 / 7 | 45 | 66,681 |
+| tr87-cd924810 | gave_up | 0.00 | 0 / 6 | 104 | 59,236 |
+| tu93-0768757b | gave_up | 1.94 | 2 / 9 | 121 | 58,943 |
+| vc33-5430563c | gave_up | 1.22 | 1 / 7 | 64 | 63,688 / note 64,552 |
+| wa30-ee6fef47 | gave_up | 0.00 | 0 / 9 | 116 | 66,807 |
+
+Summary counts from the final table:
 
 ```text
-Full 25-game Duck runs should be used sparingly.
-After the first baseline reproduction, use targeted 3-8 game diagnostics rather than full runs for every change.
+Games with level progress: 14 / 25
+Total completed levels: 18
+Games with 2 levels completed: ft09, sc25, tn36, tu93
+Best score: ft09 = 14.21
+Second-best score: tn36 = 10.71
+Median official ARC score: 0.20
 ```
 
-Suggested targeted games from observed progress:
+## Runtime / quota interpretation after completion
 
-```python
-LIMIT_TO_GAME_IDS = [
-    "ka59",
-    "lf52",
-    "lp85",
-    "sb26",
-    "su15",
-    "tn36",
-    "tu93",
-    "vc33",
-]
+Real job duration:
+
+```text
+2h 12m 36s ≈ 2.21 GPU-hours if Kaggle bills by notebook runtime
 ```
 
-## Browser tab guidance
+If the weekly GPU budget is about 30 hours:
+
+```text
+2.21 / 30 ≈ 7.4% of weekly GPU quota
+```
+
+Decision:
+
+```text
+Full 25-game Duck runs are affordable but expensive.
+Use full runs only for baseline/release candidates.
+Use targeted 3-8 game diagnostics for development.
+```
+
+The diagnostics explicitly warn that games run in parallel and wallclock per game is not simply total wallclock divided by number of games. Therefore, `total wallclock: 198107.2s` should not be treated as consumed Kaggle GPU time.
+
+## Analysis / interpretation
+
+### What worked
+
+- The public Duck notebook reproduced successfully in our Kaggle setup.
+- The final public benchmark score was `1.68`, aligned with the Tufa public-train reference mean.
+- The harness completed one pass over all 25 public games.
+- The run generated useful diagnostics, including score-vs-token curves, score-vs-wallclock curves, per-game plots, and per-pass per-game result table.
+- Duck solved early levels on 14 of 25 games and completed 18 total levels.
+- The strongest games were `ft09`, `tn36`, `sc25`, and `tu93`.
+
+### What failed / limitations
+
+- No full game was won: `runs won = 0 / 25`.
+- All runs ended in `gave_up` state.
+- The public benchmark is much stronger than our current heuristic baseline, but it is still low in absolute terms.
+- Token use is heavy: `1,576,578` total generated tokens for one 25-game pass.
+- Many games consumed around 60k-67k tokens with zero levels completed.
+- Weak / zero-score games remain important failure-analysis targets: `cd82`, `cn04`, `dc22`, `g50t`, `ls20`, `m0r0`, `r11l`, `s5i5`, `sk48`, `tr87`, `wa30`.
+- Official Kaggle submission score is still awaited and must be recorded separately when available.
+
+### Strategic conclusion
+
+This session confirms that the Duck direction is materially above our current gated-BFS line on public-game reproduction:
+
+```text
+Latest weak offline gated-BFS context: ~0.1916
+Best known selected project public baseline: ~0.38
+Duck-Repro-A public benchmark: 1.68
+```
+
+Approximate ratio:
+
+```text
+1.68 / 0.38 ≈ 4.4x best observed selected baseline
+1.68 / 0.1916 ≈ 8.8x latest weak offline context
+```
+
+Research interpretation:
+
+```text
+Duck is token-expensive but adapts better than action-search heuristics.
+The main gap is not just action efficiency. It is early-level rule discovery through LLM + Python REPL + multimodal/segmentation context.
+```
+
+## Browser tab guidance recorded
 
 The user asked whether they could close the browser tab running the Kaggle notebook.
 
@@ -232,43 +308,36 @@ Safer checklist:
 3. Then closing the browser tab should be fine.
 ```
 
-## What worked
-
-- A clean Duck public reproduction workbench was created and shared.
-- The Kaggle run started and produced diagnostics.
-- The run showed increasing mean score over time, indicating the harness was alive and making progress.
-- The run reached level 1 on multiple public games.
-- Runtime behavior was explained as plausible given concurrency and local LLM inference.
-- GPU budget risk was identified early.
-
-## What failed / unresolved
-
-- The run was still in progress at the time of this note.
-- Final score, final diagnostics, and final artifact list are not yet known.
-- No code improvements were attempted yet.
-- No per-game comparison against our persistent-memory/gated-BFS baseline was completed yet.
-- We still need to save final `diagnostics.html`, logs, and any generated files from Kaggle.
-
 ## Current best score/result
 
 Project baseline context:
 
 ```text
 P0 random baseline: 0.07 public
-Best known selected project submission: ~0.38 public, Persistent Memory short/gated-BFS v1 — Version 1
+Best known selected project submission before Duck: ~0.38 public, Persistent Memory short/gated-BFS v1 — Version 1
 Latest weak offline seed/sweep context: ~0.1916
 ```
 
-Duck reproduction run context at latest shared snapshot:
+Duck reproduction context:
 
 ```text
-Duck-Repro-A latest in-progress mean score: 0.58
-Median score: 0.00
+Duck-Repro-A public benchmark mean score: 1.68
+Weighted scorer mean: 3.61
+Raw levels beaten mean: 0.72
+Median official ARC score: 0.20
 Runs: 25
 Won: 0
-Total actions: 1276
-Total tokens: 688,578
-Status: in progress
+Games with progress: 14 / 25
+Total completed levels: 18
+Total actions: 3,545
+Total tokens: 1,576,578
+Duration: 2h 12m 36s
+```
+
+Submission status:
+
+```text
+Official Kaggle submission score: awaited
 ```
 
 Reference Tufa result from earlier review:
@@ -278,7 +347,7 @@ Tufa Duck official Milestone 1 Kaggle score: 1.21%
 Tufa public train mean: 1.6002 +/- 0.4475
 ```
 
-## Files changed
+## Files / artifacts referenced
 
 Created and shared to user during this session:
 
@@ -286,37 +355,41 @@ Created and shared to user during this session:
 /mnt/data/arc3_20260704_duck_public_repro_workbench.ipynb
 ```
 
-Created in repo by this commit:
+Uploaded by user after run completion:
+
+```text
+/mnt/data/summary (6).txt
+/mnt/data/diagnostics.html
+/mnt/data/benchmark.json
+/mnt/data/taaf_setup_env.json
+/mnt/data/ar25-0c556536_p0.log
+/mnt/data/wa30-ee6fef47_p0_events.jsonl
+/mnt/data/duck-harness-kaggle-duck-public-repro-20260704.pdf
+/mnt/data/duck-harness-kaggle-duck-public-repro-20260704 2.pdf
+/mnt/data/duck-harness-kaggle-duck-public-repro-20260704 3.pdf
+```
+
+Repo session note updated:
 
 ```text
 session_notes/2026-07-04_duck_public_repro_run.md
 ```
 
-No project source code or scoring notebook was modified in the repo during this session.
+No project source code or scoring notebook was modified in the repo during this update.
 
 ## Next session plan
 
-### Step 1 — Finish baseline artifact capture
+### Step 1 — Record official Kaggle score when available
 
-When the Kaggle run completes, collect:
-
-```text
-/kaggle/working/diagnostics.html
-/kaggle/working/git_status.txt
-/kaggle/working/submission.parquet
-full notebook output/log
-any score/summary files emitted by the harness
-```
-
-Record:
+When Kaggle submission scoring completes, append:
 
 ```text
-final mean score
-final per-game scores
-runtime
-GPU type
-whether Save & Run / Commit was used
-whether run was competition rerun or public/offline benchmark mode
+submission name / version
+public score
+private score if visible / applicable
+rank if visible
+whether selected
+submission runtime if shown
 ```
 
 ### Step 2 — Build per-game comparison
@@ -327,10 +400,10 @@ Create a table:
 game_id | our_baseline_score | duck_score | duck_level_progress | duck_action_count | reusable_idea
 ```
 
-Start with games where Duck made progress:
+Start with Duck's strongest progress games:
 
 ```text
-ka59, lf52, lp85, sb26, su15, tn36, tu93, vc33
+ft09, tn36, sc25, tu93, lp85, sb26, ka59, lf52, vc33
 ```
 
 ### Step 3 — Avoid full reruns initially
@@ -340,7 +413,7 @@ Use targeted diagnostics in the customization hook before running another full 2
 Targeted run candidate:
 
 ```python
-LIMIT_TO_GAME_IDS = ["ka59", "lf52", "lp85", "sb26", "su15", "tn36", "tu93", "vc33"]
+LIMIT_TO_GAME_IDS = ["ft09", "tn36", "sc25", "tu93", "lp85", "sb26", "ka59", "lf52", "vc33"]
 MAX_GAMES_FOR_DEBUG = None
 ```
 
@@ -355,5 +428,20 @@ EXP-DUCK-LITE-001: segmentation + trace diagnostics port
 Goal:
 
 ```text
-Do not modify the LLM solver first. First port the reusable perception/diagnostic ideas into our own offline workbench and compare against persistent-memory/gated-BFS.
+Do not modify the LLM solver first.
+First port the reusable perception/diagnostic ideas into our own offline workbench and compare against persistent-memory/gated-BFS.
+```
+
+### Step 5 — Failure analysis targets
+
+Inspect zero-score games separately:
+
+```text
+cd82, cn04, dc22, g50t, ls20, m0r0, r11l, s5i5, sk48, tr87, wa30
+```
+
+Purpose:
+
+```text
+Determine whether failures are caused by perception, wrong objective hypothesis, mouse/action misuse, excessive token burn, or insufficient memory/context compaction.
 ```
