@@ -1,3 +1,5 @@
 # Session Notes Index
 
 - [2026-04-24](2026-04-24.md)
+- [2026-07-06 Duck Baseline Strategy and Replay Plan](2026-07-06_duck_baseline_strategy_and_replay_plan.md)
+- [2026-07-06 Kaggle Access and Tufa Duck Notebook Logic](2026-07-06_kaggle_access_and_tufa_notebook_logic.md)
