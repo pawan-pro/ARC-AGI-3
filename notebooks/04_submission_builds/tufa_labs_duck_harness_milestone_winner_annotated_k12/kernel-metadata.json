@@ -1,0 +1,27 @@
+{
+  "id": "jatalepawan/tufa-duck-winning-notebook-annotated-k12",
+  "title": "Tufa Duck Winning Notebook - Annotated K12 Reference",
+  "code_file": "tufa_labs_duck_harness_milestone_winner_annotated_k12.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "keywords": [
+    "arc-agi-3",
+    "duck",
+    "annotated-reference"
+  ],
+  "dataset_sources": [
+    "driessmit1/arc3-vllm-h100-wheelhouse-v3",
+    "jeroencottaar/taaf-kaggle-source-share",
+    "driessmit1/vrfai-qwen3-6-27b-fp8-hf-snapshot"
+  ],
+  "kernel_sources": [],
+  "competition_sources": [
+    "arc-prize-2026-arc-agi-3"
+  ],
+  "model_sources": [],
+  "machine_shape": "NvidiaRtxPro6000"
+}

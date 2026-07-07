@@ -10,6 +10,12 @@ Created reference notebook:
 notebooks/04_submission_builds/tufa_labs_duck_harness_milestone_winner_annotated_k12.ipynb
 ```
 
+Created Kaggle package folder with inputs metadata:
+
+```text
+notebooks/04_submission_builds/tufa_labs_duck_harness_milestone_winner_annotated_k12/
+```
+
 Source notebook:
 
 ```text
@@ -32,6 +38,8 @@ The annotated notebook keeps the original visible notebook logic and adds:
 3. Plain-English comments inside code cells.
 4. Upgrade lenses for moving from the current bronze-level baseline toward top-10 quality.
 5. Guardrails about not changing solver behavior before replay/trace review.
+6. An explicit Kaggle inputs note near the top of the notebook.
+7. A companion kernel-metadata.json file listing the required Kaggle inputs.
 ```
 
 The notebook is meant as a study/reference artifact, not as a Kaggle submission artifact.
@@ -74,4 +82,3 @@ with the observational prompt:
 ```text
 codex_prompts/2026-07-06_duck_replay_trace_review.md
 ```
-
