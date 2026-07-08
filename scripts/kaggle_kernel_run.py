@@ -18,16 +18,28 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 PACKAGE_DIR = REPO_ROOT / "notebooks/04_submission_builds/duck_public_repro_terminal_run"
-METADATA_PATH = PACKAGE_DIR / "kernel-metadata.json"
-ARTIFACT_DIR = REPO_ROOT / "artifacts/kaggle/duck_public_repro_terminal_run/latest"
+VARIANTS = {
+    "baseline": {
+        "metadata": PACKAGE_DIR / "kernel-metadata.json",
+        "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_public_repro_terminal_run/latest",
+    },
+    "stall": {
+        "metadata": PACKAGE_DIR / "kernel-metadata-stall-policy.json",
+        "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_controlled_stall_policy/latest",
+    },
+}
 
 
-def load_metadata() -> dict:
-    return json.loads(METADATA_PATH.read_text(encoding="utf-8"))
+def variant_config(args: argparse.Namespace) -> dict:
+    return VARIANTS[str(getattr(args, "variant", "baseline"))]
 
 
-def kernel_id() -> str:
-    return str(load_metadata()["id"])
+def load_metadata(args: argparse.Namespace) -> dict:
+    return json.loads(variant_config(args)["metadata"].read_text(encoding="utf-8"))
+
+
+def kernel_id(args: argparse.Namespace) -> str:
+    return str(load_metadata(args)["id"])
 
 
 def run(cmd: list[str], *, check: bool = True) -> subprocess.CompletedProcess:
@@ -49,9 +61,10 @@ def capture(cmd: list[str], *, check: bool = True) -> str:
     return result.stdout
 
 
-def cmd_info(_: argparse.Namespace) -> None:
-    metadata = load_metadata()
+def cmd_info(args: argparse.Namespace) -> None:
+    metadata = load_metadata(args)
     print("Kaggle package:")
+    print(f"  variant:     {args.variant}")
     print(f"  package_dir: {PACKAGE_DIR}")
     print(f"  kernel_id:   {metadata['id']}")
     print(f"  title:       {metadata['title']}")
@@ -65,16 +78,26 @@ def cmd_info(_: argparse.Namespace) -> None:
         print(f"  dataset:     {ref}")
 
 
-def cmd_push(_: argparse.Namespace) -> None:
-    run(["kaggle", "kernels", "push", "-p", str(PACKAGE_DIR)])
+def cmd_push(args: argparse.Namespace) -> None:
+    config = variant_config(args)
+    active_metadata = PACKAGE_DIR / "kernel-metadata.json"
+    requested_metadata = config["metadata"]
+    original_text = active_metadata.read_text(encoding="utf-8")
+    requested_text = requested_metadata.read_text(encoding="utf-8")
+    try:
+        if requested_metadata != active_metadata:
+            active_metadata.write_text(requested_text, encoding="utf-8")
+        run(["kaggle", "kernels", "push", "-p", str(PACKAGE_DIR)])
+    finally:
+        active_metadata.write_text(original_text, encoding="utf-8")
 
 
-def cmd_status(_: argparse.Namespace) -> None:
-    run(["kaggle", "kernels", "status", kernel_id()])
+def cmd_status(args: argparse.Namespace) -> None:
+    run(["kaggle", "kernels", "status", kernel_id(args)])
 
 
 def cmd_logs(args: argparse.Namespace) -> None:
-    cmd = ["kaggle", "kernels", "logs", kernel_id()]
+    cmd = ["kaggle", "kernels", "logs", kernel_id(args)]
     if args.follow:
         cmd.extend(["--follow", "--interval", str(args.interval)])
     run(cmd)
@@ -91,21 +114,23 @@ def cmd_watch(args: argparse.Namespace) -> None:
         "failed",
     }
     while True:
-        output = capture(["kaggle", "kernels", "status", kernel_id()], check=False)
+        output = capture(["kaggle", "kernels", "status", kernel_id(args)], check=False)
         lower = output.lower()
         if any(state in lower for state in terminal_states):
             break
         time.sleep(args.interval)
 
 
-def cmd_output(_: argparse.Namespace) -> None:
-    ARTIFACT_DIR.mkdir(parents=True, exist_ok=True)
-    run(["kaggle", "kernels", "output", kernel_id(), "-p", str(ARTIFACT_DIR), "--force"])
-    print(f"Downloaded latest output to {ARTIFACT_DIR}")
+def cmd_output(args: argparse.Namespace) -> None:
+    artifact_dir = variant_config(args)["artifact_dir"]
+    artifact_dir.mkdir(parents=True, exist_ok=True)
+    run(["kaggle", "kernels", "output", kernel_id(args), "-p", str(artifact_dir), "--force"])
+    print(f"Downloaded latest output to {artifact_dir}")
 
 
 def cmd_summarize(args: argparse.Namespace) -> None:
-    benchmark_path = Path(args.benchmark) if args.benchmark else ARTIFACT_DIR / "benchmark.json"
+    artifact_dir = variant_config(args)["artifact_dir"]
+    benchmark_path = Path(args.benchmark) if args.benchmark else artifact_dir / "benchmark.json"
     if not benchmark_path.exists():
         raise SystemExit(f"Missing benchmark.json: {benchmark_path}")
 
@@ -168,6 +193,12 @@ def cmd_summarize(args: argparse.Namespace) -> None:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--variant",
+        choices=sorted(VARIANTS),
+        default="baseline",
+        help="Kaggle kernel package variant to operate on.",
+    )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     subparsers.add_parser("info", help="Show package metadata").set_defaults(func=cmd_info)
