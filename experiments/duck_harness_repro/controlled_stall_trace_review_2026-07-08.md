@@ -79,3 +79,18 @@ Accept the policy only if:
 ```
 
 Do not submit this variant to the leaderboard until the targeted practice run passes those checks.
+
+## 2026-07-08 Follow-Up
+
+The first controlled run showed the right directional signal, but it was not a clean four-game validation. The notebook's customization cell filtered `bm.games`, then the final run cell rebuilt `bm.games` from the live/offline game source. The notebook has been updated so filtering happens after game-list construction.
+
+Observed controlled-run signal before the clean rerun:
+
+| game | baseline levels/actions/tokens | controlled levels/actions/tokens | interpretation |
+|---|---|---|---|
+| `ft09-0d8bbf25` | 2/6, 82, 70,043 | 3/6, 110, 96,551 | Preserved and improved real progress. Best first helper target. |
+| `tn36-ef4dde99` | 0/7, 122, 69,693 | 1/7, 99, 19,376 | Reduced waste and found one level. Needs clean targeted replay. |
+| `sc25-635fd71a` | 0/6, 147, 70,194 | 0/6, 90, 41,110 | Reduced waste with no lost progress. |
+| `tr87-cd924810` | 0/6, 330, 61,632 | 0/6, 90, 16,439 | Strongest evidence for early stall cutoff. |
+
+Next implementation target: wire a deterministic `ft09`-style toggle-grid helper only after the clean targeted replay confirms the same action/level pattern.
