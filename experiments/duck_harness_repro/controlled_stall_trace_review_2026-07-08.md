@@ -94,3 +94,23 @@ Observed controlled-run signal before the clean rerun:
 | `tr87-cd924810` | 0/6, 330, 61,632 | 0/6, 90, 16,439 | Strongest evidence for early stall cutoff. |
 
 Next implementation target: wire a deterministic `ft09`-style toggle-grid helper only after the clean targeted replay confirms the same action/level pattern.
+
+## Clean Targeted Rerun Result
+
+The corrected notebook selected exactly the four intended games:
+
+```text
+tn36-ef4dde99
+sc25-635fd71a
+ft09-0d8bbf25
+tr87-cd924810
+```
+
+| game | baseline | controlled stall | conclusion |
+|---|---:|---:|---|
+| `ft09-0d8bbf25` | 2/6, 82 actions, 70,043 tokens | 2/6, 126 actions, 71,628 tokens | Progress preserved, but level 3 still stalls. |
+| `tn36-ef4dde99` | 0/7, 122 actions, 69,693 tokens | 0/7, 90 actions, 70,452 tokens | Fewer actions, no token gain. |
+| `sc25-635fd71a` | 0/6, 147 actions, 70,194 tokens | 0/6, 90 actions, 50,946 tokens | Accepted as a useful waste cut. |
+| `tr87-cd924810` | 0/6, 330 actions, 61,632 tokens | 0/6, 90 actions, 33,355 tokens | Accepted as a useful waste cut. |
+
+Decision: keep controlled stall as a guardrail, but do not expect it to improve score alone. Move scoring effort to targeted mechanics helpers, starting with `ft09`.

@@ -33,6 +33,28 @@ Important caveat: the first controlled stall run accidentally played all 25 game
 | `sc25-635fd71a` | 0/6 | 147 | 70,194 | 0/6 | 90 | 41,110 | Stall policy reduced waste; no evidence of useful late progress. |
 | `tr87-cd924810` | 0/6 | 330 | 61,632 | 0/6 | 90 | 16,439 | Biggest waste reduction. Long action loops should be cut earlier. |
 
+## Clean Four-Game Rerun
+
+After fixing the target filter, the controlled stall notebook ran only:
+
+```text
+tn36-ef4dde99
+sc25-635fd71a
+ft09-0d8bbf25
+tr87-cd924810
+```
+
+Fresh run summary:
+
+| game | baseline | controlled stall | readout |
+|---|---:|---:|---|
+| `ft09-0d8bbf25` | 2/6, 82 actions, 70,043 tokens | 2/6, 126 actions, 71,628 tokens | Preserved progress, but did not improve efficiency. The first two levels took 29 and 7 actions; level 3 burned 90 actions until cutoff. |
+| `tn36-ef4dde99` | 0/7, 122 actions, 69,693 tokens | 0/7, 90 actions, 70,452 tokens | Fewer actions, no token saving. |
+| `sc25-635fd71a` | 0/6, 147 actions, 70,194 tokens | 0/6, 90 actions, 50,946 tokens | Useful waste reduction. |
+| `tr87-cd924810` | 0/6, 330 actions, 61,632 tokens | 0/6, 90 actions, 33,355 tokens | Strong waste reduction. |
+
+Conclusion: the stall policy is worth keeping as a safety rail, but it is not a scoring strategy. The next scoring work should turn `ft09`'s discovered small-grid rule into direct deterministic clicks, especially to stop level-3 thrashing.
+
 ## Solved/Partially Solved Patterns
 
 | game | observed mechanic | what Duck did well | failure mode | next helper candidate |
@@ -57,4 +79,3 @@ Important caveat: the first controlled stall run accidentally played all 25 game
 2. Accept the stall policy only if `ft09` keeps at least two level transitions and the three stall games spend fewer tokens/actions than baseline.
 3. Implement the first deterministic helper for `ft09`, because it has the clearest evidence of reusable logic.
 4. Add a similar helper only after replay confirms the exact mechanic for `sb26` or `vc33`.
-
