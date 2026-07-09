@@ -27,6 +27,10 @@ VARIANTS = {
         "metadata": PACKAGE_DIR / "kernel-metadata-stall-policy.json",
         "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_controlled_stall_policy/latest",
     },
+    "ft09-helper": {
+        "metadata": PACKAGE_DIR / "kernel-metadata-ft09-helper.json",
+        "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_ft09_helper/latest",
+    },
 }
 
 
