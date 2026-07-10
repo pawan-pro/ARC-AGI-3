@@ -75,3 +75,33 @@ If level 4 is different:
 Add a second helper rather than stretching the level-3 helper beyond its applicability.
 ```
 
+## Level-4 Inspection Result
+
+Level 4 is same-family.
+
+Evidence from the downloaded event stream:
+
+```text
+normal cells still respond to MOUSE clicks
+clicking normal cells cycles colors
+special cells still contain compact white/gray/color clue masks
+```
+
+Observed color cycle:
+
+```text
+b -> R -> O -> b
+```
+
+Decision:
+
+```text
+Generalize the ft09 mask helper.
+Do not create an unrelated second helper yet.
+```
+
+Next experiment:
+
+```text
+EXP-DUCK-004: generalized ft09 mask-cycle helper
+```

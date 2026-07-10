@@ -65,9 +65,28 @@ Always run the ft09 helper on every game.
 
 ## Next Work
 
-1. Inspect `ft09` level 4, because the helper advanced from level 3 to level 4 and then stalled.
-2. Decide whether level 4 is the same family with a larger/shifted mask layout or a new mechanic.
-3. If same family, generalize the `ft09` helper from hardcoded coordinates to detected cells/masks.
-4. If new mechanic, add a separate helper candidate and keep the level-3 helper as-is.
-5. Keep controlled stall as a safety brake, not as a scoring strategy.
+1. Implement `EXP-DUCK-004`: generalized ft09 mask-cycle helper.
+2. Detect cell centers and special mask cells instead of hardcoding level-3 coordinates.
+3. Support multi-color cycles such as `b -> R -> O -> b`, not only two-color toggles.
+4. Keep controlled stall as a safety brake, not as a scoring strategy.
 
+## 2026-07-10 Level-4 Decision
+
+`ft09` level 4 is the same broad mask/toggle family, not a separate mechanic.
+
+The reason is simple:
+
+```text
+normal cells are still clicked
+clicks still change cell colors
+special cells still contain white/gray clue masks
+progress still appears to require matching a target color pattern
+```
+
+The new difficulty is that level 4 is a multi-color cycle:
+
+```text
+b -> R -> O -> b
+```
+
+So the next step is to generalize the existing helper rather than create an unrelated second helper.
