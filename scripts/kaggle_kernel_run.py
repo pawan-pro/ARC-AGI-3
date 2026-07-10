@@ -31,6 +31,10 @@ VARIANTS = {
         "metadata": PACKAGE_DIR / "kernel-metadata-ft09-helper.json",
         "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_ft09_helper/latest",
     },
+    "ft09-mask-cycle": {
+        "metadata": PACKAGE_DIR / "kernel-metadata-ft09-mask-cycle.json",
+        "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_ft09_mask_cycle/latest",
+    },
 }
 
 
