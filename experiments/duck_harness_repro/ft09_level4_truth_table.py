@@ -189,11 +189,18 @@ def reconstruct(events_path: Path, *, max_candidates: int = 8) -> dict[str, obje
         executed = 0
         changed = 0
         mismatches: list[str] = []
+        stop_reason = ""
         for cell in requested:
             event = action_events.get(action_num)
             if event is None:
+                stop_reason = "missing_action_event"
                 break
-            actual_cell = parse_action_cell(str(event["action_display"]))
+            action_display = str(event.get("action_display") or "")
+            try:
+                actual_cell = parse_action_cell(action_display)
+            except ValueError:
+                stop_reason = f"non_mouse_action:{action_display}"
+                break
             if actual_cell != cell:
                 mismatches.append(f"{action_num}: expected {cell}, saw {actual_cell}")
             previous_board = action_events[action_num - 1]["board"]
@@ -218,8 +225,11 @@ def reconstruct(events_path: Path, *, max_candidates: int = 8) -> dict[str, obje
                     "target": center_string(target),
                     "after": center_string(after),
                     "mismatches": mismatches,
+                    "stop_reason": stop_reason,
                 }
             )
+        if stop_reason:
+            break
         if action_num > max(action_events):
             break
 
