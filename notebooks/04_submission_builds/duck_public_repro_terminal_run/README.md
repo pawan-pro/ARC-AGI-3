@@ -31,6 +31,16 @@ python scripts/kaggle_kernel_run.py output
 python scripts/kaggle_kernel_run.py summarize
 ```
 
+Targeted EXP-DUCK-008 workflow:
+
+```bash
+python scripts/kaggle_kernel_run.py --variant ft09-level4-overlap info
+python scripts/kaggle_kernel_run.py --variant ft09-level4-overlap push
+python scripts/kaggle_kernel_run.py --variant ft09-level4-overlap watch
+python scripts/kaggle_kernel_run.py --variant ft09-level4-overlap output
+python scripts/kaggle_kernel_run.py --variant ft09-level4-overlap summarize
+```
+
 Notes:
 
 ```text
@@ -39,4 +49,3 @@ Notes:
 - `output` downloads the latest kernel output into artifacts/kaggle/duck_public_repro_terminal_run/latest/.
 - `summarize` reads benchmark.json from that output folder when available.
 ```
-
