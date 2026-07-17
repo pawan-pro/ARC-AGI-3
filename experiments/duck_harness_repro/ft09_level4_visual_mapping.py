@@ -14,20 +14,36 @@ import itertools
 import json
 from pathlib import Path
 
-from ft09_level4_truth_table import (
-    BLUE,
-    CYCLE,
-    GRAY,
-    NORMAL_CELLS,
-    NORMAL_SET,
-    SPECIAL_CELLS,
-    WHITE,
-    center_string,
-    color,
-    cycle_distance,
-    mask_values,
-    reconstruct,
-)
+try:
+    from .ft09_level4_truth_table import (
+        BLUE,
+        CYCLE,
+        GRAY,
+        NORMAL_CELLS,
+        NORMAL_SET,
+        SPECIAL_CELLS,
+        WHITE,
+        center_string,
+        color,
+        cycle_distance,
+        mask_values,
+        reconstruct,
+    )
+except ImportError:
+    from ft09_level4_truth_table import (
+        BLUE,
+        CYCLE,
+        GRAY,
+        NORMAL_CELLS,
+        NORMAL_SET,
+        SPECIAL_CELLS,
+        WHITE,
+        center_string,
+        color,
+        cycle_distance,
+        mask_values,
+        reconstruct,
+    )
 
 
 def load_level4_board(events_path: Path) -> list[list[int]]:
