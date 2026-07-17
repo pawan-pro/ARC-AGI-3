@@ -47,6 +47,10 @@ VARIANTS = {
         "metadata": PACKAGE_DIR / "kernel-metadata-ft09-level4-overlap.json",
         "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_ft09_level4_overlap/latest",
     },
+    "full-eval-overlap": {
+        "metadata": PACKAGE_DIR / "kernel-metadata-full-eval-overlap.json",
+        "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_full_eval_ft09_overlap/latest",
+    },
 }
 
 
