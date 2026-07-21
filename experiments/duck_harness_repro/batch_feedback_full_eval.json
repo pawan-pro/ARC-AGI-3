@@ -1,0 +1,226 @@
+{
+  "exempt_prefixes": [
+    "ft09"
+  ],
+  "games": [
+    {
+      "batches": 61,
+      "exempt": false,
+      "game_id": "ar25-0c556536",
+      "multi_action_batches": 15,
+      "no_change_trailing_actions": 18,
+      "no_change_triggered_batches": 2,
+      "repeated_state_trailing_actions": 18,
+      "repeated_state_triggered_batches": 2
+    },
+    {
+      "batches": 224,
+      "exempt": false,
+      "game_id": "bp35-0a0ad940",
+      "multi_action_batches": 11
+    },
+    {
+      "batches": 199,
+      "exempt": false,
+      "game_id": "cd82-fb555c5d",
+      "multi_action_batches": 3,
+      "no_change_trailing_actions": 1,
+      "no_change_triggered_batches": 1,
+      "repeated_state_trailing_actions": 1,
+      "repeated_state_triggered_batches": 1
+    },
+    {
+      "batches": 48,
+      "exempt": false,
+      "game_id": "cn04-2fe56bfb",
+      "multi_action_batches": 30,
+      "no_change_trailing_actions": 9,
+      "no_change_triggered_batches": 2,
+      "repeated_state_trailing_actions": 12,
+      "repeated_state_triggered_batches": 4
+    },
+    {
+      "batches": 154,
+      "exempt": false,
+      "game_id": "dc22-fdcac232",
+      "multi_action_batches": 6,
+      "no_change_trailing_actions": 24,
+      "no_change_triggered_batches": 3,
+      "repeated_state_trailing_actions": 24,
+      "repeated_state_triggered_batches": 3
+    },
+    {
+      "batches": 2,
+      "exempt": true,
+      "game_id": "ft09-0d8bbf25",
+      "multi_action_batches": 2,
+      "no_change_trailing_actions": 47,
+      "no_change_triggered_batches": 1,
+      "no_change_unsafe_batches": 1,
+      "repeated_state_trailing_actions": 47,
+      "repeated_state_triggered_batches": 1,
+      "repeated_state_unsafe_batches": 1
+    },
+    {
+      "batches": 74,
+      "exempt": false,
+      "game_id": "g50t-5849a774",
+      "multi_action_batches": 24,
+      "no_change_trailing_actions": 59,
+      "no_change_triggered_batches": 14,
+      "repeated_state_trailing_actions": 59,
+      "repeated_state_triggered_batches": 14
+    },
+    {
+      "batches": 49,
+      "exempt": false,
+      "game_id": "ka59-38d34dbb",
+      "multi_action_batches": 27,
+      "no_change_trailing_actions": 31,
+      "no_change_triggered_batches": 11,
+      "repeated_state_trailing_actions": 31,
+      "repeated_state_triggered_batches": 11
+    },
+    {
+      "batches": 148,
+      "exempt": false,
+      "game_id": "lf52-271a04aa",
+      "multi_action_batches": 13
+    },
+    {
+      "batches": 75,
+      "exempt": false,
+      "game_id": "lp85-305b61c3",
+      "multi_action_batches": 0
+    },
+    {
+      "batches": 24,
+      "exempt": false,
+      "game_id": "ls20-9607627b",
+      "multi_action_batches": 12
+    },
+    {
+      "batches": 163,
+      "exempt": false,
+      "game_id": "m0r0-492f87ba",
+      "multi_action_batches": 8,
+      "no_change_trailing_actions": 4,
+      "no_change_triggered_batches": 3,
+      "repeated_state_trailing_actions": 4,
+      "repeated_state_triggered_batches": 3
+    },
+    {
+      "batches": 399,
+      "exempt": false,
+      "game_id": "r11l-495a7899",
+      "multi_action_batches": 0
+    },
+    {
+      "batches": 44,
+      "exempt": false,
+      "game_id": "re86-8af5384d",
+      "multi_action_batches": 21
+    },
+    {
+      "batches": 61,
+      "exempt": false,
+      "game_id": "s5i5-18d95033",
+      "multi_action_batches": 6
+    },
+    {
+      "batches": 172,
+      "exempt": false,
+      "game_id": "sb26-7fbdac44",
+      "multi_action_batches": 99
+    },
+    {
+      "batches": 257,
+      "exempt": false,
+      "game_id": "sc25-635fd71a",
+      "multi_action_batches": 13,
+      "no_change_trailing_actions": 6,
+      "no_change_triggered_batches": 2,
+      "repeated_state_trailing_actions": 6,
+      "repeated_state_triggered_batches": 2
+    },
+    {
+      "batches": 43,
+      "exempt": false,
+      "game_id": "sk48-d8078629",
+      "multi_action_batches": 29,
+      "no_change_trailing_actions": 68,
+      "no_change_triggered_batches": 17,
+      "repeated_state_trailing_actions": 74,
+      "repeated_state_triggered_batches": 18
+    },
+    {
+      "batches": 58,
+      "exempt": false,
+      "game_id": "sp80-589a99af",
+      "multi_action_batches": 33
+    },
+    {
+      "batches": 90,
+      "exempt": false,
+      "game_id": "su15-1944f8ab",
+      "multi_action_batches": 12
+    },
+    {
+      "batches": 80,
+      "exempt": false,
+      "game_id": "tn36-ef4dde99",
+      "multi_action_batches": 4
+    },
+    {
+      "batches": 239,
+      "exempt": false,
+      "game_id": "tr87-cd924810",
+      "multi_action_batches": 5
+    },
+    {
+      "batches": 18,
+      "exempt": false,
+      "game_id": "tu93-0768757b",
+      "multi_action_batches": 9,
+      "repeated_state_trailing_actions": 12,
+      "repeated_state_triggered_batches": 2,
+      "repeated_state_unsafe_batches": 1
+    },
+    {
+      "batches": 69,
+      "exempt": false,
+      "game_id": "vc33-5430563c",
+      "multi_action_batches": 13
+    },
+    {
+      "batches": 50,
+      "exempt": false,
+      "game_id": "wa30-ee6fef47",
+      "multi_action_batches": 34,
+      "no_change_trailing_actions": 11,
+      "no_change_triggered_batches": 7,
+      "repeated_state_trailing_actions": 46,
+      "repeated_state_triggered_batches": 10
+    }
+  ],
+  "included_totals": {
+    "batches": 2799,
+    "multi_action_batches": 427,
+    "no_change_trailing_actions": 231,
+    "no_change_triggered_batches": 62,
+    "repeated_state_trailing_actions": 287,
+    "repeated_state_triggered_batches": 70,
+    "repeated_state_unsafe_batches": 1
+  },
+  "run_root": "artifacts/kaggle/duck_full_eval_ft09_overlap/latest",
+  "totals": {
+    "batches": 2801,
+    "multi_action_batches": 429,
+    "no_change_trailing_actions": 278,
+    "no_change_triggered_batches": 63,
+    "no_change_unsafe_batches": 1,
+    "repeated_state_trailing_actions": 334,
+    "repeated_state_triggered_batches": 71,
+    "repeated_state_unsafe_batches": 2
+  }
+}

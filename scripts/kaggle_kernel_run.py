@@ -55,6 +55,10 @@ VARIANTS = {
         "metadata": PACKAGE_DIR / "kernel-metadata-reki-fallback.json",
         "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_reki_fallback/latest",
     },
+    "batch-feedback": {
+        "metadata": PACKAGE_DIR / "kernel-metadata-batch-feedback.json",
+        "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_batch_feedback/latest",
+    },
 }
 
 
