@@ -1,0 +1,551 @@
+{
+  "games": [
+    {
+      "actions": 147,
+      "changed_cells": 2981,
+      "effectful_actions": 135,
+      "exact_guard_candidates": 1,
+      "exact_guard_examples": [
+        {
+          "action": "MOUSE(row=55, col=30)",
+          "action_num": 147,
+          "changed_cells": 9,
+          "level": 1,
+          "progress": false
+        }
+      ],
+      "exact_guard_unsafe": 1,
+      "exact_no_effect_actions": 12,
+      "final_score": 0.0,
+      "game_id": "sc25-635fd71a",
+      "levels_completed": 0,
+      "longest_action_streaks": [
+        {
+          "action_id": "ACTION6",
+          "end_action": 49,
+          "exact_no_effect_actions": 5,
+          "length": 48,
+          "progress_actions": 0,
+          "start_action": 2
+        },
+        {
+          "action_id": "ACTION6",
+          "end_action": 144,
+          "exact_no_effect_actions": 3,
+          "length": 48,
+          "progress_actions": 0,
+          "start_action": 97
+        },
+        {
+          "action_id": "ACTION6",
+          "end_action": 95,
+          "exact_no_effect_actions": 2,
+          "length": 45,
+          "progress_actions": 0,
+          "start_action": 51
+        },
+        {
+          "action_id": "ACTION6",
+          "end_action": 147,
+          "exact_no_effect_actions": 1,
+          "length": 2,
+          "progress_actions": 0,
+          "start_action": 146
+        },
+        {
+          "action_id": "ACTION3",
+          "end_action": 1,
+          "exact_no_effect_actions": 1,
+          "length": 1,
+          "progress_actions": 0,
+          "start_action": 1
+        },
+        {
+          "action_id": "RESET",
+          "end_action": 50,
+          "exact_no_effect_actions": 0,
+          "length": 1,
+          "progress_actions": 0,
+          "start_action": 50
+        },
+        {
+          "action_id": "RESET",
+          "end_action": 96,
+          "exact_no_effect_actions": 0,
+          "length": 1,
+          "progress_actions": 0,
+          "start_action": 96
+        },
+        {
+          "action_id": "RESET",
+          "end_action": 145,
+          "exact_no_effect_actions": 0,
+          "length": 1,
+          "progress_actions": 0,
+          "start_action": 145
+        }
+      ],
+      "no_progress_actions": 147,
+      "progress_actions": 0,
+      "structural_guard_examples": [],
+      "top_structural_signatures": [
+        {
+          "attempts": 8,
+          "effectful": 6,
+          "level": 1,
+          "no_effect": 2,
+          "progress": 0,
+          "signature": "ACTION6:color=2|pixels=9|bbox=3x3|rect=1|twins=5"
+        },
+        {
+          "attempts": 2,
+          "effectful": 0,
+          "level": 1,
+          "no_effect": 2,
+          "progress": 0,
+          "signature": "ACTION6:color=10|pixels=16|bbox=4x4|rect=1|twins=1"
+        },
+        {
+          "attempts": 2,
+          "effectful": 0,
+          "level": 1,
+          "no_effect": 2,
+          "progress": 0,
+          "signature": "ACTION6:color=14|pixels=76|bbox=38x2|rect=1|twins=1"
+        },
+        {
+          "attempts": 1,
+          "effectful": 0,
+          "level": 1,
+          "no_effect": 1,
+          "progress": 0,
+          "signature": "ACTION3"
+        },
+        {
+          "attempts": 1,
+          "effectful": 0,
+          "level": 1,
+          "no_effect": 1,
+          "progress": 0,
+          "signature": "ACTION6:color=15|pixels=4|bbox=2x2|rect=1|twins=4"
+        },
+        {
+          "attempts": 1,
+          "effectful": 0,
+          "level": 1,
+          "no_effect": 1,
+          "progress": 0,
+          "signature": "ACTION6:color=2|pixels=60|bbox=4x18|rect=0|twins=1"
+        },
+        {
+          "attempts": 1,
+          "effectful": 0,
+          "level": 1,
+          "no_effect": 1,
+          "progress": 0,
+          "signature": "ACTION6:color=9|pixels=8|bbox=4x2|rect=1|twins=1"
+        },
+        {
+          "attempts": 1,
+          "effectful": 0,
+          "level": 1,
+          "no_effect": 1,
+          "progress": 0,
+          "signature": "ACTION6:color=2|pixels=48|bbox=8x8|rect=0|twins=1"
+        },
+        {
+          "attempts": 1,
+          "effectful": 0,
+          "level": 1,
+          "no_effect": 1,
+          "progress": 0,
+          "signature": "ACTION6:color=14|pixels=128|bbox=64x2|rect=1|twins=1"
+        },
+        {
+          "attempts": 27,
+          "effectful": 27,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=2|pixels=9|bbox=3x3|rect=1|twins=9"
+        }
+      ]
+    },
+    {
+      "actions": 330,
+      "changed_cells": 5884,
+      "effectful_actions": 330,
+      "exact_guard_examples": [],
+      "exact_no_effect_actions": 0,
+      "final_score": 0.0,
+      "game_id": "tr87-cd924810",
+      "levels_completed": 0,
+      "longest_action_streaks": [
+        {
+          "action_id": "ACTION1",
+          "end_action": 18,
+          "exact_no_effect_actions": 0,
+          "length": 8,
+          "progress_actions": 0,
+          "start_action": 11
+        },
+        {
+          "action_id": "ACTION1",
+          "end_action": 38,
+          "exact_no_effect_actions": 0,
+          "length": 7,
+          "progress_actions": 0,
+          "start_action": 32
+        },
+        {
+          "action_id": "ACTION1",
+          "end_action": 46,
+          "exact_no_effect_actions": 0,
+          "length": 7,
+          "progress_actions": 0,
+          "start_action": 40
+        },
+        {
+          "action_id": "ACTION1",
+          "end_action": 195,
+          "exact_no_effect_actions": 0,
+          "length": 7,
+          "progress_actions": 0,
+          "start_action": 189
+        },
+        {
+          "action_id": "ACTION1",
+          "end_action": 203,
+          "exact_no_effect_actions": 0,
+          "length": 7,
+          "progress_actions": 0,
+          "start_action": 197
+        },
+        {
+          "action_id": "ACTION1",
+          "end_action": 211,
+          "exact_no_effect_actions": 0,
+          "length": 7,
+          "progress_actions": 0,
+          "start_action": 205
+        },
+        {
+          "action_id": "ACTION1",
+          "end_action": 219,
+          "exact_no_effect_actions": 0,
+          "length": 7,
+          "progress_actions": 0,
+          "start_action": 213
+        },
+        {
+          "action_id": "ACTION1",
+          "end_action": 227,
+          "exact_no_effect_actions": 0,
+          "length": 7,
+          "progress_actions": 0,
+          "start_action": 221
+        },
+        {
+          "action_id": "ACTION1",
+          "end_action": 53,
+          "exact_no_effect_actions": 0,
+          "length": 6,
+          "progress_actions": 0,
+          "start_action": 48
+        },
+        {
+          "action_id": "ACTION1",
+          "end_action": 60,
+          "exact_no_effect_actions": 0,
+          "length": 6,
+          "progress_actions": 0,
+          "start_action": 55
+        }
+      ],
+      "no_progress_actions": 330,
+      "progress_actions": 0,
+      "structural_guard_examples": [],
+      "top_structural_signatures": [
+        {
+          "attempts": 217,
+          "effectful": 217,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION1"
+        },
+        {
+          "attempts": 54,
+          "effectful": 54,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION4"
+        },
+        {
+          "attempts": 47,
+          "effectful": 47,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION3"
+        },
+        {
+          "attempts": 10,
+          "effectful": 10,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION2"
+        },
+        {
+          "attempts": 2,
+          "effectful": 2,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "RESET"
+        }
+      ]
+    },
+    {
+      "actions": 83,
+      "changed_cells": 4027,
+      "effectful_actions": 83,
+      "exact_guard_examples": [],
+      "exact_no_effect_actions": 0,
+      "final_score": 1.3065543677788576,
+      "game_id": "r11l-495a7899",
+      "levels_completed": 1,
+      "longest_action_streaks": [
+        {
+          "action_id": "ACTION6",
+          "end_action": 83,
+          "exact_no_effect_actions": 0,
+          "length": 83,
+          "progress_actions": 1,
+          "start_action": 1
+        }
+      ],
+      "no_progress_actions": 82,
+      "progress_actions": 1,
+      "structural_guard_examples": [],
+      "top_structural_signatures": [
+        {
+          "attempts": 20,
+          "effectful": 20,
+          "level": 2,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=12|pixels=1|bbox=1x1|rect=1|twins=15"
+        },
+        {
+          "attempts": 17,
+          "effectful": 17,
+          "level": 2,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=6|pixels=1|bbox=1x1|rect=1|twins=2"
+        },
+        {
+          "attempts": 16,
+          "effectful": 16,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 1,
+          "signature": "ACTION6:color=6|pixels=1|bbox=1x1|rect=1|twins=1"
+        },
+        {
+          "attempts": 7,
+          "effectful": 7,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=0|pixels=8|bbox=3x5|rect=0|twins=1"
+        },
+        {
+          "attempts": 5,
+          "effectful": 5,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=15|pixels=21|bbox=6x5|rect=0|twins=1"
+        },
+        {
+          "attempts": 2,
+          "effectful": 2,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=3|pixels=8|bbox=3x5|rect=0|twins=1"
+        },
+        {
+          "attempts": 1,
+          "effectful": 1,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=5|pixels=3318|bbox=64x63|rect=0|twins=1"
+        },
+        {
+          "attempts": 1,
+          "effectful": 1,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=5|pixels=3346|bbox=64x63|rect=0|twins=1"
+        },
+        {
+          "attempts": 1,
+          "effectful": 1,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=5|pixels=3368|bbox=64x64|rect=0|twins=1"
+        },
+        {
+          "attempts": 1,
+          "effectful": 1,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=5|pixels=3372|bbox=64x64|rect=0|twins=1"
+        }
+      ]
+    },
+    {
+      "actions": 122,
+      "changed_cells": 467,
+      "effectful_actions": 122,
+      "exact_guard_examples": [],
+      "exact_no_effect_actions": 0,
+      "final_score": 0.0,
+      "game_id": "tn36-ef4dde99",
+      "levels_completed": 0,
+      "longest_action_streaks": [
+        {
+          "action_id": "ACTION6",
+          "end_action": 61,
+          "exact_no_effect_actions": 0,
+          "length": 61,
+          "progress_actions": 0,
+          "start_action": 1
+        },
+        {
+          "action_id": "ACTION6",
+          "end_action": 122,
+          "exact_no_effect_actions": 0,
+          "length": 60,
+          "progress_actions": 0,
+          "start_action": 63
+        },
+        {
+          "action_id": "RESET",
+          "end_action": 62,
+          "exact_no_effect_actions": 0,
+          "length": 1,
+          "progress_actions": 0,
+          "start_action": 62
+        }
+      ],
+      "no_progress_actions": 122,
+      "progress_actions": 0,
+      "structural_guard_examples": [],
+      "top_structural_signatures": [
+        {
+          "attempts": 12,
+          "effectful": 12,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=1|pixels=3|bbox=1x3|rect=1|twins=3"
+        },
+        {
+          "attempts": 12,
+          "effectful": 12,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=1|pixels=3|bbox=1x3|rect=1|twins=2"
+        },
+        {
+          "attempts": 12,
+          "effectful": 12,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=5|pixels=3|bbox=1x3|rect=1|twins=3"
+        },
+        {
+          "attempts": 12,
+          "effectful": 12,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=5|pixels=3|bbox=1x3|rect=1|twins=2"
+        },
+        {
+          "attempts": 11,
+          "effectful": 11,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=5|pixels=3|bbox=1x3|rect=1|twins=4"
+        },
+        {
+          "attempts": 11,
+          "effectful": 11,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=1|pixels=3|bbox=1x3|rect=1|twins=4"
+        },
+        {
+          "attempts": 9,
+          "effectful": 9,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=0|pixels=353|bbox=43x38|rect=0|twins=1"
+        },
+        {
+          "attempts": 6,
+          "effectful": 6,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=9|pixels=69|bbox=9x9|rect=0|twins=1"
+        },
+        {
+          "attempts": 6,
+          "effectful": 6,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=11|pixels=14|bbox=4x4|rect=0|twins=1"
+        },
+        {
+          "attempts": 6,
+          "effectful": 6,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=5|pixels=3|bbox=1x3|rect=1|twins=1"
+        }
+      ]
+    }
+  ],
+  "run_root": "artifacts/kaggle/duck_public_repro_terminal_run/latest",
+  "threshold": 2,
+  "totals": {
+    "actions": 682,
+    "effectful_actions": 670,
+    "exact_guard_candidates": 1,
+    "exact_guard_unsafe": 1,
+    "exact_no_effect_actions": 12,
+    "no_progress_actions": 681,
+    "progress_actions": 1,
+    "structural_guard_candidates": 0,
+    "structural_guard_unsafe": 0
+  }
+}

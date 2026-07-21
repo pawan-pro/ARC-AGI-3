@@ -1,0 +1,714 @@
+{
+  "games": [
+    {
+      "actions": 294,
+      "changed_cells": 4924,
+      "effectful_actions": 225,
+      "exact_guard_candidates": 4,
+      "exact_guard_examples": [
+        {
+          "action": "MOUSE(row=50, col=30)",
+          "action_num": 113,
+          "changed_cells": 9,
+          "level": 1,
+          "progress": false
+        },
+        {
+          "action": "MOUSE(row=50, col=30)",
+          "action_num": 169,
+          "changed_cells": 9,
+          "level": 1,
+          "progress": false
+        },
+        {
+          "action": "MOUSE(row=52, col=15)",
+          "action_num": 243,
+          "changed_cells": 0,
+          "level": 1,
+          "progress": false
+        },
+        {
+          "action": "MOUSE(row=52, col=15)",
+          "action_num": 254,
+          "changed_cells": 0,
+          "level": 1,
+          "progress": false
+        }
+      ],
+      "exact_guard_unsafe": 2,
+      "exact_no_effect_actions": 69,
+      "final_score": 0.0,
+      "game_id": "sc25-635fd71a",
+      "levels_completed": 0,
+      "longest_action_streaks": [
+        {
+          "action_id": "ACTION6",
+          "end_action": 89,
+          "exact_no_effect_actions": 4,
+          "length": 25,
+          "progress_actions": 0,
+          "start_action": 65
+        },
+        {
+          "action_id": "ACTION6",
+          "end_action": 294,
+          "exact_no_effect_actions": 1,
+          "length": 23,
+          "progress_actions": 0,
+          "start_action": 272
+        },
+        {
+          "action_id": "ACTION6",
+          "end_action": 128,
+          "exact_no_effect_actions": 1,
+          "length": 17,
+          "progress_actions": 0,
+          "start_action": 112
+        },
+        {
+          "action_id": "ACTION4",
+          "end_action": 33,
+          "exact_no_effect_actions": 4,
+          "length": 15,
+          "progress_actions": 0,
+          "start_action": 19
+        },
+        {
+          "action_id": "ACTION3",
+          "end_action": 48,
+          "exact_no_effect_actions": 4,
+          "length": 15,
+          "progress_actions": 0,
+          "start_action": 34
+        },
+        {
+          "action_id": "ACTION6",
+          "end_action": 148,
+          "exact_no_effect_actions": 0,
+          "length": 12,
+          "progress_actions": 0,
+          "start_action": 137
+        },
+        {
+          "action_id": "ACTION3",
+          "end_action": 18,
+          "exact_no_effect_actions": 3,
+          "length": 11,
+          "progress_actions": 0,
+          "start_action": 8
+        },
+        {
+          "action_id": "ACTION3",
+          "end_action": 64,
+          "exact_no_effect_actions": 2,
+          "length": 10,
+          "progress_actions": 0,
+          "start_action": 55
+        },
+        {
+          "action_id": "ACTION3",
+          "end_action": 110,
+          "exact_no_effect_actions": 1,
+          "length": 10,
+          "progress_actions": 0,
+          "start_action": 101
+        },
+        {
+          "action_id": "ACTION6",
+          "end_action": 217,
+          "exact_no_effect_actions": 3,
+          "length": 10,
+          "progress_actions": 0,
+          "start_action": 208
+        }
+      ],
+      "no_progress_actions": 294,
+      "progress_actions": 0,
+      "structural_guard_candidates": 5,
+      "structural_guard_examples": [
+        {
+          "action": "MOUSE(row=19, col=14)",
+          "action_num": 221,
+          "changed_cells": 0,
+          "level": 1,
+          "progress": false
+        },
+        {
+          "action": "MOUSE(row=19, col=14)",
+          "action_num": 225,
+          "changed_cells": 0,
+          "level": 1,
+          "progress": false
+        },
+        {
+          "action": "MOUSE(row=19, col=14)",
+          "action_num": 229,
+          "changed_cells": 0,
+          "level": 1,
+          "progress": false
+        },
+        {
+          "action": "MOUSE(row=19, col=14)",
+          "action_num": 233,
+          "changed_cells": 0,
+          "level": 1,
+          "progress": false
+        },
+        {
+          "action": "MOUSE(row=19, col=14)",
+          "action_num": 237,
+          "changed_cells": 0,
+          "level": 1,
+          "progress": false
+        }
+      ],
+      "structural_guard_unsafe": 0,
+      "top_structural_signatures": [
+        {
+          "attempts": 49,
+          "effectful": 11,
+          "level": 1,
+          "no_effect": 38,
+          "progress": 0,
+          "signature": "ACTION6:color=15|pixels=4|bbox=2x2|rect=1|twins=4"
+        },
+        {
+          "attempts": 78,
+          "effectful": 64,
+          "level": 1,
+          "no_effect": 14,
+          "progress": 0,
+          "signature": "ACTION3"
+        },
+        {
+          "attempts": 41,
+          "effectful": 34,
+          "level": 1,
+          "no_effect": 7,
+          "progress": 0,
+          "signature": "ACTION4"
+        },
+        {
+          "attempts": 7,
+          "effectful": 0,
+          "level": 1,
+          "no_effect": 7,
+          "progress": 0,
+          "signature": "ACTION6:color=10|pixels=16|bbox=4x4|rect=1|twins=1"
+        },
+        {
+          "attempts": 19,
+          "effectful": 17,
+          "level": 1,
+          "no_effect": 2,
+          "progress": 0,
+          "signature": "ACTION6:color=0|pixels=9|bbox=3x3|rect=1|twins=4"
+        },
+        {
+          "attempts": 1,
+          "effectful": 0,
+          "level": 1,
+          "no_effect": 1,
+          "progress": 0,
+          "signature": "ACTION6:color=2|pixels=48|bbox=8x8|rect=0|twins=1"
+        },
+        {
+          "attempts": 49,
+          "effectful": 49,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=3|pixels=208|bbox=17x17|rect=0|twins=1"
+        },
+        {
+          "attempts": 9,
+          "effectful": 9,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=0|pixels=9|bbox=3x3|rect=1|twins=3"
+        },
+        {
+          "attempts": 9,
+          "effectful": 9,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=0|pixels=9|bbox=3x3|rect=1|twins=2"
+        },
+        {
+          "attempts": 9,
+          "effectful": 9,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=0|pixels=9|bbox=3x3|rect=1|twins=1"
+        }
+      ]
+    },
+    {
+      "actions": 265,
+      "changed_cells": 4074,
+      "effectful_actions": 265,
+      "exact_guard_examples": [],
+      "exact_no_effect_actions": 0,
+      "final_score": 0.0,
+      "game_id": "tr87-cd924810",
+      "levels_completed": 0,
+      "longest_action_streaks": [
+        {
+          "action_id": "ACTION1",
+          "end_action": 41,
+          "exact_no_effect_actions": 0,
+          "length": 37,
+          "progress_actions": 0,
+          "start_action": 5
+        },
+        {
+          "action_id": "ACTION1",
+          "end_action": 238,
+          "exact_no_effect_actions": 0,
+          "length": 14,
+          "progress_actions": 0,
+          "start_action": 225
+        },
+        {
+          "action_id": "ACTION1",
+          "end_action": 137,
+          "exact_no_effect_actions": 0,
+          "length": 8,
+          "progress_actions": 0,
+          "start_action": 130
+        },
+        {
+          "action_id": "ACTION1",
+          "end_action": 49,
+          "exact_no_effect_actions": 0,
+          "length": 7,
+          "progress_actions": 0,
+          "start_action": 43
+        },
+        {
+          "action_id": "ACTION1",
+          "end_action": 57,
+          "exact_no_effect_actions": 0,
+          "length": 7,
+          "progress_actions": 0,
+          "start_action": 51
+        },
+        {
+          "action_id": "ACTION1",
+          "end_action": 65,
+          "exact_no_effect_actions": 0,
+          "length": 7,
+          "progress_actions": 0,
+          "start_action": 59
+        },
+        {
+          "action_id": "ACTION1",
+          "end_action": 73,
+          "exact_no_effect_actions": 0,
+          "length": 7,
+          "progress_actions": 0,
+          "start_action": 67
+        },
+        {
+          "action_id": "ACTION1",
+          "end_action": 101,
+          "exact_no_effect_actions": 0,
+          "length": 7,
+          "progress_actions": 0,
+          "start_action": 95
+        },
+        {
+          "action_id": "ACTION1",
+          "end_action": 109,
+          "exact_no_effect_actions": 0,
+          "length": 7,
+          "progress_actions": 0,
+          "start_action": 103
+        },
+        {
+          "action_id": "ACTION1",
+          "end_action": 117,
+          "exact_no_effect_actions": 0,
+          "length": 7,
+          "progress_actions": 0,
+          "start_action": 111
+        }
+      ],
+      "no_progress_actions": 265,
+      "progress_actions": 0,
+      "structural_guard_examples": [],
+      "top_structural_signatures": [
+        {
+          "attempts": 222,
+          "effectful": 222,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION1"
+        },
+        {
+          "attempts": 23,
+          "effectful": 23,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION4"
+        },
+        {
+          "attempts": 17,
+          "effectful": 17,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION3"
+        },
+        {
+          "attempts": 2,
+          "effectful": 2,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "RESET"
+        },
+        {
+          "attempts": 1,
+          "effectful": 1,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION2"
+        }
+      ]
+    },
+    {
+      "actions": 399,
+      "changed_cells": 11384,
+      "effectful_actions": 399,
+      "exact_guard_examples": [],
+      "exact_no_effect_actions": 0,
+      "final_score": 0.0,
+      "game_id": "r11l-495a7899",
+      "levels_completed": 0,
+      "longest_action_streaks": [
+        {
+          "action_id": "ACTION6",
+          "end_action": 60,
+          "exact_no_effect_actions": 0,
+          "length": 60,
+          "progress_actions": 0,
+          "start_action": 1
+        },
+        {
+          "action_id": "ACTION6",
+          "end_action": 121,
+          "exact_no_effect_actions": 0,
+          "length": 60,
+          "progress_actions": 0,
+          "start_action": 62
+        },
+        {
+          "action_id": "ACTION6",
+          "end_action": 182,
+          "exact_no_effect_actions": 0,
+          "length": 60,
+          "progress_actions": 0,
+          "start_action": 123
+        },
+        {
+          "action_id": "ACTION6",
+          "end_action": 243,
+          "exact_no_effect_actions": 0,
+          "length": 60,
+          "progress_actions": 0,
+          "start_action": 184
+        },
+        {
+          "action_id": "ACTION6",
+          "end_action": 304,
+          "exact_no_effect_actions": 0,
+          "length": 60,
+          "progress_actions": 0,
+          "start_action": 245
+        },
+        {
+          "action_id": "ACTION6",
+          "end_action": 365,
+          "exact_no_effect_actions": 0,
+          "length": 60,
+          "progress_actions": 0,
+          "start_action": 306
+        },
+        {
+          "action_id": "ACTION6",
+          "end_action": 399,
+          "exact_no_effect_actions": 0,
+          "length": 33,
+          "progress_actions": 0,
+          "start_action": 367
+        },
+        {
+          "action_id": "RESET",
+          "end_action": 61,
+          "exact_no_effect_actions": 0,
+          "length": 1,
+          "progress_actions": 0,
+          "start_action": 61
+        },
+        {
+          "action_id": "RESET",
+          "end_action": 122,
+          "exact_no_effect_actions": 0,
+          "length": 1,
+          "progress_actions": 0,
+          "start_action": 122
+        },
+        {
+          "action_id": "RESET",
+          "end_action": 183,
+          "exact_no_effect_actions": 0,
+          "length": 1,
+          "progress_actions": 0,
+          "start_action": 183
+        }
+      ],
+      "no_progress_actions": 399,
+      "progress_actions": 0,
+      "structural_guard_examples": [],
+      "top_structural_signatures": [
+        {
+          "attempts": 230,
+          "effectful": 230,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=6|pixels=1|bbox=1x1|rect=1|twins=1"
+        },
+        {
+          "attempts": 46,
+          "effectful": 46,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=15|pixels=21|bbox=6x5|rect=0|twins=1"
+        },
+        {
+          "attempts": 39,
+          "effectful": 39,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=15|pixels=21|bbox=5x5|rect=0|twins=1"
+        },
+        {
+          "attempts": 17,
+          "effectful": 17,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=3|pixels=1|bbox=1x1|rect=1|twins=3"
+        },
+        {
+          "attempts": 10,
+          "effectful": 10,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=3|pixels=6|bbox=3x4|rect=0|twins=1"
+        },
+        {
+          "attempts": 10,
+          "effectful": 10,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=3|pixels=7|bbox=4x4|rect=0|twins=1"
+        },
+        {
+          "attempts": 6,
+          "effectful": 6,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "RESET"
+        },
+        {
+          "attempts": 5,
+          "effectful": 5,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=15|pixels=20|bbox=5x5|rect=0|twins=1"
+        },
+        {
+          "attempts": 2,
+          "effectful": 2,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=5|pixels=3350|bbox=64x63|rect=0|twins=1"
+        },
+        {
+          "attempts": 2,
+          "effectful": 2,
+          "level": 1,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=5|pixels=3358|bbox=64x64|rect=0|twins=1"
+        }
+      ]
+    },
+    {
+      "actions": 160,
+      "changed_cells": 4886,
+      "effectful_actions": 160,
+      "exact_guard_examples": [],
+      "exact_no_effect_actions": 0,
+      "final_score": 3.571428571428571,
+      "game_id": "tn36-ef4dde99",
+      "levels_completed": 1,
+      "longest_action_streaks": [
+        {
+          "action_id": "ACTION6",
+          "end_action": 69,
+          "exact_no_effect_actions": 0,
+          "length": 69,
+          "progress_actions": 1,
+          "start_action": 1
+        },
+        {
+          "action_id": "ACTION6",
+          "end_action": 131,
+          "exact_no_effect_actions": 0,
+          "length": 61,
+          "progress_actions": 0,
+          "start_action": 71
+        },
+        {
+          "action_id": "ACTION6",
+          "end_action": 160,
+          "exact_no_effect_actions": 0,
+          "length": 28,
+          "progress_actions": 0,
+          "start_action": 133
+        },
+        {
+          "action_id": "RESET",
+          "end_action": 70,
+          "exact_no_effect_actions": 0,
+          "length": 1,
+          "progress_actions": 0,
+          "start_action": 70
+        },
+        {
+          "action_id": "RESET",
+          "end_action": 132,
+          "exact_no_effect_actions": 0,
+          "length": 1,
+          "progress_actions": 0,
+          "start_action": 132
+        }
+      ],
+      "no_progress_actions": 159,
+      "progress_actions": 1,
+      "structural_guard_examples": [],
+      "top_structural_signatures": [
+        {
+          "attempts": 22,
+          "effectful": 22,
+          "level": 2,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=0|pixels=1|bbox=1x1|rect=1|twins=4"
+        },
+        {
+          "attempts": 8,
+          "effectful": 8,
+          "level": 2,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=1|pixels=3|bbox=3x1|rect=1|twins=8"
+        },
+        {
+          "attempts": 7,
+          "effectful": 7,
+          "level": 2,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=1|pixels=3|bbox=1x3|rect=1|twins=16"
+        },
+        {
+          "attempts": 7,
+          "effectful": 7,
+          "level": 2,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=1|pixels=3|bbox=3x1|rect=1|twins=20"
+        },
+        {
+          "attempts": 7,
+          "effectful": 7,
+          "level": 2,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=1|pixels=3|bbox=1x3|rect=1|twins=12"
+        },
+        {
+          "attempts": 7,
+          "effectful": 7,
+          "level": 2,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=1|pixels=3|bbox=3x1|rect=1|twins=16"
+        },
+        {
+          "attempts": 7,
+          "effectful": 7,
+          "level": 2,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=9|pixels=69|bbox=9x9|rect=0|twins=1"
+        },
+        {
+          "attempts": 6,
+          "effectful": 6,
+          "level": 2,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=1|pixels=3|bbox=3x1|rect=1|twins=24"
+        },
+        {
+          "attempts": 6,
+          "effectful": 6,
+          "level": 2,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=11|pixels=6|bbox=3x2|rect=1|twins=1"
+        },
+        {
+          "attempts": 5,
+          "effectful": 5,
+          "level": 2,
+          "no_effect": 0,
+          "progress": 0,
+          "signature": "ACTION6:color=1|pixels=3|bbox=1x3|rect=1|twins=8"
+        }
+      ]
+    }
+  ],
+  "run_root": "artifacts/kaggle/duck_full_eval_ft09_overlap/latest",
+  "threshold": 2,
+  "totals": {
+    "actions": 1118,
+    "effectful_actions": 1049,
+    "exact_guard_candidates": 4,
+    "exact_guard_unsafe": 2,
+    "exact_no_effect_actions": 69,
+    "no_progress_actions": 1117,
+    "progress_actions": 1,
+    "structural_guard_candidates": 5,
+    "structural_guard_unsafe": 0
+  }
+}
