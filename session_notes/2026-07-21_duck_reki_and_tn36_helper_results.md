@@ -67,12 +67,45 @@ added until a successful trace or a discriminating isolated experiment reveals
 that rule. EXP-DUCK-014 therefore uses only the validated level-1 prefix and
 returns level 2 to normal Duck reasoning.
 
-## EXP-DUCK-014 launch
+## EXP-DUCK-012: exact-no-change batch feedback
+
+Kaggle kernel: `jatalepawan/arc-agi-3-duck-exact-no-change-batch-feedback`
+
+The four-game targeted run completed 2 of 28 levels with score sum `0.6022`,
+1,282 actions, and 760,038 generated tokens. The live policy interrupted 55
+exact-no-change batches and cancelled 180 queued actions. `g50t` and `ka59`
+each completed one level; `sk48` and `dc22` completed none.
+
+This proves that immediate feedback can invalidate a queued plan, but it is not
+ready for promotion. Total spend remained high, and one interruption coincided
+with a terminal transition. Keep the event instrumentation, add a terminal
+guard before any retest, and do not merge this policy into the submission.
+
+## EXP-DUCK-014 full-evaluation result
 
 Kaggle kernel: `jatalepawan/arc-agi-3-duck-full-eval-ft09-tn36`
 
-The candidate preserves EXP-DUCK-009's validated ft09 policies and all-game
-settings. It applies the seven-action prefix only to tn36 level 1, then resumes
-normal Duck reasoning on level 2. Version 1 was launched after EXP-DUCK-013
-passed. Promotion to leaderboard submission still requires the completed
-all-game benchmark to outperform or safely dominate EXP-DUCK-009.
+The candidate preserved EXP-DUCK-009's validated ft09 policies and all-game
+settings. It applied the seven-action prefix only to tn36 level 1, then resumed
+normal Duck reasoning on level 2.
+
+| metric | EXP-DUCK-009 | EXP-DUCK-014 | change |
+|---|---:|---:|---:|
+| levels completed | 18/183 | 22/183 | +4 |
+| score sum | 65.6878 | 92.7582 | +27.0704 |
+| ft09 levels | 4/6 | 4/6 | 0 |
+| tn36 levels | 0/7 | 1/7 | +1 |
+
+`ft09` reproduced its exact 69-action, zero-token 4/6 result. `tn36` began
+with the exact seven-action, zero-token helper; action 7 completed level 1, and
+normal Duck continued on level 2 through action 64. The helper did not appear
+in any non-target game. Every check in `validate_exp_duck_014.py` passed.
+
+The all-game gate therefore passed, and the exact generated
+`submission.parquet` is the leaderboard candidate. The local four-level gain
+includes stochastic non-target differences, so the official public score is
+still the final promotion test; it must exceed EXP-DUCK-009's `0.92`.
+
+Submission reference `54880404` was created from kernel Version 1 and was
+observed as `PENDING` on 2026-07-21. The submitted artifact SHA-256 is
+`71bfd543030e339d87bd9ff744d466218398a1259650b2c255626d27049c88bb`.
