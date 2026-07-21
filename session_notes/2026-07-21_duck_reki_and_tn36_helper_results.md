@@ -53,6 +53,20 @@ solver_note: tn36_level1_helper=success; helper_actions=7
 This satisfies the exact promotion gate. Unlike the generic fallback, it is a
 mechanic derived from a successful trace and protected by a board signature.
 
+### Level-2 follow-up
+
+The level-2 board produced by EXP-DUCK-013 is byte-identical to the level-2
+board reached by EXP-DUCK-009. It contains 44 three-pixel blue toggle objects,
+two separate panels, selector-like bottom icons, two clue shapes, and a submit
+object. EXP-DUCK-009 clicked all 44 toggles and later tried panel-specific
+patterns, selectors, resets, and repeated submit clicks without advancing.
+
+This rejects the simple "clear every block" interpretation. Level 2 appears to
+require a panel transformation or selection rule. No level-2 helper should be
+added until a successful trace or a discriminating isolated experiment reveals
+that rule. EXP-DUCK-014 therefore uses only the validated level-1 prefix and
+returns level 2 to normal Duck reasoning.
+
 ## EXP-DUCK-014 launch
 
 Kaggle kernel: `jatalepawan/arc-agi-3-duck-full-eval-ft09-tn36`
