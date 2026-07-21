@@ -73,6 +73,26 @@ def analyze_events(events: list[dict[str, Any]]) -> dict[str, int]:
     return dict(result)
 
 
+def analyze_live_feedback(events: list[dict[str, Any]]) -> dict[str, int]:
+    """Summarize interruptions recorded by the patched live solver."""
+    result: Counter[str] = Counter()
+    for event in (item for item in events if item.get("type") == "action"):
+        if not event.get("batch_feedback_stop"):
+            continue
+        batch_index = int(event.get("batch_index") or 1)
+        batch_size = int(event.get("batch_size") or batch_index)
+        result["live_interruptions"] += 1
+        result["live_cancelled_actions"] += max(0, batch_size - batch_index)
+        result["live_exact_no_change_interruptions"] += (
+            event.get("batch_feedback_reason") == "exact_no_board_change"
+        )
+        if bool(event.get("level_completed")) or float(event.get("reward") or 0) > 0:
+            result["live_progress_interruptions"] += 1
+        if event.get("game_over") or event.get("run_complete"):
+            result["live_terminal_interruptions"] += 1
+    return dict(result)
+
+
 def analyze_run(run_root: Path, exempt_prefixes: set[str]) -> dict[str, Any]:
     artifacts = run_root / "artifacts"
     games = []
@@ -82,6 +102,7 @@ def analyze_run(run_root: Path, exempt_prefixes: set[str]) -> dict[str, Any]:
         game_id = path.name.split("_p0_events.jsonl", 1)[0]
         events = [json.loads(line) for line in path.read_text().splitlines() if line]
         metrics = analyze_events(events)
+        metrics.update(analyze_live_feedback(events))
         exempt = any(game_id.startswith(prefix) for prefix in exempt_prefixes)
         games.append({"game_id": game_id, "exempt": exempt, **metrics})
         totals.update(metrics)

@@ -1,6 +1,6 @@
 import unittest
 
-from batch_feedback_analysis import analyze_events
+from batch_feedback_analysis import analyze_events, analyze_live_feedback
 
 
 def event(kind, board, number=0, batch_index=None, batch_size=None, reward=0):
@@ -40,6 +40,27 @@ class BatchFeedbackAnalysisTests(unittest.TestCase):
         ]
         result = analyze_events(events)
         self.assertEqual(result["no_change_unsafe_batches"], 1)
+
+    def test_counts_recorded_live_interruptions(self):
+        a = [[0]]
+        stopped = event("action", a, 1, 2, 5)
+        stopped.update(
+            {
+                "batch_feedback_stop": True,
+                "batch_feedback_reason": "exact_no_board_change",
+            }
+        )
+        result = analyze_live_feedback([event("initial", a), stopped])
+        self.assertEqual(result["live_interruptions"], 1)
+        self.assertEqual(result["live_cancelled_actions"], 3)
+        self.assertEqual(result["live_exact_no_change_interruptions"], 1)
+        self.assertNotIn("live_progress_interruptions", result)
+
+    def test_flags_invalid_progress_interruption(self):
+        stopped = event("action", [[1]], 1, 1, 3, reward=1)
+        stopped["batch_feedback_stop"] = True
+        result = analyze_live_feedback([stopped])
+        self.assertEqual(result["live_progress_interruptions"], 1)
 
 
 if __name__ == "__main__":
