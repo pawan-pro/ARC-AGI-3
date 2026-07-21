@@ -51,6 +51,10 @@ VARIANTS = {
         "metadata": PACKAGE_DIR / "kernel-metadata-full-eval-overlap.json",
         "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_full_eval_ft09_overlap/latest",
     },
+    "reki-fallback": {
+        "metadata": PACKAGE_DIR / "kernel-metadata-reki-fallback.json",
+        "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_reki_fallback/latest",
+    },
 }
 
 
@@ -162,6 +166,7 @@ def cmd_summarize(args: argparse.Namespace) -> None:
     runs = benchmark.get("game_runs", [])
     rows = []
     for game_run in runs:
+        game_id = str(game_run.get("game_id") or "")
         history = game_run.get("history") or []
         actions = sum(game_run.get("actions_per_level") or [])
         note = game_run.get("solver_note") or ""
@@ -174,15 +179,33 @@ def cmd_summarize(args: argparse.Namespace) -> None:
         tokens = note_tokens or sum(step.get("generated_tokens") or 0 for step in history)
         action_counts = Counter((step.get("action") or {}).get("id") for step in history)
         zero_token_actions = sum(1 for step in history if (step.get("generated_tokens") or 0) == 0)
+        fallback_events = []
+        events_path = artifact_dir / "artifacts" / f"{game_id}_p0_events.jsonl"
+        if events_path.exists():
+            for line in events_path.read_text(encoding="utf-8").splitlines():
+                if not line.strip():
+                    continue
+                event = json.loads(line)
+                if event.get("fallback_policy") == "reki_saliency_deadsig":
+                    fallback_events.append(event)
         rows.append(
             {
-                "game_id": game_run.get("game_id"),
+                "game_id": game_id,
                 "score": float(game_run.get("final_score") or 0),
                 "levels": int(game_run.get("levels_completed") or 0),
                 "total_levels": int(game_run.get("number_of_levels") or 0),
                 "actions": actions,
                 "tokens": tokens,
                 "zero_token_actions": zero_token_actions,
+                "fallback_actions": len(fallback_events),
+                "fallback_effective": sum(
+                    bool((event.get("reki_fallback_observation") or {}).get("effective"))
+                    for event in fallback_events
+                ),
+                "fallback_progress": sum(
+                    bool((event.get("reki_fallback_observation") or {}).get("level_progress"))
+                    for event in fallback_events
+                ),
                 "top_actions": action_counts.most_common(3),
             }
         )
@@ -194,6 +217,12 @@ def cmd_summarize(args: argparse.Namespace) -> None:
     print(f"actions: {sum(row['actions'] for row in rows)}")
     print(f"tokens: {sum(row['tokens'] for row in rows)}")
     print(f"zero_token_actions: {sum(row['zero_token_actions'] for row in rows)}")
+    print(
+        "reki_fallback: "
+        f"actions={sum(row['fallback_actions'] for row in rows)} "
+        f"effective={sum(row['fallback_effective'] for row in rows)} "
+        f"level_progress={sum(row['fallback_progress'] for row in rows)}"
+    )
 
     print("\nTop progress games:")
     for row in sorted(rows, key=lambda item: (item["score"], item["levels"]), reverse=True)[:12]:
@@ -201,7 +230,8 @@ def cmd_summarize(args: argparse.Namespace) -> None:
             f"{row['game_id']:13} score={row['score']:6.2f} "
             f"levels={row['levels']}/{row['total_levels']} "
             f"actions={row['actions']:4} tokens={row['tokens']:6} "
-            f"zero={row['zero_token_actions']:4} top={row['top_actions']}"
+            f"zero={row['zero_token_actions']:4} fallback={row['fallback_actions']:3}/"
+            f"{row['fallback_effective']:3}/{row['fallback_progress']:2} top={row['top_actions']}"
         )
 
     print("\nZero-level high-spend games:")
@@ -211,7 +241,8 @@ def cmd_summarize(args: argparse.Namespace) -> None:
             f"{row['game_id']:13} score={row['score']:6.2f} "
             f"levels={row['levels']}/{row['total_levels']} "
             f"actions={row['actions']:4} tokens={row['tokens']:6} "
-            f"zero={row['zero_token_actions']:4} top={row['top_actions']}"
+            f"zero={row['zero_token_actions']:4} fallback={row['fallback_actions']:3}/"
+            f"{row['fallback_effective']:3}/{row['fallback_progress']:2} top={row['top_actions']}"
         )
 
 
