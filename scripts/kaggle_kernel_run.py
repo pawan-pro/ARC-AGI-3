@@ -59,6 +59,10 @@ VARIANTS = {
         "metadata": PACKAGE_DIR / "kernel-metadata-batch-feedback.json",
         "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_batch_feedback/latest",
     },
+    "tn36-level1-helper": {
+        "metadata": PACKAGE_DIR / "kernel-metadata-tn36-level1-helper.json",
+        "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_tn36_level1_helper/latest",
+    },
 }
 
 
