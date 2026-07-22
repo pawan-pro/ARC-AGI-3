@@ -67,6 +67,14 @@ VARIANTS = {
         "metadata": PACKAGE_DIR / "kernel-metadata-full-eval-ft09-tn36.json",
         "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_full_eval_ft09_tn36/latest",
     },
+    "seeded-control": {
+        "metadata": PACKAGE_DIR / "kernel-metadata-seeded-pair-control.json",
+        "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_seeded_pair_control/latest",
+    },
+    "seeded-tn36": {
+        "metadata": PACKAGE_DIR / "kernel-metadata-seeded-pair-tn36.json",
+        "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_seeded_pair_tn36/latest",
+    },
 }
 
 
