@@ -106,6 +106,13 @@ The all-game gate therefore passed, and the exact generated
 includes stochastic non-target differences, so the official public score is
 still the final promotion test; it must exceed EXP-DUCK-009's `0.92`.
 
-Submission reference `54880404` was created from kernel Version 1 and was
-observed as `PENDING` on 2026-07-21. The submitted artifact SHA-256 is
+Submission reference `54880404` was created from kernel Version 1. It completed
+on 2026-07-22 with public score `0.88`, below EXP-DUCK-009's `0.92` by `0.04`.
+The submitted artifact SHA-256 is
 `71bfd543030e339d87bd9ff744d466218398a1259650b2c255626d27049c88bb`.
+
+This is a useful local-to-public mismatch. The targeted tn36 helper behaved as
+validated, but the full 25-game run contains stochastic non-target differences;
+its higher local score sum was not reliable evidence of a public improvement.
+Reject EXP-DUCK-014 as a leaderboard baseline, keep EXP-DUCK-009 active, and
+require paired or repeated all-game controls before the next submission.
