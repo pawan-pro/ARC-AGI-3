@@ -71,6 +71,18 @@ VARIANTS = {
         "metadata": PACKAGE_DIR / "kernel-metadata-tn36-level2-replay.json",
         "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_tn36_level2_replay/latest",
     },
+    "tn36-level2-program": {
+        "metadata": PACKAGE_DIR / "kernel-metadata-tn36-level2-program.json",
+        "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_tn36_level2_program/latest",
+    },
+    "tn36-level3-continuation": {
+        "metadata": PACKAGE_DIR / "kernel-metadata-tn36-level3-continuation.json",
+        "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_tn36_level3_continuation/latest",
+    },
+    "tn36-level3-program": {
+        "metadata": PACKAGE_DIR / "kernel-metadata-tn36-level3-program.json",
+        "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_tn36_level3_program/latest",
+    },
     "full-eval-ft09-tn36": {
         "metadata": PACKAGE_DIR / "kernel-metadata-full-eval-ft09-tn36.json",
         "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_full_eval_ft09_tn36/latest",
