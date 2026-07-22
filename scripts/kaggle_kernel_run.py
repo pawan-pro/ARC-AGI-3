@@ -63,6 +63,10 @@ VARIANTS = {
         "metadata": PACKAGE_DIR / "kernel-metadata-tn36-level1-helper.json",
         "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_tn36_level1_helper/latest",
     },
+    "tn36-level2-helper": {
+        "metadata": PACKAGE_DIR / "kernel-metadata-tn36-level2-matrix.json",
+        "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_tn36_level2_matrix/latest",
+    },
     "full-eval-ft09-tn36": {
         "metadata": PACKAGE_DIR / "kernel-metadata-full-eval-ft09-tn36.json",
         "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_full_eval_ft09_tn36/latest",
