@@ -10,12 +10,51 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 CONTROL = ROOT / "artifacts/kaggle/duck_seeded_pair_control/latest/benchmark.json"
 CANDIDATE = ROOT / "artifacts/kaggle/duck_seeded_pair_tn36/latest/benchmark.json"
+CONTROL_EVENTS = ROOT / "artifacts/kaggle/duck_seeded_pair_control/latest/artifacts"
+CANDIDATE_EVENTS = ROOT / "artifacts/kaggle/duck_seeded_pair_tn36/latest/artifacts"
 TARGET = "tn36-ef4dde99"
 
 
 def load(path: Path) -> dict[str, dict]:
     payload = json.loads(path.read_text(encoding="utf-8"))
     return {row["game_id"]: row for row in payload["game_runs"]}
+
+
+def load_events(directory: Path) -> dict[str, dict]:
+    runs: dict[str, dict] = {}
+    for path in sorted(directory.glob("*_events.jsonl")):
+        game_id = path.name.split("_p0_events.jsonl", 1)[0]
+        events = [
+            json.loads(line)
+            for line in path.read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        ]
+        action_events = [event for event in events if event.get("type") == "action"]
+        runs[game_id] = {
+            "levels_completed": max(
+                (int(event.get("level", 1) or 1) - 1 for event in events),
+                default=0,
+            ),
+            "final_score": max(
+                (float(event.get("score", 0.0) or 0.0) for event in events),
+                default=0.0,
+            ),
+            "history": [
+                {
+                    "action": event.get("action_display"),
+                    "generated_tokens": 0,
+                }
+                for event in action_events
+            ],
+        }
+    return runs
+
+
+def load_available(benchmark: Path, events: Path) -> dict[str, dict]:
+    if benchmark.exists():
+        return load(benchmark)
+    print(f"benchmark missing; reconstructing action trajectories from {events}")
+    return load_events(events)
 
 
 def signature(row: dict) -> dict:
@@ -28,8 +67,8 @@ def signature(row: dict) -> dict:
 
 
 def main() -> int:
-    control = load(CONTROL)
-    candidate = load(CANDIDATE)
+    control = load_available(CONTROL, CONTROL_EVENTS)
+    candidate = load_available(CANDIDATE, CANDIDATE_EVENTS)
     if set(control) != set(candidate):
         raise SystemExit("FAIL: paired runs selected different games")
 

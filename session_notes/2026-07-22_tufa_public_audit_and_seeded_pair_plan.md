@@ -68,6 +68,38 @@ Both Version 1 kernels were launched on 2026-07-22 and entered `RUNNING` state:
 Expected monitoring cadence: roughly every three hours, matching the historical Duck
 runtime instead of repeatedly polling.
 
+## EXP-DUCK-015 result
+
+Both kernels completed successfully in about 2 hours 12 minutes. Kaggle's downloaded
+package omitted `benchmark.json`, but it included complete per-game event streams;
+the final Kaggle logs also printed the complete benchmark summaries.
+
+| Metric | 015A control | 015B tn36 candidate |
+|---|---:|---:|
+| Levels across eight games | 9 | 11 |
+| Mean score | 6.71 | 7.15 |
+| Actions | 2,501 | 3,061 |
+| Generated tokens | 1,134,698 | 1,148,936 |
+| tn36 levels | 0 | 1 |
+| tn36 actions | 428 | 263 |
+| tn36 tokens | 171,229 | 146,565 |
+
+The tn36 helper worked as designed: it added level 1 and reduced tn36 resource use.
+The isolation gate nevertheless failed. Every one of the six LLM-driven non-target
+games eventually followed a different action path, and four already differed on the
+first action. Only ft09 matched exactly because its 69 actions are deterministic.
+
+This shows that request seeds alone do not make separate concurrent vLLM GPU runs
+reproducible. Batch scheduling and GPU/model execution still change sampled outputs.
+Therefore the aggregate `9 -> 11` level result cannot be attributed solely to tn36.
+No competition submission was made, and EXP-DUCK-009 remains the active `0.92`
+baseline.
+
+Next measurement design: run control and candidate sequentially inside the same
+kernel with concurrency 1, preferably in both A/B and B/A order over several seeds.
+That separates the helper effect from cross-run batching variance. Do not spend a
+full submission until the target improvement survives that gate.
+
 ## What the public winner suggests next
 
 After the paired ruler is validated, the strongest general research directions are:
