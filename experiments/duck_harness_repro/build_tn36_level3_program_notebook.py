@@ -164,13 +164,28 @@ TN36_LEVEL3_PROGRAM_POLICY = {
 }
 '''
     anchor = "\ntry:\n    bm.label ="
+    if anchor not in config:
+        raise RuntimeError("Could not find benchmark-label anchor for level-3 policy")
     config = config.replace(anchor, policy + anchor, 1)
-    assign_anchor = "    bm.solver.tn36_level2_program_policy = dict(TN36_LEVEL2_PROGRAM_POLICY)\n"
+    assign_anchor = "    bm.solver.tn36_level2_program_policy = dict(TN36_LEVEL2_REPLAY_POLICY)\n"
+    if assign_anchor not in config:
+        raise RuntimeError("Could not find level-2 policy assignment for level-3 wiring")
     config = config.replace(
         assign_anchor,
         assign_anchor + "    bm.solver.tn36_level3_program_policy = dict(TN36_LEVEL3_PROGRAM_POLICY)\n",
         1,
     )
+    print_anchor = '    print("tn36 level-1 helper policy:", json.dumps(bm.solver.tn36_level1_helper_policy, sort_keys=True))\n'
+    if print_anchor not in config:
+        raise RuntimeError("Could not find helper-policy diagnostic anchor")
+    config = config.replace(
+        print_anchor,
+        print_anchor
+        + '    print("tn36 level-3 program policy:", json.dumps(bm.solver.tn36_level3_program_policy, sort_keys=True))\n',
+        1,
+    )
+    if "bm.solver.tn36_level3_program_policy =" not in config:
+        raise RuntimeError("Level-3 program policy was not wired into the solver")
     set_source(cells[16], config)
     set_source(
         cells[0],

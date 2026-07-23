@@ -56,22 +56,37 @@ an expected total of 25 deterministic, zero-token actions through level 3.
 - The same substring-removal defect affected the next generated versions.
 - Both builders now remove only exact whole lines, and their embedded solver
   methods compile locally.
-- Kaggle accepted EXP-DUCK-020 version 3.
-- Kaggle then began returning private-kernel permission errors; forced OAuth
-  refresh opened a browser approval page but was not completed in this run.
-- EXP-DUCK-019's corrected relaunch also hit Kaggle's two-GPU-session limit.
+- Kaggle accepted EXP-DUCK-020 version 3, but the builder silently failed to
+  assign `tn36_level3_program_policy` because it searched for the nonexistent
+  `TN36_LEVEL2_PROGRAM_POLICY` name instead of `TN36_LEVEL2_REPLAY_POLICY`.
+- Version 3 therefore fell through to normal Duck on level 3: 25 actions,
+  21,400 tokens, and 2/7 levels. This was not a valid program test.
+- The builder now asserts every policy insertion and prints the active level-3
+  policy at runtime.
+- Corrected version 4 ran all 25 actions deterministically with zero tokens.
+  Levels 1-2 still passed, but the nine level-3 actions made no progress:
 
-## Next commands after OAuth approval
-
-```bash
-python scripts/kaggle_kernel_run.py --variant tn36-level3-program status
-python scripts/kaggle_kernel_run.py --variant tn36-level3-program output
-python scripts/kaggle_kernel_run.py --variant tn36-level3-program summarize
-python experiments/duck_harness_repro/validate_exp_duck_020.py
+```text
+levels:            2 / 7
+score:             10.7143
+actions:           25 total
+actions per level: 7, 9, 9, 0, 0, 0, 0
+generated tokens:  0
+solver note:       tn36_level3_program=no_progress; helper_actions=9
+validator:         FAIL (expected level 3 completion)
 ```
 
-If version 3 is absent or failed, push it again. Once a GPU slot is free, push
-and validate `tn36-level3-continuation` to compare normal Duck from level 3.
+## K-12 result
+
+The robot now reads our instruction card correctly and uses no LLM thinking
+tokens. The directions written on the card are wrong, however, so the robot
+does not reach the level-3 goal.
+
+## Next experiment
+
+Relaunch EXP-DUCK-019. Keep the validated 16-action, zero-token prefix through
+levels 1-2, then let unchanged Duck reason on level 3. Inspect its transcript
+and action effects before proposing another deterministic command sequence.
 
 EXP-DUCK-009 at public score `0.92` remains the active submission baseline. No
 full evaluation or competition submission is justified until the corrected
