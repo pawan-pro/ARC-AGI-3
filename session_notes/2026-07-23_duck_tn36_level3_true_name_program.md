@@ -114,3 +114,42 @@ The competition submission gate requires structural validation plus aggregate
 score and level totals that are not weaker than EXP-DUCK-009. A local pass is
 necessary but not enough: EXP-DUCK-009 at public score `0.92` remains active
 until an official leaderboard score improves it.
+
+## EXP-DUCK-023 full-evaluation result
+
+The all-game evaluation passed every prepared gate:
+
+| metric | stored EXP-DUCK-009 benchmark | EXP-DUCK-023 | change |
+|---|---:|---:|---:|
+| levels completed | 14/183 | 19/183 | +5 |
+| score sum | 21.2453 | 88.3263 | +67.0810 |
+| ft09 levels | 4/6 | 4/6 | 0 |
+| tn36 levels | 0/7 | 3/7 | +3 |
+
+Additional totals:
+
+```text
+actions: 5,427
+tokens:  1,602,534
+```
+
+Structural validation confirmed:
+
+- all 25 expected games ran;
+- ft09 reproduced its 69-action, zero-token 4/6 path;
+- tn36 actions 7, 16, and 25 completed levels 1, 2, and 3;
+- the first 25 tn36 actions generated zero tokens;
+- normal Duck continued on tn36 level 4;
+- none of the tn36 helper notes appeared on another game.
+
+The exact kernel Version 1 artifact was submitted through Kaggle's
+code-competition workflow:
+
+```text
+submission reference: 54930218
+description: EXP-DUCK-023 full eval ft09 plus tn36 level 3 wall route
+status: pending
+```
+
+EXP-DUCK-009 at public score `0.92` remains the active baseline until Kaggle
+publishes the official score for submission `54930218`.

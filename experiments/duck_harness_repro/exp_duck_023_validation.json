@@ -1,0 +1,31 @@
+{
+  "checks": {
+    "aggregate_not_weaker": true,
+    "expected_25_games": true,
+    "ft09_helper_note": true,
+    "ft09_preserved": true,
+    "helper_did_not_leak": true,
+    "same_game_ids": true,
+    "tn36_continued_on_level4": true,
+    "tn36_exact_prefix_length": true,
+    "tn36_level1_note": true,
+    "tn36_level2_note": true,
+    "tn36_level3_note": true,
+    "tn36_level_boundaries": true,
+    "tn36_prefix_zero_tokens": true,
+    "tn36_three_levels": true
+  },
+  "details": {
+    "baseline_levels": 14,
+    "baseline_score_sum": 21.24529139237075,
+    "candidate_levels": 19,
+    "candidate_score_sum": 88.32628705596551,
+    "ft09_levels": 4,
+    "level_delta": 5,
+    "score_delta": 67.08099566359476,
+    "tn36_actions": 88,
+    "tn36_levels": 3
+  },
+  "recommended_submit": true,
+  "structural_pass": true
+}
