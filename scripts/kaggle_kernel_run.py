@@ -83,9 +83,21 @@ VARIANTS = {
         "metadata": PACKAGE_DIR / "kernel-metadata-tn36-level3-program.json",
         "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_tn36_level3_program/latest",
     },
+    "tn36-level3-true-name": {
+        "metadata": PACKAGE_DIR / "kernel-metadata-tn36-level3-true-name.json",
+        "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_tn36_level3_true_name/latest",
+    },
+    "tn36-level3-wall-route": {
+        "metadata": PACKAGE_DIR / "kernel-metadata-tn36-level3-wall-route.json",
+        "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_tn36_level3_wall_route/latest",
+    },
     "full-eval-ft09-tn36": {
         "metadata": PACKAGE_DIR / "kernel-metadata-full-eval-ft09-tn36.json",
         "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_full_eval_ft09_tn36/latest",
+    },
+    "full-eval-ft09-tn36-level3": {
+        "metadata": PACKAGE_DIR / "kernel-metadata-full-eval-ft09-tn36-level3.json",
+        "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_full_eval_ft09_tn36_level3/latest",
     },
     "seeded-control": {
         "metadata": PACKAGE_DIR / "kernel-metadata-seeded-pair-control.json",

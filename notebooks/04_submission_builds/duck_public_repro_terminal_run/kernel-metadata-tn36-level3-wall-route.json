@@ -1,0 +1,20 @@
+{
+  "id": "jatalepawan/arc-agi-3-duck-tn36-level-3-wall-route",
+  "title": "ARC-AGI-3 Duck tn36 Level 3 Wall Route",
+  "code_file": "arc3_20260723_duck_tn36_level3_wall_route_helper.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "keywords": ["arc-agi-3", "duck", "tn36"],
+  "dataset_sources": [
+    "driessmit1/arc3-vllm-h100-wheelhouse-v3",
+    "jeroencottaar/taaf-kaggle-source-share",
+    "driessmit1/vrfai-qwen3-6-27b-fp8-hf-snapshot"
+  ],
+  "kernel_sources": [],
+  "competition_sources": ["arc-prize-2026-arc-agi-3"],
+  "model_sources": [],
+  "machine_shape": "NvidiaRtxPro6000"
+}
