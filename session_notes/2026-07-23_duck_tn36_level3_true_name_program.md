@@ -151,5 +151,17 @@ description: EXP-DUCK-023 full eval ft09 plus tn36 level 3 wall route
 status: pending
 ```
 
-EXP-DUCK-009 at public score `0.92` remains the active baseline until Kaggle
-publishes the official score for submission `54930218`.
+Kaggle completed submission `54930218` with public score `0.90`. This is `0.02`
+below EXP-DUCK-009's `0.92`, so EXP-DUCK-023 is rejected as the active
+leaderboard baseline.
+
+## K-12 interpretation
+
+We definitely taught the robot how to solve the first three tn36 rooms. But the
+other games still use an unpredictable LLM, so this particular full run was a
+slightly weaker lottery ticket overall. The new tn36 skill is worth keeping;
+the complete notebook result is not.
+
+The next integration should control or average the non-target LLM randomness
+before paying for another official submission. EXP-DUCK-009 remains the active
+baseline at `0.92`.
