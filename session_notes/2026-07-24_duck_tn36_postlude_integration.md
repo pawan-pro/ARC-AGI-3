@@ -69,3 +69,59 @@ aggregate levels and score >= scored EXP-DUCK-009 artifact
 ```
 
 EXP-DUCK-009 remains the active public baseline at `0.92`.
+
+## EXP-DUCK-024 full-evaluation result
+
+The completed Version 1 run passed every gate:
+
+| metric | EXP-DUCK-009 | EXP-DUCK-024 | change |
+|---|---:|---:|---:|
+| levels completed | 18/183 | 18/183 | 0 |
+| score sum | 65.6878 | 81.4323 | +15.7445 |
+| actions | 4,435 | 4,369 | -66 |
+| ft09 levels | 4/6 | 4/6 | 0 |
+| tn36 levels | 1/7 | 3/7 | +2 |
+
+EXP-DUCK-024 generated 1,674,657 tokens across all games. On tn36 specifically,
+normal Duck made 57 analysis calls and spent 69,355 tokens before the postlude.
+Duck had already reached level 2. The postlude then:
+
+```text
+started after action: 232
+reset current level:  1 action
+solved levels 2-3:   18 actions
+generated tokens:    0
+final tn36 result:   3/7
+```
+
+The strict validator confirmed:
+
+```text
+same 25 games
+ft09 preserved
+normal tn36 analysis occurred before repair
+postlude began with RESET
+postlude generated zero tokens
+tn36 reached three levels
+helper did not leak
+aggregate not weaker than scored EXP-DUCK-009
+recommended_submit = true
+```
+
+Compared with EXP-DUCK-009, unrelated LLM games still varied. The net result
+was exactly offsetting: tn36 gained two levels, while `bp35`, `m0r0`, `sp80`,
+and `tu93` lost four total levels and `r11l` plus `sk48` gained two. This
+confirms that preserving request traffic reduces the direct integration
+disturbance but does not remove general concurrent-LLM variance.
+
+The exact notebook Version 1 was submitted through the code-competition
+workflow:
+
+```text
+submission reference: 54965732
+description: EXP-DUCK-024 Duck baseline request stream plus tn36 postlude
+status: pending
+```
+
+Do not submit again. EXP-DUCK-009 remains active at public score `0.92` until
+submission `54965732` completes above it.
