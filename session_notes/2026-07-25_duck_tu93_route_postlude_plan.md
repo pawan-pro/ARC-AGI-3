@@ -60,3 +60,43 @@ If this test passes, the next experiment will keep EXP-DUCK-024 unchanged
 during normal play and run the tu93 route only as a postlude. A full evaluation
 and official submission remain gated on preserving ft09, tn36, all 25 games,
 and no helper leakage.
+
+## EXP-DUCK-025 result
+
+The isolated Kaggle Version 1 passed every strict gate:
+
+```text
+levels completed: 2/9
+score:            6.6667
+actions:          28
+tokens:           0
+analysis events:  0
+level 1 route:    exact 18 actions
+level 2 route:    exact 10 actions
+```
+
+The solver note independently confirms both successes:
+
+```text
+tu93_route=success; level=1; helper_actions=18
+tu93_route=success; level=2; helper_actions=10
+```
+
+This proves the tu93 calculator itself works. It does not yet prove that a new
+25-game run will beat the `1.11` public baseline, because the LLM-driven games
+still vary between full runs.
+
+## EXP-DUCK-026
+
+The next notebook starts from the exact EXP-DUCK-024 notebook. It preserves:
+
+```text
+normal Duck on every game
+the validated ft09 path
+the existing post-Duck tn36 repair
+the model, prompt, batching, and action budgets
+```
+
+It adds only one behavior: after normal Duck stops on tu93, reset the current
+level and apply the exact-board routes until two levels are complete. The full
+run remains a gate, not an automatic competition submission.

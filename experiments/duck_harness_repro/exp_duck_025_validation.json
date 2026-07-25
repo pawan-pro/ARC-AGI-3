@@ -1,0 +1,18 @@
+{
+  "checks": {
+    "exact_route": true,
+    "level1_success_note": true,
+    "level2_success_note": true,
+    "one_target_game": true,
+    "two_levels": true,
+    "zero_analysis_events": true
+  },
+  "details": {
+    "actions": 28,
+    "analysis_events": 0,
+    "levels_completed": 2,
+    "solver_note": "tu93_route=success; level=2; helper_actions=10; tu93_route=success; level=1; helper_actions=18"
+  },
+  "recommended_full_evaluation": true,
+  "structural_pass": true
+}
