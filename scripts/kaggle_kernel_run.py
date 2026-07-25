@@ -103,6 +103,10 @@ VARIANTS = {
         "metadata": PACKAGE_DIR / "kernel-metadata-full-eval-tn36-postlude.json",
         "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_full_eval_tn36_postlude/latest",
     },
+    "tu93-route-helper": {
+        "metadata": PACKAGE_DIR / "kernel-metadata-tu93-route-helper.json",
+        "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_tu93_route_helper/latest",
+    },
     "seeded-control": {
         "metadata": PACKAGE_DIR / "kernel-metadata-seeded-pair-control.json",
         "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_seeded_pair_control/latest",
