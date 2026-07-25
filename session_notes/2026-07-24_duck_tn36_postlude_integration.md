@@ -123,5 +123,31 @@ description: EXP-DUCK-024 Duck baseline request stream plus tn36 postlude
 status: pending
 ```
 
-Do not submit again. EXP-DUCK-009 remains active at public score `0.92` until
-submission `54965732` completes above it.
+Do not submit again.
+
+## Official public result
+
+Kaggle completed submission `54965732` with:
+
+```text
+status:       COMPLETE
+public score: 1.11
+```
+
+This beats EXP-DUCK-009's `0.92` by `0.19` absolute, or about `20.7%`.
+EXP-DUCK-024 is promoted as the active submission baseline and new project
+best.
+
+## What transferred
+
+The earlier tn36 integrations scored `0.88` and `0.90` even though their local
+results looked stronger. They changed tn36's LLM request stream at the start,
+which disturbed the shared concurrent model workload.
+
+EXP-DUCK-024 kept Duck's normal tn36 reasoning first. Only after that reasoning
+ended did it apply the zero-token repair. The `1.11` public score is strong
+evidence that this ordering was the missing integration detail.
+
+K-12 version: let every student finish the normal class first, then correct one
+worksheet afterward. That keeps the lesson stable for the rest of the class
+while still adding the known answer where it helps.
