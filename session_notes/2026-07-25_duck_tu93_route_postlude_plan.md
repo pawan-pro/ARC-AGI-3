@@ -100,3 +100,53 @@ the model, prompt, batching, and action budgets
 It adds only one behavior: after normal Duck stops on tu93, reset the current
 level and apply the exact-board routes until two levels are complete. The full
 run remains a gate, not an automatic competition submission.
+
+## EXP-DUCK-026 full-evaluation result
+
+The completed 25-game run passed every structural and aggregate gate:
+
+| metric | EXP-DUCK-024 | EXP-DUCK-026 | change |
+|---|---:|---:|---:|
+| levels completed | 18/183 | 21/183 | +3 |
+| score sum | 81.4323 | 98.3785 | +16.9462 |
+| actions | 4,369 | 5,131 | +762 |
+| ft09 levels | 4/6 | 4/6 | 0 |
+| tn36 levels | 3/7 | 3/7 | 0 |
+| tu93 levels | 1/9 | 2/9 | +1 |
+
+The run used 1,633,141 generated tokens. The existing tn36 postlude remained
+healthy: normal Duck ran first, then the postlude used 26 actions and zero
+tokens to reach level 3. No tn36 or tu93 helper note leaked to another game.
+
+Normal Duck independently solved both tu93 levels before stopping:
+
+```text
+tu93 levels:          2/9
+tu93 actions:         65
+tu93 analysis events: 38
+solver note:          tu93_postlude=already_complete; levels=2
+```
+
+Therefore, this full run proves that the tu93 postlude integrates safely, but
+it does not measure an additional level caused by the postlude. The aggregate
+gain also contains ordinary LLM-run variance: `cd82`, `ls20`, and `sp80`
+improved, while `sk48` and `vc33` lost one level each.
+
+Both validators returned:
+
+```text
+structural_pass = true
+recommended_submit = true
+```
+
+The exact Version 1 notebook was submitted through Kaggle's code-competition
+workflow:
+
+```text
+submission reference: 55001932
+description: EXP-DUCK-026 Duck baseline plus tn36 and tu93 postludes
+status: pending
+```
+
+Do not submit again. Promote EXP-DUCK-026 only if its official public score is
+above the active EXP-DUCK-024 score of `1.11`.

@@ -1,0 +1,31 @@
+{
+  "checks": {
+    "aggregate_not_weaker_than_active_baseline": true,
+    "expected_25_games": true,
+    "ft09_preserved": true,
+    "same_game_ids": true,
+    "tn36_preserved": true,
+    "tu93_helper_did_not_leak": true,
+    "tu93_normal_duck_first": true,
+    "tu93_postlude_observed": true,
+    "tu93_postlude_zero_tokens": true,
+    "tu93_reset_before_repair": true,
+    "tu93_two_levels": true
+  },
+  "details": {
+    "baseline_levels": 18,
+    "baseline_score_sum": 81.43233111525558,
+    "candidate_levels": 21,
+    "candidate_score_sum": 98.37849921159122,
+    "first_tu93_postlude_action_index": null,
+    "ft09_levels": 4,
+    "level_delta": 3,
+    "score_delta": 16.94616809633564,
+    "tn36_levels": 3,
+    "tu93_actions": 65,
+    "tu93_analysis_events": 38,
+    "tu93_levels": 2
+  },
+  "recommended_submit": true,
+  "structural_pass": true
+}
