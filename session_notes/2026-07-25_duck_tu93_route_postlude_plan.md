@@ -150,3 +150,34 @@ status: pending
 
 Do not submit again. Promote EXP-DUCK-026 only if its official public score is
 above the active EXP-DUCK-024 score of `1.11`.
+
+## Official public result
+
+Kaggle completed submission `55001932` with:
+
+```text
+status:       COMPLETE
+public score: 0.86
+```
+
+This is `0.25` below EXP-DUCK-024's public score of `1.11`. EXP-DUCK-026 is
+rejected, and EXP-DUCK-024 remains the active baseline.
+
+The isolated tu93 calculator is still valid: it solved two levels in exactly
+28 zero-token actions. The failed promotion is an integration-evidence issue,
+not a route failure. In the full run, normal Duck reached two tu93 levels
+before the postlude, so the new helper never activated. The apparently stronger
+21-level local aggregate came partly from unrelated stochastic gains and did
+not transfer to the hidden scoring run.
+
+Next experiments should not be submitted merely because one stochastic full
+run has a stronger aggregate. Require at least one of:
+
+```text
+the target postlude actually activates and adds a level
+a paired in-kernel control isolates the helper's effect
+repeated full runs show a stable aggregate advantage
+```
+
+The practical next target remains another game with a repeatable mechanic, but
+its isolated helper should be integrated only after this stronger causal gate.
