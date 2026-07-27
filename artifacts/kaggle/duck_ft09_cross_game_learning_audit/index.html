@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EXP-DUCK-030 Cross-Game Learning Audit</title>
+<style>
+:root { color-scheme:dark; --bg:#101315; --panel:#181d20; --line:#3b474e;
+--text:#f4f6f7; --muted:#acb8bf; --green:#54d19b; --yellow:#ffd166;
+--red:#ff7474; --blue:#58a6ff; }
+* { box-sizing:border-box } body { margin:0;background:var(--bg);color:var(--text);
+font:16px/1.55 system-ui,sans-serif } header,main { width:min(1240px,calc(100% - 32px));margin:auto }
+header { padding:38px 0 28px } h1 { margin:0;font-size:clamp(2rem,5vw,4rem);letter-spacing:0 }
+h2,h3 { letter-spacing:0 } p { color:var(--muted) } code { color:var(--yellow) }
+section { border-top:1px solid var(--line);padding:32px 0 }
+.badges,.stats { display:flex;flex-wrap:wrap;gap:8px } .badge,.stat { border:1px solid var(--line);border-radius:4px;padding:7px 11px }
+.pass { color:var(--green) } .fail { color:var(--red) } .warn { color:var(--yellow) }
+.grid { display:grid;grid-template-columns:1fr 1fr;gap:18px } article { background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:16px }
+figure { margin:0 } img { width:100%;image-rendering:pixelated;border:1px solid var(--line) } figcaption { color:var(--muted);padding-top:7px }
+table { width:100%;border-collapse:collapse;background:var(--panel) } th,td { text-align:left;border-bottom:1px solid var(--line);padding:10px }
+.flow { display:grid;grid-template-columns:repeat(5,1fr);gap:8px } .flow div { background:var(--panel);border-top:4px solid var(--blue);padding:12px;min-height:95px }
+.actions { display:grid;grid-template-columns:repeat(7,1fr);gap:7px } .action { min-height:72px;color:var(--text);background:#22292e;border:1px solid #52616b;border-radius:4px }
+.action span { display:block;color:var(--muted) } .action:hover,.action.active { border-color:var(--yellow);background:#302d20 }
+.inspector { margin-top:12px;min-height:76px;background:var(--panel);border-left:4px solid var(--yellow);padding:14px }
+.decision { border-left:4px solid var(--green);padding-left:16px }
+@media(max-width:820px) { .grid,.flow { grid-template-columns:1fr } .actions { grid-template-columns:repeat(3,1fr) } }
+</style></head><body><header>
+<p><a href="../duck_tu93_pixel_learning_audit/index.html">Previous: tu93 navigation learner</a></p>
+<h1>ft09: Form the objective, then act</h1>
+<p>EXP-DUCK-030 tests the same hypothesis-first architecture on a different
+family: a mouse-controlled color puzzle. The learner stores no winning
+coordinates and no named color roles.</p>
+<div class="badges"><span class="badge pass">Cross-family gate: PASS</span>
+<span class="badge pass">21/21 actions matched</span>
+<span class="badge pass">Advanced to level 5</span>
+<span class="badge">Held-out winning actions used for inference: 0</span>
+<span class="badge warn">Competition submission: NO</span></div>
+</header><main>
+<section><h2>The logic, in five steps</h2><div class="flow">
+<div><strong>1. Find structure</strong><p>Detect repeated blocks and their spacing.</p></div>
+<div><strong>2. Find clues</strong><p>Separate 18 plain cells from 3 patterned clue cells.</p></div>
+<div><strong>3. State a rule</strong><p>One mask mark copies the clue center; the other chooses a different state.</p></div>
+<div><strong>4. Test globally</strong><p>Shared cells must receive the same answer from every clue.</p></div>
+<div><strong>5. Act and check</strong><p>Click the first wrong cell, observe it, and continue toward the frozen target.</p></div>
+</div></section>
+<section><div class="grid">
+<figure><img src="heldout-initial.png" alt="Held-out ft09 level 4 board"><figcaption>Only this initial board was used. Yellow boxes identify the three detected clues.</figcaption></figure>
+<figure><img src="inferred-target.png" alt="Pixel-derived target board"><figcaption>The target was fixed before any successful level-4 click was read.</figcaption></figure>
+</div></section>
+<section><div class="grid"><div><h2>Falsifiable hypothesis test</h2>
+<table><thead><tr><th>Center-copy hypothesis</th><th>Consistent targets</th><th>Decision</th></tr></thead><tbody><tr><td>Pixel mark 0</td><td>1</td><td>Accepted</td></tr><tr><td>Pixel mark 2</td><td>0</td><td>Rejected</td></tr></tbody></table>
+</div><article><h3>Why overlap matters</h3>
+<p>Reading each clue alone leaves <strong>8</strong> possible assignments.
+Demanding that overlapping clues agree leaves exactly <strong>1</strong>.
+Reversing the two mask meanings leaves <strong>0</strong>.</p>
+<p class="pass"><strong>This is logic, not blind trial and error:</strong> the
+wrong explanation is rejected before clicking.</p></article></div></section>
+<section><h2>Closed-loop action audit</h2>
+<p>The objective stays fixed. After every click, the policy reads the new board
+and asks: “What is the first cell that still differs from the target?”</p>
+<div class="actions"><button class="action" data-step="1"
+data-cell="16,14"
+data-before="9" data-target="8"
+data-after="8" data-advanced="false">
+<span>1</span><strong>Mouse (16, 14)</strong></button><button class="action" data-step="2"
+data-cell="16,22"
+data-before="9" data-target="12"
+data-after="8" data-advanced="false">
+<span>2</span><strong>Mouse (16, 22)</strong></button><button class="action" data-step="3"
+data-cell="16,22"
+data-before="8" data-target="12"
+data-after="12" data-advanced="false">
+<span>3</span><strong>Mouse (16, 22)</strong></button><button class="action" data-step="4"
+data-cell="16,30"
+data-before="9" data-target="8"
+data-after="8" data-advanced="false">
+<span>4</span><strong>Mouse (16, 30)</strong></button><button class="action" data-step="5"
+data-cell="16,46"
+data-before="9" data-target="8"
+data-after="8" data-advanced="false">
+<span>5</span><strong>Mouse (16, 46)</strong></button><button class="action" data-step="6"
+data-cell="24,14"
+data-before="9" data-target="8"
+data-after="8" data-advanced="false">
+<span>6</span><strong>Mouse (24, 14)</strong></button><button class="action" data-step="7"
+data-cell="24,30"
+data-before="9" data-target="8"
+data-after="8" data-advanced="false">
+<span>7</span><strong>Mouse (24, 30)</strong></button><button class="action" data-step="8"
+data-cell="24,46"
+data-before="9" data-target="8"
+data-after="8" data-advanced="false">
+<span>8</span><strong>Mouse (24, 46)</strong></button><button class="action" data-step="9"
+data-cell="32,14"
+data-before="9" data-target="8"
+data-after="8" data-advanced="false">
+<span>9</span><strong>Mouse (32, 14)</strong></button><button class="action" data-step="10"
+data-cell="32,22"
+data-before="9" data-target="12"
+data-after="8" data-advanced="false">
+<span>10</span><strong>Mouse (32, 22)</strong></button><button class="action" data-step="11"
+data-cell="32,22"
+data-before="8" data-target="12"
+data-after="12" data-advanced="false">
+<span>11</span><strong>Mouse (32, 22)</strong></button><button class="action" data-step="12"
+data-cell="32,30"
+data-before="9" data-target="8"
+data-after="8" data-advanced="false">
+<span>12</span><strong>Mouse (32, 30)</strong></button><button class="action" data-step="13"
+data-cell="32,38"
+data-before="9" data-target="8"
+data-after="8" data-advanced="false">
+<span>13</span><strong>Mouse (32, 38)</strong></button><button class="action" data-step="14"
+data-cell="40,22"
+data-before="9" data-target="8"
+data-after="8" data-advanced="false">
+<span>14</span><strong>Mouse (40, 22)</strong></button><button class="action" data-step="15"
+data-cell="40,38"
+data-before="9" data-target="8"
+data-after="8" data-advanced="false">
+<span>15</span><strong>Mouse (40, 38)</strong></button><button class="action" data-step="16"
+data-cell="48,22"
+data-before="9" data-target="12"
+data-after="8" data-advanced="false">
+<span>16</span><strong>Mouse (48, 22)</strong></button><button class="action" data-step="17"
+data-cell="48,22"
+data-before="8" data-target="12"
+data-after="12" data-advanced="false">
+<span>17</span><strong>Mouse (48, 22)</strong></button><button class="action" data-step="18"
+data-cell="48,30"
+data-before="9" data-target="12"
+data-after="8" data-advanced="false">
+<span>18</span><strong>Mouse (48, 30)</strong></button><button class="action" data-step="19"
+data-cell="48,30"
+data-before="8" data-target="12"
+data-after="12" data-advanced="false">
+<span>19</span><strong>Mouse (48, 30)</strong></button><button class="action" data-step="20"
+data-cell="48,38"
+data-before="9" data-target="12"
+data-after="8" data-advanced="false">
+<span>20</span><strong>Mouse (48, 38)</strong></button><button class="action" data-step="21"
+data-cell="48,38"
+data-before="8" data-target="12"
+data-after="14" data-advanced="true">
+<span>21</span><strong>Mouse (48, 38)</strong></button></div>
+<div class="inspector" id="inspector">Select an action to see the observed state change.</div>
+</section>
+<section><h2>Decision and next gate</h2>
+<p class="decision">The architecture now works on two unlike families:
+tu93 uses a learned navigation graph; ft09 uses a learned constraint model.
+That supports the scalable principle <code>observe -> hypothesize -> reject
+inconsistent models -> plan -> verify each effect</code>. The next honest test
+is prospective: apply it to an unsolved level whose successful actions are not
+already in our replay, and reject it if the objective is ambiguous or an
+observed action contradicts the model.</p></section>
+</main><script>
+document.querySelectorAll(".action").forEach(button => button.addEventListener("click", () => {
+document.querySelectorAll(".action").forEach(item => item.classList.remove("active"));
+button.classList.add("active");
+const ending = button.dataset.advanced === "true" ? " The level advanced." : "";
+document.querySelector("#inspector").textContent =
+`Step ${button.dataset.step}: click (${button.dataset.cell}). Observed color ${button.dataset.before} -> ${button.dataset.after}; target is ${button.dataset.target}.${ending}`;
+}));</script></body></html>

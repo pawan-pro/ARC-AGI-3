@@ -1,0 +1,624 @@
+{
+  "experiment": "EXP-DUCK-030",
+  "method": "source-hidden pixel objective inference plus closed-loop control",
+  "data_boundary": {
+    "training_levels": [
+      1,
+      2,
+      3
+    ],
+    "training_action_frames": 47,
+    "heldout_level": 4,
+    "heldout_success_actions_available_to_objective_model": 0,
+    "heldout_control_feedback": "one observed board after each action selected by the frozen objective"
+  },
+  "model": {
+    "background": 4,
+    "palette": [
+      8,
+      9,
+      12
+    ],
+    "spacing": 8,
+    "normal_cells": [
+      [
+        16,
+        14
+      ],
+      [
+        16,
+        22
+      ],
+      [
+        16,
+        30
+      ],
+      [
+        16,
+        38
+      ],
+      [
+        16,
+        46
+      ],
+      [
+        24,
+        14
+      ],
+      [
+        24,
+        30
+      ],
+      [
+        24,
+        46
+      ],
+      [
+        32,
+        14
+      ],
+      [
+        32,
+        22
+      ],
+      [
+        32,
+        30
+      ],
+      [
+        32,
+        38
+      ],
+      [
+        32,
+        46
+      ],
+      [
+        40,
+        22
+      ],
+      [
+        40,
+        38
+      ],
+      [
+        48,
+        22
+      ],
+      [
+        48,
+        30
+      ],
+      [
+        48,
+        38
+      ]
+    ],
+    "clue_cells": [
+      [
+        24,
+        22
+      ],
+      [
+        24,
+        38
+      ],
+      [
+        40,
+        30
+      ]
+    ],
+    "mask_marks": [
+      0,
+      2
+    ],
+    "center_mark": 0,
+    "other_assignments": [
+      8,
+      8,
+      8
+    ],
+    "target": [
+      {
+        "cell": [
+          16,
+          14
+        ],
+        "color": 8
+      },
+      {
+        "cell": [
+          16,
+          22
+        ],
+        "color": 12
+      },
+      {
+        "cell": [
+          16,
+          30
+        ],
+        "color": 8
+      },
+      {
+        "cell": [
+          16,
+          38
+        ],
+        "color": 9
+      },
+      {
+        "cell": [
+          16,
+          46
+        ],
+        "color": 8
+      },
+      {
+        "cell": [
+          24,
+          14
+        ],
+        "color": 8
+      },
+      {
+        "cell": [
+          24,
+          30
+        ],
+        "color": 8
+      },
+      {
+        "cell": [
+          24,
+          46
+        ],
+        "color": 8
+      },
+      {
+        "cell": [
+          32,
+          14
+        ],
+        "color": 8
+      },
+      {
+        "cell": [
+          32,
+          22
+        ],
+        "color": 12
+      },
+      {
+        "cell": [
+          32,
+          30
+        ],
+        "color": 8
+      },
+      {
+        "cell": [
+          32,
+          38
+        ],
+        "color": 8
+      },
+      {
+        "cell": [
+          32,
+          46
+        ],
+        "color": 9
+      },
+      {
+        "cell": [
+          40,
+          22
+        ],
+        "color": 8
+      },
+      {
+        "cell": [
+          40,
+          38
+        ],
+        "color": 8
+      },
+      {
+        "cell": [
+          48,
+          22
+        ],
+        "color": 12
+      },
+      {
+        "cell": [
+          48,
+          30
+        ],
+        "color": 12
+      },
+      {
+        "cell": [
+          48,
+          38
+        ],
+        "color": 12
+      }
+    ],
+    "hypothesis_counts": [
+      {
+        "center_mark": 0,
+        "solutions": 1
+      },
+      {
+        "center_mark": 2,
+        "solutions": 0
+      }
+    ]
+  },
+  "decisions": [
+    {
+      "step": 1,
+      "predicted": [
+        16,
+        14
+      ],
+      "actual": [
+        16,
+        14
+      ],
+      "matched": true,
+      "before_color": 9,
+      "target_color": 8,
+      "after_color": 8,
+      "level_advanced": false
+    },
+    {
+      "step": 2,
+      "predicted": [
+        16,
+        22
+      ],
+      "actual": [
+        16,
+        22
+      ],
+      "matched": true,
+      "before_color": 9,
+      "target_color": 12,
+      "after_color": 8,
+      "level_advanced": false
+    },
+    {
+      "step": 3,
+      "predicted": [
+        16,
+        22
+      ],
+      "actual": [
+        16,
+        22
+      ],
+      "matched": true,
+      "before_color": 8,
+      "target_color": 12,
+      "after_color": 12,
+      "level_advanced": false
+    },
+    {
+      "step": 4,
+      "predicted": [
+        16,
+        30
+      ],
+      "actual": [
+        16,
+        30
+      ],
+      "matched": true,
+      "before_color": 9,
+      "target_color": 8,
+      "after_color": 8,
+      "level_advanced": false
+    },
+    {
+      "step": 5,
+      "predicted": [
+        16,
+        46
+      ],
+      "actual": [
+        16,
+        46
+      ],
+      "matched": true,
+      "before_color": 9,
+      "target_color": 8,
+      "after_color": 8,
+      "level_advanced": false
+    },
+    {
+      "step": 6,
+      "predicted": [
+        24,
+        14
+      ],
+      "actual": [
+        24,
+        14
+      ],
+      "matched": true,
+      "before_color": 9,
+      "target_color": 8,
+      "after_color": 8,
+      "level_advanced": false
+    },
+    {
+      "step": 7,
+      "predicted": [
+        24,
+        30
+      ],
+      "actual": [
+        24,
+        30
+      ],
+      "matched": true,
+      "before_color": 9,
+      "target_color": 8,
+      "after_color": 8,
+      "level_advanced": false
+    },
+    {
+      "step": 8,
+      "predicted": [
+        24,
+        46
+      ],
+      "actual": [
+        24,
+        46
+      ],
+      "matched": true,
+      "before_color": 9,
+      "target_color": 8,
+      "after_color": 8,
+      "level_advanced": false
+    },
+    {
+      "step": 9,
+      "predicted": [
+        32,
+        14
+      ],
+      "actual": [
+        32,
+        14
+      ],
+      "matched": true,
+      "before_color": 9,
+      "target_color": 8,
+      "after_color": 8,
+      "level_advanced": false
+    },
+    {
+      "step": 10,
+      "predicted": [
+        32,
+        22
+      ],
+      "actual": [
+        32,
+        22
+      ],
+      "matched": true,
+      "before_color": 9,
+      "target_color": 12,
+      "after_color": 8,
+      "level_advanced": false
+    },
+    {
+      "step": 11,
+      "predicted": [
+        32,
+        22
+      ],
+      "actual": [
+        32,
+        22
+      ],
+      "matched": true,
+      "before_color": 8,
+      "target_color": 12,
+      "after_color": 12,
+      "level_advanced": false
+    },
+    {
+      "step": 12,
+      "predicted": [
+        32,
+        30
+      ],
+      "actual": [
+        32,
+        30
+      ],
+      "matched": true,
+      "before_color": 9,
+      "target_color": 8,
+      "after_color": 8,
+      "level_advanced": false
+    },
+    {
+      "step": 13,
+      "predicted": [
+        32,
+        38
+      ],
+      "actual": [
+        32,
+        38
+      ],
+      "matched": true,
+      "before_color": 9,
+      "target_color": 8,
+      "after_color": 8,
+      "level_advanced": false
+    },
+    {
+      "step": 14,
+      "predicted": [
+        40,
+        22
+      ],
+      "actual": [
+        40,
+        22
+      ],
+      "matched": true,
+      "before_color": 9,
+      "target_color": 8,
+      "after_color": 8,
+      "level_advanced": false
+    },
+    {
+      "step": 15,
+      "predicted": [
+        40,
+        38
+      ],
+      "actual": [
+        40,
+        38
+      ],
+      "matched": true,
+      "before_color": 9,
+      "target_color": 8,
+      "after_color": 8,
+      "level_advanced": false
+    },
+    {
+      "step": 16,
+      "predicted": [
+        48,
+        22
+      ],
+      "actual": [
+        48,
+        22
+      ],
+      "matched": true,
+      "before_color": 9,
+      "target_color": 12,
+      "after_color": 8,
+      "level_advanced": false
+    },
+    {
+      "step": 17,
+      "predicted": [
+        48,
+        22
+      ],
+      "actual": [
+        48,
+        22
+      ],
+      "matched": true,
+      "before_color": 8,
+      "target_color": 12,
+      "after_color": 12,
+      "level_advanced": false
+    },
+    {
+      "step": 18,
+      "predicted": [
+        48,
+        30
+      ],
+      "actual": [
+        48,
+        30
+      ],
+      "matched": true,
+      "before_color": 9,
+      "target_color": 12,
+      "after_color": 8,
+      "level_advanced": false
+    },
+    {
+      "step": 19,
+      "predicted": [
+        48,
+        30
+      ],
+      "actual": [
+        48,
+        30
+      ],
+      "matched": true,
+      "before_color": 8,
+      "target_color": 12,
+      "after_color": 12,
+      "level_advanced": false
+    },
+    {
+      "step": 20,
+      "predicted": [
+        48,
+        38
+      ],
+      "actual": [
+        48,
+        38
+      ],
+      "matched": true,
+      "before_color": 9,
+      "target_color": 12,
+      "after_color": 8,
+      "level_advanced": false
+    },
+    {
+      "step": 21,
+      "predicted": [
+        48,
+        38
+      ],
+      "actual": [
+        48,
+        38
+      ],
+      "matched": true,
+      "before_color": 8,
+      "target_color": 12,
+      "after_color": 14,
+      "level_advanced": true
+    }
+  ],
+  "validation": {
+    "actions": 21,
+    "all_actions_matched": true,
+    "target_reached": true,
+    "advanced_to_level": 5
+  },
+  "ablations": {
+    "wrong_mask_role_solutions": 0,
+    "without_overlap_candidates": 8,
+    "interpretation": "Local clues alone leave eight assignments. Requiring shared cells to agree reduces the correct interpretation to one and the reversed interpretation to zero."
+  },
+  "checks": {
+    "heldout_actions_hidden_during_objective_inference": true,
+    "no_stored_board_coordinates": true,
+    "no_stored_color_roles": true,
+    "geometry_discovered": true,
+    "objective_unique": true,
+    "wrong_mask_hypothesis_rejected": true,
+    "closed_loop_actions_match": true,
+    "exactly_21_actions": true,
+    "target_reached": true,
+    "live_replay_advanced_to_level_5": true
+  },
+  "structural_pass": true,
+  "competition_submit": false,
+  "decision": "Accept a second, non-navigation family as source-hidden model-based transfer. Next test the same hypothesis-first protocol prospectively on an unsolved level before integrating it into a full notebook."
+}
