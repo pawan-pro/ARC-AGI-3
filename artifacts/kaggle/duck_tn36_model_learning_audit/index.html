@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EXP-DUCK-028 Model Learning Audit</title>
+<style>
+:root {
+  color-scheme: dark; --bg:#101315; --panel:#171b1e; --line:#39434a;
+  --text:#f4f6f7; --muted:#aeb8bf; --blue:#58a6ff; --green:#54d19b;
+  --yellow:#ffd166; --red:#ff7474; --magenta:#e53aa3;
+}
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font:16px/1.55 system-ui,sans-serif; }
+header, main { width:min(1220px,calc(100% - 32px)); margin:auto; }
+header { padding:42px 0 28px; }
+h1 { margin:0 0 8px; font-size:clamp(2rem,5vw,4rem); letter-spacing:0; }
+h2,h3 { letter-spacing:0; }
+p { color:var(--muted); }
+.status { display:flex; gap:8px; flex-wrap:wrap; }
+.badge { border:1px solid var(--line); border-radius:4px; padding:6px 10px; font-weight:700; }
+.pass { color:var(--green); } .warn { color:var(--yellow); } .reject { color:var(--red); }
+.flow { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin:24px 0 42px; }
+.flow div { border-top:4px solid var(--blue); padding:12px; background:var(--panel); min-height:108px; }
+.flow strong { display:block; } .flow span { color:var(--muted); font-size:.9rem; }
+section { border-top:1px solid var(--line); padding:34px 0; }
+.level-grid { display:grid; grid-template-columns:minmax(260px,.8fr) minmax(420px,1.4fr); gap:28px; }
+.boards { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+figure { margin:0; } img { width:100%; image-rendering:pixelated; border:1px solid var(--line); }
+figcaption { color:var(--muted); padding-top:6px; }
+.program { display:grid; grid-template-columns:repeat(6,minmax(74px,1fr)); gap:8px; margin:18px 0; }
+.program-step { background:#20262b; color:var(--text); border:1px solid #52606a; border-radius:4px; padding:10px 5px; min-height:86px; }
+.program-step:hover,.program-step.active { border-color:var(--yellow); background:#2c2a20; }
+.program-step span,.program-step small { display:block; color:var(--muted); }
+.inspector { border-left:4px solid var(--yellow); background:var(--panel); padding:14px; min-height:76px; }
+table { width:100%; border-collapse:collapse; background:var(--panel); }
+th,td { text-align:left; border-bottom:1px solid var(--line); padding:9px; }
+.evidence { border-left:4px solid var(--green); padding-left:14px; }
+.decision { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.decision article { background:var(--panel); border:1px solid var(--line); border-radius:6px; padding:16px; }
+code { color:var(--yellow); }
+a { color:#83d7ff; }
+@media(max-width:800px) {
+  .flow,.decision { grid-template-columns:1fr; }
+  .level-grid { grid-template-columns:1fr; }
+  .program { grid-template-columns:repeat(3,1fr); }
+}
+</style>
+</head>
+<body>
+<header>
+  <p><a href="../duck_calculator_visual_review/index.html">Back to calculator replays</a></p>
+  <h1>tn36: From guessing to planning</h1>
+  <p>This page audits EXP-DUCK-028. It shows what was remembered, what goal was stated,
+  what programs were tested, and what the official engine actually accepted.</p>
+  <div class="status">
+    <span class="badge pass">Research gate: PASS</span>
+    <span class="badge warn">Source-assisted</span>
+    <span class="badge reject">Pixel-only generalization: NOT PROVEN</span>
+    <span class="badge">Competition submission: NO</span>
+  </div>
+  <div class="flow">
+    <div><strong>1. Remember</strong><span>Carry forward command meanings from earlier levels.</span></div>
+    <div><strong>2. State goal</strong><span>Move the editable robot onto its target.</span></div>
+    <div><strong>3. Predict</strong><span>Try directions that reduce visible distance first.</span></div>
+    <div><strong>4. Simulate</strong><span>Test complete programs in the official local engine.</span></div>
+    <div><strong>5. Verify</strong><span>Accept only if the engine advances a level.</span></div>
+  </div>
+</header>
+<main>
+<section>
+  <div class="level-grid">
+    <div>
+      <p class="pass"><strong>Level 2 · learned behavior reused</strong></p>
+      <h2>Objective before action</h2>
+      <p>Move the editable right-side robot onto its target in level 2.</p>
+      <p class="evidence">The target is above the robot. Memory says command
+      <code>33</code> means Up, so Up is tested first.</p>
+      <p><strong>1 candidate</strong> tested.
+      The engine advanced to level 3.</p>
+    </div>
+    <div class="boards">
+      <figure><img src="level2-before.png" alt="tn36 level 2 before planning"><figcaption>Before: level 2</figcaption></figure>
+      <figure><img src="level2-after.png" alt="tn36 level 2 after planning"><figcaption>After: engine advanced to level 3</figcaption></figure>
+    </div>
+  </div>
+  <div class="program"><button class="program-step" data-level="2" data-step="0">
+<span>1</span><strong>Up</strong>
+<small>command 33</small></button><button class="program-step" data-level="2" data-step="1">
+<span>2</span><strong>Up</strong>
+<small>command 33</small></button><button class="program-step" data-level="2" data-step="2">
+<span>3</span><strong>Up</strong>
+<small>command 33</small></button><button class="program-step" data-level="2" data-step="3">
+<span>4</span><strong>Up</strong>
+<small>command 33</small></button></div>
+  <div class="inspector" id="inspector-2">Select a step. Each button writes one remembered movement command into the visible program editor.</div>
+</section>
+<section>
+  <div class="level-grid">
+    <div>
+      <p class="pass"><strong>Level 3 · held-out search</strong></p>
+      <h2>Old controls, new obstacle rule</h2>
+      <p>Move the editable right-side robot onto its target in level 3.</p>
+      <p class="evidence">Right and Up are tried first because the target is right
+      and above. The walls change after every third command, so order matters.</p>
+      <p><strong>258 candidates</strong> tested before
+      one advanced the engine to level 4.</p>
+    </div>
+    <div class="boards">
+      <figure><img src="level3-before.png" alt="tn36 level 3 before planning"><figcaption>Before: level 3 with switching walls</figcaption></figure>
+      <figure><img src="level3-after.png" alt="tn36 level 3 after planning"><figcaption>After: engine advanced to level 4</figcaption></figure>
+    </div>
+  </div>
+  <div class="program"><button class="program-step" data-level="3" data-step="0">
+<span>1</span><strong>Right</strong>
+<small>command 2</small></button><button class="program-step" data-level="3" data-step="1">
+<span>2</span><strong>Up</strong>
+<small>command 33</small></button><button class="program-step" data-level="3" data-step="2">
+<span>3</span><strong>Right</strong>
+<small>command 2</small></button><button class="program-step" data-level="3" data-step="3">
+<span>4</span><strong>Right</strong>
+<small>command 2</small></button><button class="program-step" data-level="3" data-step="4">
+<span>5</span><strong>Right</strong>
+<small>command 2</small></button><button class="program-step" data-level="3" data-step="5">
+<span>6</span><strong>Up</strong>
+<small>command 33</small></button></div>
+  <div class="inspector" id="inspector-3">Select a step to inspect its predicted movement and its position in the three-command wall cycle.</div>
+  <h3>Some rejected hypotheses</h3>
+  <table><thead><tr><th>Predicted program</th><th>Actual result</th></tr></thead>
+  <tbody><tr><td>Right Right Right Right Right Right</td><td>Did not advance</td></tr><tr><td>Right Right Right Right Right Up</td><td>Did not advance</td></tr><tr><td>Right Right Right Right Right Left</td><td>Did not advance</td></tr><tr><td>Right Right Right Right Right Down</td><td>Did not advance</td></tr><tr><td>Right Right Right Right Up Right</td><td>Did not advance</td></tr><tr><td>Right Right Right Right Up Up</td><td>Did not advance</td></tr><tr><td>Right Right Right Right Up Left</td><td>Did not advance</td></tr><tr><td>Right Right Right Right Up Down</td><td>Did not advance</td></tr></tbody></table>
+</section>
+<section>
+  <h2>What this proves, and what it does not</h2>
+  <div class="decision">
+    <article><h3 class="pass">Keep</h3><p>Cross-level control memory, explicit objectives,
+    direction-ranked search, and level-advance verification.</p></article>
+    <article><h3 class="reject">Reject</h3><p>Copying the visible demonstration.
+    <code>Down Down Down Down</code> did not solve level 3.</p></article>
+    <article><h3 class="warn">Next gate</h3><p>Infer the simulator from pixels and
+    observed action effects, then pass a new held-out game without reading its source.</p></article>
+  </div>
+</section>
+</main>
+<script>
+const meanings = {1:"move left",2:"move right",3:"move down",33:"move up"};
+const programs = {
+  "2": [33, 33, 33, 33],
+  "3": [2, 33, 2, 2, 2, 33]
+};
+document.querySelectorAll(".program-step").forEach(button => {
+  button.addEventListener("click", () => {
+    const level = button.dataset.level;
+    const index = Number(button.dataset.step);
+    document.querySelectorAll(`.program-step[data-level="${level}"]`).forEach(item => item.classList.remove("active"));
+    button.classList.add("active");
+    const command = programs[level][index];
+    const cycle = (index % 3) + 1;
+    const wallText = level === "3" && cycle === 3
+      ? " After this third command, the wall state switches."
+      : level === "3" ? ` This is command ${cycle} of the current wall cycle.` : "";
+    document.querySelector(`#inspector-${level}`).textContent =
+      `Step ${index + 1} predicts: ${meanings[command]} one cell.${wallText}`;
+  });
+});
+</script>
+</body>
+</html>
