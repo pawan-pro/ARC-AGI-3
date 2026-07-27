@@ -56,7 +56,13 @@ helper_methods = r"""    def _tu93_route_policy(self) -> dict[str, Any]:
     def _try_tu93_route(self) -> bool:
         policy = self._tu93_route_policy()
         level = _level_number(self.game)
-        if not policy or _is_engine_game_over(self.game) or level not in (1, 2):
+        target_level = int(policy.get("target_level", 2)) if policy else 2
+        if (
+            not policy
+            or _is_engine_game_over(self.game)
+            or level < 1
+            or level > target_level
+        ):
             return False
 
         tried = getattr(self, "_tu93_route_tried_levels", set())
@@ -92,7 +98,7 @@ helper_methods = r"""    def _tu93_route_policy(self) -> dict[str, Any]:
                 self._tu93_route_note(
                     f"tu93_route=success; level={{level}}; helper_actions={{executed}}"
                 )
-                if level >= 2:
+                if level >= target_level:
                     self._tu93_route_stop = True
                 self.write_viewer_payload()
                 return True
@@ -148,6 +154,7 @@ MAX_GAMES_FOR_DEBUG = None
 TU93_ROUTE_POLICY = {
     "enabled": True,
     "target_game_ids": LIMIT_TO_GAME_IDS,
+    "target_level": 2,
 }
 
 bm.label = f"{getattr(bm, 'label', 'duck')}-{DUCK_REPRO_LABEL}"

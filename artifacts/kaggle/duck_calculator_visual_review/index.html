@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Duck Calculator Visual Review</title>
+<style>
+:root { color-scheme: dark; --bg:#101214; --panel:#181c20; --line:#343b42; --text:#f4f6f8; --muted:#aab4bd; --accent:#68c3a3; --warn:#f0bd63; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; line-height:1.5; }
+header { max-width:1180px; margin:0 auto; padding:42px 24px 24px; }
+h1 { font-size:36px; line-height:1.1; margin:0 0 12px; letter-spacing:0; }
+header p { color:var(--muted); max-width:760px; margin:0; }
+main { border-top:1px solid var(--line); }
+.case { display:grid; grid-template-columns:minmax(240px,0.75fr) minmax(0,1.25fr); gap:32px; max-width:1180px; margin:0 auto; padding:32px 24px; border-bottom:1px solid var(--line); }
+.copy h2 { font-size:23px; margin:6px 0 10px; letter-spacing:0; }
+.copy p { color:var(--muted); }
+.number { color:var(--accent) !important; font-size:13px; font-weight:700; text-transform:uppercase; }
+a { color:#8dd9ff; }
+.media { display:grid; grid-template-columns:minmax(0,1.4fr) minmax(180px,0.6fr); gap:14px; align-items:start; }
+video, figure { width:100%; margin:0; background:#000; border:1px solid var(--line); border-radius:6px; }
+video { aspect-ratio:1/1; image-rendering:pixelated; }
+figure { padding:10px; }
+figure img { display:block; width:100%; image-rendering:pixelated; }
+figcaption { color:var(--muted); font-size:12px; margin-top:8px; }
+.note { color:var(--warn); }
+@media (max-width:800px) { .case,.media { grid-template-columns:1fr; } h1 { font-size:30px; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Duck Calculator Visual Review</h1>
+  <p>Play each replay and use the timeline to compare normal reasoning with deterministic postludes. The current proposal now targets <span class="note">tu93 level 3</span>, because levels 1-2 may already be solved by normal Duck.</p>
+</header>
+<main>
+<section class="case">
+  <div class="copy">
+    <p class="number">EXP-DUCK-009, normal Duck only</p>
+    <h2>1. Before calculator: tn36</h2>
+    <p>Duck reached 1/7 levels. This is the comparison case before the successful postlude.</p>
+    <a href="../duck_full_eval_ft09_overlap/latest/movies/gtn36-ef4dde99_p0.mp4">Open replay in its own page</a>
+  </div>
+  <div class="media">
+    <video controls loop preload="metadata" poster="tn36-before.png" src="../duck_full_eval_ft09_overlap/latest/movies/gtn36-ef4dde99_p0.mp4"></video>
+    <figure><img src="tn36-before.png" alt="Final recorded board for 1. Before calculator: tn36"><figcaption>Final recorded board</figcaption></figure>
+  </div>
+</section><section class="case">
+  <div class="copy">
+    <p class="number">EXP-DUCK-024, normal Duck then deterministic postlude</p>
+    <h2>2. Calculator that reached 1.11: tn36</h2>
+    <p>Duck reasoned normally first. The zero-token repair then reached 3/7 levels. This notebook scored 1.11 publicly.</p>
+    <a href="../duck_full_eval_tn36_postlude/latest/movies/gtn36-ef4dde99_p0.mp4">Open replay in its own page</a>
+  </div>
+  <div class="media">
+    <video controls loop preload="metadata" poster="tn36-after.png" src="../duck_full_eval_tn36_postlude/latest/movies/gtn36-ef4dde99_p0.mp4"></video>
+    <figure><img src="tn36-after.png" alt="Final recorded board for 2. Calculator that reached 1.11: tn36"><figcaption>Final recorded board</figcaption></figure>
+  </div>
+</section><section class="case">
+  <div class="copy">
+    <p class="number">EXP-DUCK-025, isolated deterministic route</p>
+    <h2>3. Proposed calculator proof: tu93</h2>
+    <p>The calculator solved levels 1-2 in exactly 28 actions with zero LLM tokens.</p>
+    <a href="../duck_tu93_route_helper/latest/movies/gtu93-0768757b_p0.mp4">Open replay in its own page</a>
+  </div>
+  <div class="media">
+    <video controls loop preload="metadata" poster="tu93-proof.png" src="../duck_tu93_route_helper/latest/movies/gtu93-0768757b_p0.mp4"></video>
+    <figure><img src="tu93-proof.png" alt="Final recorded board for 3. Proposed calculator proof: tu93"><figcaption>Final recorded board</figcaption></figure>
+  </div>
+</section><section class="case">
+  <div class="copy">
+    <p class="number">EXP-DUCK-026, normal Duck already reached level 3</p>
+    <h2>4. Current tu93 state</h2>
+    <p>The postlude correctly skipped because Duck had already completed two levels. The still shows the resulting level-3 state.</p>
+    <a href="../duck_full_eval_tu93_postlude/latest/movies/gtu93-0768757b_p0.mp4">Open replay in its own page</a>
+  </div>
+  <div class="media">
+    <video controls loop preload="metadata" poster="tu93-current.png" src="../duck_full_eval_tu93_postlude/latest/movies/gtu93-0768757b_p0.mp4"></video>
+    <figure><img src="tu93-current.png" alt="Final recorded board for 4. Current tu93 state"><figcaption>Final recorded board</figcaption></figure>
+  </div>
+</section>
+</main>
+</body>
+</html>

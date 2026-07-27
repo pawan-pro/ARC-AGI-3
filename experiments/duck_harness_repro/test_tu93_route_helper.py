@@ -29,8 +29,8 @@ def level_start(run_name, level):
         event["board"]
         for event in stored
         if event.get("type") == "action"
-        and event.get("action_display") == "RESET"
         and event.get("level") == level
+        and int(event.get("score") or 0) >= level - 1
     )
 
 
@@ -39,9 +39,10 @@ class Tu93RouteHelperTests(unittest.TestCase):
         for run_name in (
             "duck_public_repro_terminal_run",
             "duck_full_eval_ft09_overlap",
-            "duck_full_eval_tn36_postlude",
+            "duck_full_eval_ft09_tn36",
+            "duck_full_eval_tu93_postlude",
         ):
-            for level in (1, 2):
+            for level in (1, 2, 3):
                 with self.subTest(run_name=run_name, level=level):
                     self.assertEqual(
                         plan_tu93_route(level_start(run_name, level), level),
@@ -49,14 +50,17 @@ class Tu93RouteHelperTests(unittest.TestCase):
                     )
 
     def test_rejects_changed_board_or_unknown_level(self):
-        board = level_start("duck_full_eval_tn36_postlude", 1)
+        board = level_start("duck_full_eval_tu93_postlude", 1)
         board[0][0] = (board[0][0] + 1) % 16
         self.assertIsNone(plan_tu93_route(board, 1))
         self.assertIsNone(plan_tu93_route([[0]], 1))
-        self.assertIsNone(plan_tu93_route(level_start("duck_full_eval_tn36_postlude", 1), 3))
+        self.assertIsNone(plan_tu93_route(level_start("duck_full_eval_tu93_postlude", 1), 4))
 
     def test_expected_route_lengths(self):
-        self.assertEqual([len(LEVEL_ROUTES[level]) for level in (1, 2)], [18, 10])
+        self.assertEqual(
+            [len(LEVEL_ROUTES[level]) for level in (1, 2, 3)],
+            [18, 10, 19],
+        )
         self.assertEqual(board_crc32([[0]]), None)
 
 

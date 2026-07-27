@@ -9,6 +9,7 @@ from typing import Any, Iterable
 LEVEL_START_CRC32 = {
     1: 0xF888B0BD,
     2: 0x984223A4,
+    3: 0x936EEEB5,
 }
 
 LEVEL_ROUTES = {
@@ -43,6 +44,27 @@ LEVEL_ROUTES = {
         "ACTION4",
         "ACTION4",
         "ACTION1",
+    ),
+    3: (
+        "ACTION1",  # up
+        "ACTION1",
+        "ACTION4",  # right
+        "ACTION1",
+        "ACTION3",  # left
+        "ACTION3",
+        "ACTION1",
+        "ACTION3",
+        "ACTION3",
+        "ACTION2",  # down
+        "ACTION4",
+        "ACTION2",
+        "ACTION3",
+        "ACTION3",
+        "ACTION3",
+        "ACTION2",
+        "ACTION4",
+        "ACTION2",
+        "ACTION4",
     ),
 }
 
