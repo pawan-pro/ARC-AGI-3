@@ -76,3 +76,44 @@ jatalepawan/arc-agi-3-duck-tu93-level-3-route
 Do not run a full evaluation or create a competition submission unless Kaggle
 confirms exactly `3/9` levels, 47 actions, zero analysis events, and all three
 success notes.
+
+## EXP-DUCK-027 result
+
+Kaggle Version 1 completed and matched the official-engine prediction exactly:
+
+```text
+levels:             3 / 9
+actions per level:  18, 10, 19
+total actions:      47
+generated tokens:   0
+analysis events:    0
+wall-clock time:    0.96 seconds
+```
+
+The solver note contains all three success markers:
+
+```text
+tu93_route=success; level=1; helper_actions=18
+tu93_route=success; level=2; helper_actions=10
+tu93_route=success; level=3; helper_actions=19
+```
+
+`exp_duck_027_validation.json` reports `structural_pass=true` and
+`recommended_integration=true`.
+
+## Next causal gate
+
+The next experiment should test the helper after normal Duck, but only count
+the result when the helper genuinely does new work:
+
+1. run normal Duck on tu93 first;
+2. record the level reached before the postlude;
+3. require that normal Duck stopped below level 3;
+4. run the signature-gated postlude through level 3;
+5. require the postlude to add at least one level, use zero tokens, and end at
+   3/9 or better.
+
+If normal Duck already reaches level 3, the result is inconclusive rather than
+a pass. Repeat this targeted gate or pair it with a control before spending
+another 2-3 hours on a 25-game evaluation. Do not create a competition
+submission from the isolated notebook.
