@@ -1,0 +1,163 @@
+{
+  "experiment": "EXP-DUCK-029",
+  "validator_boundary": "official engine loaded after pixel learner produced both plans",
+  "correct": {
+    "steps_executed": 19,
+    "terminal_state": "NOT_FINISHED",
+    "final_level": 4,
+    "trace": [
+      {
+        "step": 1,
+        "action": "UP",
+        "state": "NOT_FINISHED",
+        "level": 3
+      },
+      {
+        "step": 2,
+        "action": "UP",
+        "state": "NOT_FINISHED",
+        "level": 3
+      },
+      {
+        "step": 3,
+        "action": "RIGHT",
+        "state": "NOT_FINISHED",
+        "level": 3
+      },
+      {
+        "step": 4,
+        "action": "UP",
+        "state": "NOT_FINISHED",
+        "level": 3
+      },
+      {
+        "step": 5,
+        "action": "LEFT",
+        "state": "NOT_FINISHED",
+        "level": 3
+      },
+      {
+        "step": 6,
+        "action": "LEFT",
+        "state": "NOT_FINISHED",
+        "level": 3
+      },
+      {
+        "step": 7,
+        "action": "UP",
+        "state": "NOT_FINISHED",
+        "level": 3
+      },
+      {
+        "step": 8,
+        "action": "LEFT",
+        "state": "NOT_FINISHED",
+        "level": 3
+      },
+      {
+        "step": 9,
+        "action": "LEFT",
+        "state": "NOT_FINISHED",
+        "level": 3
+      },
+      {
+        "step": 10,
+        "action": "DOWN",
+        "state": "NOT_FINISHED",
+        "level": 3
+      },
+      {
+        "step": 11,
+        "action": "RIGHT",
+        "state": "NOT_FINISHED",
+        "level": 3
+      },
+      {
+        "step": 12,
+        "action": "DOWN",
+        "state": "NOT_FINISHED",
+        "level": 3
+      },
+      {
+        "step": 13,
+        "action": "LEFT",
+        "state": "NOT_FINISHED",
+        "level": 3
+      },
+      {
+        "step": 14,
+        "action": "LEFT",
+        "state": "NOT_FINISHED",
+        "level": 3
+      },
+      {
+        "step": 15,
+        "action": "LEFT",
+        "state": "NOT_FINISHED",
+        "level": 3
+      },
+      {
+        "step": 16,
+        "action": "DOWN",
+        "state": "NOT_FINISHED",
+        "level": 3
+      },
+      {
+        "step": 17,
+        "action": "RIGHT",
+        "state": "NOT_FINISHED",
+        "level": 3
+      },
+      {
+        "step": 18,
+        "action": "DOWN",
+        "state": "NOT_FINISHED",
+        "level": 3
+      },
+      {
+        "step": 19,
+        "action": "RIGHT",
+        "state": "NOT_FINISHED",
+        "level": 4
+      }
+    ]
+  },
+  "naive": {
+    "steps_executed": 4,
+    "terminal_state": "GAME_OVER",
+    "final_level": 3,
+    "trace": [
+      {
+        "step": 1,
+        "action": "UP",
+        "state": "NOT_FINISHED",
+        "level": 3
+      },
+      {
+        "step": 2,
+        "action": "LEFT",
+        "state": "NOT_FINISHED",
+        "level": 3
+      },
+      {
+        "step": 3,
+        "action": "LEFT",
+        "state": "NOT_FINISHED",
+        "level": 3
+      },
+      {
+        "step": 4,
+        "action": "UP",
+        "state": "GAME_OVER",
+        "level": 3
+      }
+    ]
+  },
+  "checks": {
+    "correct_plan_advanced": true,
+    "correct_plan_exactly_19_actions": true,
+    "naive_plan_game_over": true,
+    "naive_failure_at_step_4": true
+  },
+  "structural_pass": true
+}

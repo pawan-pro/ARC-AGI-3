@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EXP-DUCK-029 Pixel Learning Audit</title>
+<style>
+:root {
+  color-scheme:dark; --bg:#101315; --panel:#181d20; --line:#3b474e;
+  --text:#f4f6f7; --muted:#acb8bf; --blue:#58a6ff; --green:#54d19b;
+  --yellow:#ffd166; --red:#ff7474; --pink:#e53aa3;
+}
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font:16px/1.55 system-ui,sans-serif; }
+header,main { width:min(1240px,calc(100% - 32px)); margin:auto; }
+header { padding:40px 0 30px; } h1 { margin:0 0 8px; font-size:clamp(2rem,5vw,4rem); letter-spacing:0; }
+h2,h3 { letter-spacing:0; } p { color:var(--muted); }
+a { color:#83d7ff; } code { color:var(--yellow); }
+.badges,.controls { display:flex; flex-wrap:wrap; gap:8px; }
+.badge,.control { border:1px solid var(--line); border-radius:4px; padding:7px 11px; }
+.pass { color:var(--green); } .fail { color:var(--red); } .warn { color:var(--yellow); }
+section { border-top:1px solid var(--line); padding:34px 0; }
+.grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.three { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+article { background:var(--panel); border:1px solid var(--line); border-radius:6px; padding:16px; }
+figure { margin:0; } img { width:100%; image-rendering:pixelated; border:1px solid var(--line); }
+figcaption { color:var(--muted); padding-top:7px; }
+.roles { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:18px 0; }
+.role { min-height:88px; border-top:5px solid; background:var(--panel); padding:12px; }
+.role strong,.role span { display:block; } .role span { color:var(--muted); font-size:.9rem; }
+.blue { border-color:#1e93ff; } .green { border-color:#4fcc30; }
+.red { border-color:#f93c31; } .purple { border-color:#a356d6; }
+table { width:100%; border-collapse:collapse; background:var(--panel); }
+th,td { text-align:left; border-bottom:1px solid var(--line); padding:9px; }
+.steps { display:grid; grid-template-columns:repeat(10,minmax(72px,1fr)); gap:7px; margin:18px 0; }
+.step { min-height:72px; color:var(--text); background:#22292e; border:1px solid #52616b; border-radius:4px; }
+.step span { display:block; color:var(--muted); } .step:hover,.step.active { border-color:var(--yellow); background:#302d20; }
+.inspector { min-height:84px; background:var(--panel); border-left:4px solid var(--yellow); padding:14px; }
+.decision { border-left:4px solid var(--green); padding-left:16px; }
+@media(max-width:850px) {
+  .grid,.three,.roles { grid-template-columns:1fr; }
+  .steps { grid-template-columns:repeat(4,1fr); }
+}
+</style>
+</head>
+<body>
+<header>
+  <p><a href="../duck_tn36_model_learning_audit/index.html">Previous source-assisted planning audit</a></p>
+  <h1>tu93: Learning the game from pictures</h1>
+  <p>EXP-DUCK-029 trained on level 1-2 action frames, received only the initial
+  level-3 picture, and planned without reading <code>tu93.py</code> or any
+  level-3 action.</p>
+  <div class="badges">
+    <span class="badge pass">Pixel-only held-out gate: PASS</span>
+    <span class="badge pass">Exact 19-action plan</span>
+    <span class="badge">50 states explored</span>
+    <span class="badge warn">Within-game transfer only</span>
+    <span class="badge">Competition submission: NO</span>
+  </div>
+</header>
+<main>
+<section>
+  <h2>What the learner discovered</h2>
+  <div class="controls">
+    <span class="control">Up [-6, 0]</span>
+    <span class="control">Down [6, 0]</span>
+    <span class="control">Left [0, -6]</span>
+    <span class="control">Right [0, 6]</span>
+    <span class="control">Grid step: 6 pixels</span>
+  </div>
+  <div class="roles">
+    <div class="role blue"><strong>Blue piece</strong><span>Color 9: the moving player</span></div>
+    <div class="role green"><strong>Green square</strong><span>Color 14: the final target</span></div>
+    <div class="role red"><strong>Red switches</strong><span>Color 8: collect all three</span></div>
+    <div class="role purple"><strong>Purple marker</strong><span>Color 15: points to a locked neighbor</span></div>
+  </div>
+  <div class="grid">
+    <figure><img src="training-level2.png" alt="Level 2 training frame"><figcaption>Training evidence: level 2</figcaption></figure>
+    <figure><img src="heldout-level3.png" alt="Held-out level 3 initial frame"><figcaption>Held-out input: only this initial level-3 picture</figcaption></figure>
+  </div>
+</section>
+<section>
+  <div class="grid">
+    <div>
+      <h2>The crucial lock rule</h2>
+      <p>A purple pixel inside each red switch points to a neighboring node.
+      That neighbor is dangerous until its switch is collected.</p>
+      <table><thead><tr><th>Red switch</th><th>Locked neighbor</th></tr></thead>
+      <tbody><tr><td>[25, 25]</td><td>[25, 31]</td></tr><tr><td>[25, 31]</td><td>[31, 31]</td></tr><tr><td>[37, 13]</td><td>[37, 19]</td></tr></tbody></table>
+    </div>
+    <figure><img src="planned-route.png" alt="Learned 19-action route"><figcaption>Green line: generated route. Large yellow points mark switches and the target.</figcaption></figure>
+  </div>
+  <h3>Inspect every planned action</h3>
+  <div class="steps"><button class="step" data-index="1"
+data-action="UP"
+data-destination="37,43"
+data-collected="false"
+data-unlocked="None">
+<span>1</span><strong>Up</strong>
+</button><button class="step" data-index="2"
+data-action="UP"
+data-destination="31,43"
+data-collected="false"
+data-unlocked="None">
+<span>2</span><strong>Up</strong>
+</button><button class="step" data-index="3"
+data-action="RIGHT"
+data-destination="31,49"
+data-collected="false"
+data-unlocked="None">
+<span>3</span><strong>Right</strong>
+</button><button class="step" data-index="4"
+data-action="UP"
+data-destination="25,49"
+data-collected="false"
+data-unlocked="None">
+<span>4</span><strong>Up</strong>
+</button><button class="step" data-index="5"
+data-action="LEFT"
+data-destination="25,43"
+data-collected="false"
+data-unlocked="None">
+<span>5</span><strong>Left</strong>
+</button><button class="step" data-index="6"
+data-action="LEFT"
+data-destination="25,37"
+data-collected="false"
+data-unlocked="None">
+<span>6</span><strong>Left</strong>
+</button><button class="step" data-index="7"
+data-action="UP"
+data-destination="19,37"
+data-collected="false"
+data-unlocked="None">
+<span>7</span><strong>Up</strong>
+</button><button class="step" data-index="8"
+data-action="LEFT"
+data-destination="19,31"
+data-collected="false"
+data-unlocked="None">
+<span>8</span><strong>Left</strong>
+</button><button class="step" data-index="9"
+data-action="LEFT"
+data-destination="19,25"
+data-collected="false"
+data-unlocked="None">
+<span>9</span><strong>Left</strong>
+</button><button class="step" data-index="10"
+data-action="DOWN"
+data-destination="25,25"
+data-collected="true"
+data-unlocked="[25, 31]">
+<span>10</span><strong>Down</strong>
+</button><button class="step" data-index="11"
+data-action="RIGHT"
+data-destination="25,31"
+data-collected="true"
+data-unlocked="[31, 31]">
+<span>11</span><strong>Right</strong>
+</button><button class="step" data-index="12"
+data-action="DOWN"
+data-destination="31,31"
+data-collected="false"
+data-unlocked="None">
+<span>12</span><strong>Down</strong>
+</button><button class="step" data-index="13"
+data-action="LEFT"
+data-destination="31,25"
+data-collected="false"
+data-unlocked="None">
+<span>13</span><strong>Left</strong>
+</button><button class="step" data-index="14"
+data-action="LEFT"
+data-destination="31,19"
+data-collected="false"
+data-unlocked="None">
+<span>14</span><strong>Left</strong>
+</button><button class="step" data-index="15"
+data-action="LEFT"
+data-destination="31,13"
+data-collected="false"
+data-unlocked="None">
+<span>15</span><strong>Left</strong>
+</button><button class="step" data-index="16"
+data-action="DOWN"
+data-destination="37,13"
+data-collected="true"
+data-unlocked="[37, 19]">
+<span>16</span><strong>Down</strong>
+</button><button class="step" data-index="17"
+data-action="RIGHT"
+data-destination="37,19"
+data-collected="false"
+data-unlocked="None">
+<span>17</span><strong>Right</strong>
+</button><button class="step" data-index="18"
+data-action="DOWN"
+data-destination="43,19"
+data-collected="false"
+data-unlocked="None">
+<span>18</span><strong>Down</strong>
+</button><button class="step" data-index="19"
+data-action="RIGHT"
+data-destination="43,25"
+data-collected="false"
+data-unlocked="None">
+<span>19</span><strong>Right</strong>
+</button></div>
+  <div class="inspector" id="inspector">Select an action to see its predicted destination and whether it unlocks another cell.</div>
+</section>
+<section>
+  <h2>Why the simpler model was rejected</h2>
+  <div class="grid">
+    <figure><img src="naive-failure.png" alt="Naive route failure"><figcaption>The red point is step 4: the naive route enters a locked cell and gets GAME_OVER.</figcaption></figure>
+    <article>
+      <p class="fail"><strong>Naive graph: REJECTED</strong></p>
+      <p>It treated every visible corridor as immediately safe and proposed
+      15 actions. The black-box game disagreed at the still-locked
+      node.</p>
+      <p class="pass"><strong>Lock-aware graph: ACCEPTED</strong></p>
+      <p>It collected switches in dependency order and exactly matched all
+      19 actions of the successful live replay.</p>
+    </article>
+  </div>
+</section>
+<section>
+  <h2>Decision</h2>
+  <p class="decision">We have proven pixel-only transfer between levels of the
+  same game. We have not yet proven transfer to a different game family. The
+  next gate should apply the architecture - control learning, role discovery,
+  dependency parsing, planning, and prediction checks - to a second game
+  without game-specific color constants.</p>
+</section>
+</main>
+<script>
+document.querySelectorAll(".step").forEach(button => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll(".step").forEach(item => item.classList.remove("active"));
+    button.classList.add("active");
+    const collected = button.dataset.collected === "true";
+    const detail = collected
+      ? ` It collects a red switch and unlocks ${button.dataset.unlocked}.`
+      : "";
+    document.querySelector("#inspector").textContent =
+      `Step ${button.dataset.index}: ${button.dataset.action} to (${button.dataset.destination}).${detail}`;
+  });
+});
+</script>
+</body>
+</html>

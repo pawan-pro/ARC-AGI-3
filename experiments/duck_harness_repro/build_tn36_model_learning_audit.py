@@ -130,6 +130,7 @@ a {{ color:#83d7ff; }}
 </head>
 <body>
 <header>
+  <p><a href="../duck_tu93_pixel_learning_audit/index.html">Next: open the source-hidden pixel-learning audit</a></p>
   <p><a href="../duck_calculator_visual_review/index.html">Back to calculator replays</a></p>
   <h1>tn36: From guessing to planning</h1>
   <p>This page audits EXP-DUCK-028. It shows what was remembered, what goal was stated,
