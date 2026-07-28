@@ -1,0 +1,561 @@
+{
+  "experiment": "EXP-DUCK-032",
+  "method": "learn clue-mark relations from solved levels 1-4, validate with leave-one-level-out prediction, separate fixed obstacles, and infer one prospective level-5 target",
+  "data_boundary": {
+    "calibration_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "level5_success_actions": 0,
+    "game_source_used": false,
+    "rejected_level5_actions_used_for_learning": false,
+    "rejected_level5_target_used_only_for_difference_ablation": true
+  },
+  "reconstructed_levels": [
+    {
+      "level": 1,
+      "normal_cells": 8,
+      "clue_cells": 1,
+      "palette": [
+        8,
+        9
+      ],
+      "target_cells": 8
+    },
+    {
+      "level": 2,
+      "normal_cells": 13,
+      "clue_cells": 2,
+      "palette": [
+        9,
+        12
+      ],
+      "target_cells": 13
+    },
+    {
+      "level": 3,
+      "normal_cells": 23,
+      "clue_cells": 4,
+      "palette": [
+        8,
+        12
+      ],
+      "target_cells": 23
+    },
+    {
+      "level": 4,
+      "normal_cells": 18,
+      "clue_cells": 3,
+      "palette": [
+        9,
+        12
+      ],
+      "target_cells": 18
+    }
+  ],
+  "leave_one_level_out": [
+    {
+      "heldout_level": 1,
+      "training_levels": [
+        2,
+        3,
+        4
+      ],
+      "learned_roles": {
+        "0": "same",
+        "2": "different"
+      },
+      "target_signatures": 1,
+      "target_cells": 8,
+      "used_calibrated_global_palette": false,
+      "exact_target_match": true
+    },
+    {
+      "heldout_level": 2,
+      "training_levels": [
+        1,
+        3,
+        4
+      ],
+      "learned_roles": {
+        "0": "same",
+        "2": "different"
+      },
+      "target_signatures": 1,
+      "target_cells": 13,
+      "used_calibrated_global_palette": false,
+      "exact_target_match": true
+    },
+    {
+      "heldout_level": 3,
+      "training_levels": [
+        1,
+        2,
+        4
+      ],
+      "learned_roles": {
+        "0": "same",
+        "2": "different"
+      },
+      "target_signatures": 1,
+      "target_cells": 23,
+      "used_calibrated_global_palette": false,
+      "exact_target_match": true
+    },
+    {
+      "heldout_level": 4,
+      "training_levels": [
+        1,
+        2,
+        3
+      ],
+      "learned_roles": {
+        "0": "same",
+        "2": "different"
+      },
+      "target_signatures": 1,
+      "target_cells": 18,
+      "used_calibrated_global_palette": true,
+      "exact_target_match": true
+    }
+  ],
+  "learned_roles": {
+    "0": "same",
+    "2": "different"
+  },
+  "level5_objective": {
+    "background": 4,
+    "state_colors": [
+      14,
+      15
+    ],
+    "spacing": 8,
+    "normal_cells": [
+      [
+        6,
+        24
+      ],
+      [
+        6,
+        32
+      ],
+      [
+        14,
+        16
+      ],
+      [
+        14,
+        32
+      ],
+      [
+        22,
+        8
+      ],
+      [
+        22,
+        16
+      ],
+      [
+        22,
+        24
+      ],
+      [
+        22,
+        32
+      ],
+      [
+        22,
+        40
+      ],
+      [
+        22,
+        48
+      ],
+      [
+        22,
+        56
+      ],
+      [
+        30,
+        16
+      ],
+      [
+        30,
+        32
+      ],
+      [
+        30,
+        48
+      ],
+      [
+        38,
+        8
+      ],
+      [
+        38,
+        16
+      ],
+      [
+        38,
+        32
+      ],
+      [
+        38,
+        40
+      ],
+      [
+        38,
+        48
+      ],
+      [
+        38,
+        56
+      ],
+      [
+        46,
+        16
+      ],
+      [
+        46,
+        32
+      ],
+      [
+        46,
+        48
+      ],
+      [
+        54,
+        16
+      ],
+      [
+        54,
+        24
+      ],
+      [
+        54,
+        32
+      ],
+      [
+        54,
+        40
+      ]
+    ],
+    "clue_cells": [
+      [
+        6,
+        16
+      ],
+      [
+        14,
+        40
+      ],
+      [
+        30,
+        8
+      ],
+      [
+        30,
+        40
+      ],
+      [
+        30,
+        56
+      ],
+      [
+        38,
+        24
+      ],
+      [
+        46,
+        24
+      ],
+      [
+        54,
+        48
+      ]
+    ],
+    "obstacle_cells": [
+      [
+        14,
+        24
+      ],
+      [
+        30,
+        24
+      ],
+      [
+        46,
+        40
+      ]
+    ],
+    "learned_roles": {
+      "0": "same",
+      "2": "different"
+    },
+    "unknown_role_models": [
+      {
+        "3": "same"
+      },
+      {
+        "3": "different"
+      }
+    ],
+    "uncovered_cells": [
+      [
+        22,
+        24
+      ]
+    ],
+    "target": [
+      {
+        "cell": [
+          6,
+          24
+        ],
+        "color": 14
+      },
+      {
+        "cell": [
+          6,
+          32
+        ],
+        "color": 15
+      },
+      {
+        "cell": [
+          14,
+          16
+        ],
+        "color": 14
+      },
+      {
+        "cell": [
+          14,
+          32
+        ],
+        "color": 14
+      },
+      {
+        "cell": [
+          22,
+          8
+        ],
+        "color": 14
+      },
+      {
+        "cell": [
+          22,
+          16
+        ],
+        "color": 15
+      },
+      {
+        "cell": [
+          22,
+          24
+        ],
+        "color": 14
+      },
+      {
+        "cell": [
+          22,
+          32
+        ],
+        "color": 15
+      },
+      {
+        "cell": [
+          22,
+          40
+        ],
+        "color": 14
+      },
+      {
+        "cell": [
+          22,
+          48
+        ],
+        "color": 15
+      },
+      {
+        "cell": [
+          22,
+          56
+        ],
+        "color": 14
+      },
+      {
+        "cell": [
+          30,
+          16
+        ],
+        "color": 14
+      },
+      {
+        "cell": [
+          30,
+          32
+        ],
+        "color": 14
+      },
+      {
+        "cell": [
+          30,
+          48
+        ],
+        "color": 14
+      },
+      {
+        "cell": [
+          38,
+          8
+        ],
+        "color": 14
+      },
+      {
+        "cell": [
+          38,
+          16
+        ],
+        "color": 15
+      },
+      {
+        "cell": [
+          38,
+          32
+        ],
+        "color": 15
+      },
+      {
+        "cell": [
+          38,
+          40
+        ],
+        "color": 14
+      },
+      {
+        "cell": [
+          38,
+          48
+        ],
+        "color": 15
+      },
+      {
+        "cell": [
+          38,
+          56
+        ],
+        "color": 14
+      },
+      {
+        "cell": [
+          46,
+          16
+        ],
+        "color": 14
+      },
+      {
+        "cell": [
+          46,
+          32
+        ],
+        "color": 14
+      },
+      {
+        "cell": [
+          46,
+          48
+        ],
+        "color": 14
+      },
+      {
+        "cell": [
+          54,
+          16
+        ],
+        "color": 15
+      },
+      {
+        "cell": [
+          54,
+          24
+        ],
+        "color": 14
+      },
+      {
+        "cell": [
+          54,
+          32
+        ],
+        "color": 15
+      },
+      {
+        "cell": [
+          54,
+          40
+        ],
+        "color": 14
+      }
+    ]
+  },
+  "planned_clicks": [
+    [
+      6,
+      32
+    ],
+    [
+      22,
+      16
+    ],
+    [
+      22,
+      32
+    ],
+    [
+      22,
+      48
+    ],
+    [
+      38,
+      16
+    ],
+    [
+      38,
+      32
+    ],
+    [
+      38,
+      48
+    ],
+    [
+      54,
+      16
+    ],
+    [
+      54,
+      32
+    ]
+  ],
+  "planned_click_count": 9,
+  "target_cells_changed_from_exp_duck_031": 27,
+  "checks": {
+    "four_targets_reconstructed": true,
+    "roles_learned_from_all_four_levels": true,
+    "four_leave_one_out_folds_exact": true,
+    "every_fold_has_one_target": true,
+    "level5_geometry_corrected": true,
+    "one_uncovered_cell_safely_retained": true,
+    "new_mark_ambiguity_is_action_invariant": true,
+    "one_calibrated_target": true,
+    "new_target_differs_from_rejected": true,
+    "nine_guarded_clicks": true,
+    "prior_rejection_used_only_as_ablation": true,
+    "no_level5_success_trace_available": true
+  },
+  "structural_pass": true,
+  "recommended_isolated_kaggle_run": true,
+  "competition_submit": false,
+  "next_action": "Build and run only an isolated private level-5 Kaggle notebook. Require a live advance to level 6 before any full evaluation."
+}

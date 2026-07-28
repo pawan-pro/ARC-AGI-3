@@ -51,6 +51,10 @@ VARIANTS = {
         "metadata": PACKAGE_DIR / "kernel-metadata-ft09-level5-prospective.json",
         "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_ft09_level5_prospective/latest",
     },
+    "ft09-level5-calibrated": {
+        "metadata": PACKAGE_DIR / "kernel-metadata-ft09-level5-calibrated.json",
+        "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_ft09_level5_calibrated/latest",
+    },
     "full-eval-overlap": {
         "metadata": PACKAGE_DIR / "kernel-metadata-full-eval-overlap.json",
         "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_full_eval_ft09_overlap/latest",
