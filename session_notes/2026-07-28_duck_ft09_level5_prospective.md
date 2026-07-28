@@ -77,7 +77,7 @@ Passed:
 Private kernel:
 
 ```text
-jatalepawan/arc-agi-3-duck-ft09-level5-prospective
+jatalepawan/arc-agi-3-duck-ft09-level-5-prospective
 ```
 
 Competition submission:
