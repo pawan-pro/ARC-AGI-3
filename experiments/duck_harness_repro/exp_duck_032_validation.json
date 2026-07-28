@@ -1,0 +1,42 @@
+{
+  "experiment": "EXP-DUCK-032",
+  "structural_pass": true,
+  "causal_gate_pass": false,
+  "recommended_full_evaluation": false,
+  "decision": "REJECT_CALIBRATED_LEVEL5_TARGET",
+  "reason": "All nine actions and state predictions were correct and the final board matched the calibrated target, but level 5 did not advance.",
+  "metrics": {
+    "levels_completed": 4,
+    "actions_per_level": [
+      9,
+      7,
+      32,
+      21,
+      9,
+      0
+    ],
+    "total_actions": 78,
+    "generated_tokens": 0,
+    "planned_helper_actions": 9,
+    "executed_helper_actions": 9,
+    "correct_observed_effects": 9,
+    "final_target_mismatches": 0
+  },
+  "checks": {
+    "one_ft09_game": true,
+    "validated_prefix_reached_level5": true,
+    "actions_per_level_exact": true,
+    "zero_tokens": true,
+    "calibrated_geometry_exact": true,
+    "two_action_equivalent_unknown_models": true,
+    "nine_helper_actions": true,
+    "live_actions_match_frozen_plan": true,
+    "every_observed_effect_correct": true,
+    "final_board_matches_calibrated_target": true,
+    "no_game_over": true,
+    "level5_did_not_advance": true,
+    "solver_note_exact": true
+  },
+  "solver_note": "ft09_level5_calibrated=attempted; normal=27; clues=8; obstacles=3; unknown_models=2; uncovered=1; target_signatures=1; planned=9; executed=9; effects_ok=True; solved=False; stop=target_exhausted; ft09_overlap_target=RORbRRRRRORRbRROOO; planned=21; executed=21; solved=True; stop=level_completed; ft09_prefix_replay_actions=48; reached_level=4; target_level=4",
+  "next_gate": "EXP-DUCK-033 should probe the three new magenta cells from clean level-5 starts. Do not test another normal-cell complement."
+}

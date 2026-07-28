@@ -95,3 +95,61 @@ competition submission: NO
 
 The shared GPU environment may take about two hours to initialize. The result
 will be downloaded and validated after the kernel reaches a terminal state.
+
+## Live Result
+
+```text
+levels completed: 4/6
+actions per level: [9, 7, 32, 21, 9, 0]
+total actions: 78
+tokens: 0
+level-5 helper actions: 9
+correct observed effects: 9/9
+final target mismatches: 0
+level-5 progress: 0
+```
+
+The calibrated helper activated with the expected 27 normal cells, 8 clues,
+3 magenta cells, 2 action-equivalent unknown-mark models, and 1 unchanged
+uncovered cell. It executed the exact nine-click plan. Every selected green
+cell became purple as predicted, and the final board matched the frozen
+target. The game remained on level 5.
+
+## Interpretation
+
+Closed-book calibration on levels 1-4 was necessary but not sufficient for
+level 5. Level 5 introduces a new mechanic that cannot be explained by either
+complementary coloring of the 27 normal cells:
+
+```text
+EXP-DUCK-031: 18-click complement rejected
+EXP-DUCK-032: 9-click complement rejected
+```
+
+The control and effect models are sound. The objective model is still
+incomplete.
+
+## Decision
+
+```text
+structural validation: PASS
+causal level-gain gate: FAIL
+full evaluation: NO
+competition submission: NO
+```
+
+## Next Gate: EXP-DUCK-033
+
+Do not test another normal-cell target. The next controlled experiment should
+start from clean level-5 boards and probe the centers of the three magenta
+cells separately:
+
+```text
+(14, 24)
+(30, 24)
+(46, 40)
+```
+
+Each arm should record whether one click is a no-op, changes the special cell,
+changes neighboring cells, unlocks normal cells, causes game over, or advances
+the level. This is a mechanic-identification experiment, not a scoring run.
