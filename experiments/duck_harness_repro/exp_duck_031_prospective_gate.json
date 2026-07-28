@@ -1,0 +1,474 @@
+{
+  "experiment": "EXP-DUCK-031",
+  "method": "prospective source-hidden binary-mask objective inference",
+  "data_boundary": {
+    "input": "terminal level-4 frame containing untouched level-5 board",
+    "known_level5_actions": 0,
+    "known_level5_success": false,
+    "game_source_used_by_learner": false
+  },
+  "objective": {
+    "background": 4,
+    "state_colors": [
+      14,
+      15
+    ],
+    "spacing": 8,
+    "normal_cells": [
+      [
+        6,
+        24
+      ],
+      [
+        6,
+        32
+      ],
+      [
+        14,
+        16
+      ],
+      [
+        14,
+        32
+      ],
+      [
+        22,
+        8
+      ],
+      [
+        22,
+        16
+      ],
+      [
+        22,
+        24
+      ],
+      [
+        22,
+        32
+      ],
+      [
+        22,
+        40
+      ],
+      [
+        22,
+        48
+      ],
+      [
+        22,
+        56
+      ],
+      [
+        30,
+        16
+      ],
+      [
+        30,
+        32
+      ],
+      [
+        30,
+        48
+      ],
+      [
+        38,
+        8
+      ],
+      [
+        38,
+        16
+      ],
+      [
+        38,
+        32
+      ],
+      [
+        38,
+        40
+      ],
+      [
+        38,
+        48
+      ],
+      [
+        38,
+        56
+      ],
+      [
+        46,
+        16
+      ],
+      [
+        46,
+        32
+      ],
+      [
+        46,
+        48
+      ],
+      [
+        54,
+        16
+      ],
+      [
+        54,
+        24
+      ],
+      [
+        54,
+        32
+      ],
+      [
+        54,
+        40
+      ]
+    ],
+    "clue_cells": [
+      [
+        6,
+        16
+      ],
+      [
+        14,
+        24
+      ],
+      [
+        14,
+        40
+      ],
+      [
+        30,
+        8
+      ],
+      [
+        30,
+        24
+      ],
+      [
+        30,
+        40
+      ],
+      [
+        30,
+        56
+      ],
+      [
+        38,
+        24
+      ],
+      [
+        46,
+        24
+      ],
+      [
+        46,
+        40
+      ],
+      [
+        54,
+        48
+      ]
+    ],
+    "mark_colors": [
+      0,
+      2,
+      3,
+      6
+    ],
+    "semantic_models": [
+      {
+        "0": "flip",
+        "2": "same",
+        "3": "same",
+        "6": "flip"
+      },
+      {
+        "0": "flip",
+        "2": "same",
+        "3": "flip",
+        "6": "flip"
+      }
+    ],
+    "target": [
+      {
+        "cell": [
+          6,
+          24
+        ],
+        "color": 15
+      },
+      {
+        "cell": [
+          6,
+          32
+        ],
+        "color": 14
+      },
+      {
+        "cell": [
+          14,
+          16
+        ],
+        "color": 15
+      },
+      {
+        "cell": [
+          14,
+          32
+        ],
+        "color": 15
+      },
+      {
+        "cell": [
+          22,
+          8
+        ],
+        "color": 15
+      },
+      {
+        "cell": [
+          22,
+          16
+        ],
+        "color": 14
+      },
+      {
+        "cell": [
+          22,
+          24
+        ],
+        "color": 15
+      },
+      {
+        "cell": [
+          22,
+          32
+        ],
+        "color": 14
+      },
+      {
+        "cell": [
+          22,
+          40
+        ],
+        "color": 15
+      },
+      {
+        "cell": [
+          22,
+          48
+        ],
+        "color": 14
+      },
+      {
+        "cell": [
+          22,
+          56
+        ],
+        "color": 15
+      },
+      {
+        "cell": [
+          30,
+          16
+        ],
+        "color": 15
+      },
+      {
+        "cell": [
+          30,
+          32
+        ],
+        "color": 15
+      },
+      {
+        "cell": [
+          30,
+          48
+        ],
+        "color": 15
+      },
+      {
+        "cell": [
+          38,
+          8
+        ],
+        "color": 15
+      },
+      {
+        "cell": [
+          38,
+          16
+        ],
+        "color": 14
+      },
+      {
+        "cell": [
+          38,
+          32
+        ],
+        "color": 14
+      },
+      {
+        "cell": [
+          38,
+          40
+        ],
+        "color": 15
+      },
+      {
+        "cell": [
+          38,
+          48
+        ],
+        "color": 14
+      },
+      {
+        "cell": [
+          38,
+          56
+        ],
+        "color": 15
+      },
+      {
+        "cell": [
+          46,
+          16
+        ],
+        "color": 15
+      },
+      {
+        "cell": [
+          46,
+          32
+        ],
+        "color": 15
+      },
+      {
+        "cell": [
+          46,
+          48
+        ],
+        "color": 15
+      },
+      {
+        "cell": [
+          54,
+          16
+        ],
+        "color": 14
+      },
+      {
+        "cell": [
+          54,
+          24
+        ],
+        "color": 15
+      },
+      {
+        "cell": [
+          54,
+          32
+        ],
+        "color": 14
+      },
+      {
+        "cell": [
+          54,
+          40
+        ],
+        "color": 15
+      }
+    ]
+  },
+  "planned_clicks": [
+    [
+      6,
+      24
+    ],
+    [
+      14,
+      16
+    ],
+    [
+      14,
+      32
+    ],
+    [
+      22,
+      8
+    ],
+    [
+      22,
+      24
+    ],
+    [
+      22,
+      40
+    ],
+    [
+      22,
+      56
+    ],
+    [
+      30,
+      16
+    ],
+    [
+      30,
+      32
+    ],
+    [
+      30,
+      48
+    ],
+    [
+      38,
+      8
+    ],
+    [
+      38,
+      40
+    ],
+    [
+      38,
+      56
+    ],
+    [
+      46,
+      16
+    ],
+    [
+      46,
+      32
+    ],
+    [
+      46,
+      48
+    ],
+    [
+      54,
+      24
+    ],
+    [
+      54,
+      40
+    ]
+  ],
+  "planned_click_count": 18,
+  "guard": "After each click, require the observed cell to equal its predicted target color; abort on mismatch, game over, or target ambiguity.",
+  "checks": {
+    "no_level5_actions_available": true,
+    "no_stored_level5_coordinates": true,
+    "binary_palette_discovered": true,
+    "geometry_discovered": true,
+    "one_actionable_target": true,
+    "semantic_ambiguity_is_action_invariant": true,
+    "eighteen_guarded_clicks": true,
+    "nine_cells_already_correct": true
+  },
+  "structural_pass": true,
+  "competition_submit": false,
+  "next_action": "Run only the isolated private Kaggle kernel. Do not build a full evaluation unless level 5 advances."
+}
