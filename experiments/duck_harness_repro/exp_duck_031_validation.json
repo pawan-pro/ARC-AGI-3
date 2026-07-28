@@ -1,0 +1,45 @@
+{
+  "experiment": "EXP-DUCK-031",
+  "structural_pass": true,
+  "prospective_gate_pass": false,
+  "recommended_full_evaluation": false,
+  "decision": "REJECT_OBJECTIVE_HYPOTHESIS",
+  "reason": "The executor reproduced every planned state change and the final board matched the frozen target, but the game remained on level 5.",
+  "metrics": {
+    "levels_completed": 4,
+    "actions_per_level": [
+      9,
+      7,
+      32,
+      21,
+      18,
+      0
+    ],
+    "total_actions": 87,
+    "generated_tokens": 0,
+    "uncached_input_tokens": 0,
+    "normal_cells": 27,
+    "clue_cells": 11,
+    "semantic_models": 2,
+    "target_signatures": 1,
+    "planned_helper_actions": 18,
+    "executed_helper_actions": 18,
+    "correct_observed_effects": 18,
+    "final_target_mismatches": 0
+  },
+  "checks": {
+    "one_ft09_game": true,
+    "validated_prefix_reached_level5": true,
+    "actions_per_level_exact": true,
+    "zero_tokens": true,
+    "objective_shape_exact": true,
+    "one_target_signature": true,
+    "eighteen_helper_actions": true,
+    "live_actions_match_frozen_plan": true,
+    "every_observed_effect_correct": true,
+    "final_board_matches_frozen_target": true,
+    "no_game_over": true,
+    "level5_did_not_advance": true
+  },
+  "solver_note": "ft09_level5_objective=attempted; normal=27; clues=11; semantic_models=2; target_signatures=1; planned=18; executed=18; effects_ok=True; solved=False; stop=target_exhausted; ft09_overlap_target=RORbRRRRRORRbRROOO; planned=21; executed=21; solved=True; stop=level_completed; ft09_prefix_replay_actions=48; reached_level=4; target_level=4"
+}

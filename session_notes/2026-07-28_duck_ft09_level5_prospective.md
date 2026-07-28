@@ -92,3 +92,65 @@ Promotion rule:
 Build a full evaluation only if the isolated run advances from level 5 to
 level 6 with all predicted effects intact.
 ```
+
+## Live Result
+
+The private Kaggle kernel completed successfully.
+
+```text
+levels completed: 4/6
+actions per level: [9, 7, 32, 21, 18, 0]
+total actions: 87
+tokens: 0
+level-5 helper actions: 18
+correct observed effects: 18/18
+final target mismatches: 0
+level-5 progress: 0
+```
+
+The validated 69-action prefix reached level 5. The prospective helper then
+activated and made exactly its 18 frozen clicks. Every selected cell changed
+from the observed starting color to the predicted target color. After the
+last click, all 27 editable cells matched the inferred target.
+
+The game nevertheless remained on level 5.
+
+## K-12 Interpretation
+
+The helper had good hands but the wrong answer sheet.
+
+- It found every square it intended to change.
+- Every click did exactly what it expected.
+- It finished the exact picture it had planned.
+- The game said that picture was not the solution.
+
+This rejects the objective hypothesis, not the mouse-control mechanism.
+Level 5 needs more than the simple rule that each mark means either "copy the
+clue center" or "flip the clue center."
+
+## Decision
+
+```text
+structural validation: PASS
+prospective level-gain gate: FAIL
+build full evaluation: NO
+competition submission: NO
+```
+
+EXP-DUCK-031 is a useful prospective falsification. It prevents us from
+shipping a confidently executed but incorrect objective into all 25 games.
+
+## Next Gate
+
+The next experiment should learn richer operator meanings from solved ft09
+levels 1-4:
+
+1. Reconstruct each solved level's initial board and accepted final target.
+2. Fit mark-specific operators across levels rather than one global
+   same-or-flip table.
+3. Hold out one solved level and require exact target prediction.
+4. Revisit level 5 only if the calibrated model produces one unique target
+   that differs from the rejected EXP-DUCK-031 target.
+
+No full evaluation or competition scoring run should be launched before that
+calibration gate passes.
