@@ -189,6 +189,51 @@ FT09_LEVEL5_MAGENTA_PROBE_POLICY = {{
     )
     set_source(cells[16], config)
 
+    if arm == "bottom_right":
+        install_cell = source(cells[6])
+        old_wheel_path = (
+            '        "/kaggle/input/competitions/arc-prize-2026-arc-agi-3/'
+            'arc_agi_3_wheels",'
+        )
+        resolver = '''ARC_COMPETITION_ROOT = next(
+    (
+        path
+        for path in (
+            Path("/kaggle/input/competitions/arc-prize-2026-arc-agi-3"),
+            Path("/kaggle/input/arc-prize-2026-arc-agi-3"),
+        )
+        if (path / "arc_agi_3_wheels").exists()
+    ),
+    None,
+)
+if ARC_COMPETITION_ROOT is None:
+    raise RuntimeError("ARC competition wheels are not mounted")
+ARC_WHEEL_DIR = ARC_COMPETITION_ROOT / "arc_agi_3_wheels"
+print("Resolved ARC competition root:", ARC_COMPETITION_ROOT)
+
+'''
+        if old_wheel_path not in install_cell:
+            raise RuntimeError("Could not find fixed ARC wheel path")
+        install_cell = resolver + install_cell.replace(
+            old_wheel_path, "        str(ARC_WHEEL_DIR),", 1
+        )
+        set_source(cells[6], install_cell)
+
+        run_cell = source(cells[19])
+        old_env_path = (
+            'competition_env_files = str(Path("/kaggle/input/competitions/'
+            'arc-prize-2026-arc-agi-3/arc_agi_3_wheels").parent / '
+            '"environment_files")'
+        )
+        if old_env_path not in run_cell:
+            raise RuntimeError("Could not find fixed ARC environment path")
+        run_cell = run_cell.replace(
+            old_env_path,
+            'competition_env_files = str(ARC_COMPETITION_ROOT / "environment_files")',
+            1,
+        )
+        set_source(cells[19], run_cell)
+
     notebook.setdefault("metadata", {})["exp_duck_id"] = "EXP-DUCK-033"
     notebook["metadata"]["experiment_arm"] = arm
     notebook["metadata"]["experiment_purpose"] = (
@@ -212,6 +257,8 @@ FT09_LEVEL5_MAGENTA_PROBE_POLICY = {{
         f'"col": {col}',
         '"enabled": False',
     )
+    if arm == "bottom_right":
+        required += ("ARC_COMPETITION_ROOT", "ARC_WHEEL_DIR")
     if not all(token in rendered for token in required):
         raise RuntimeError(f"Notebook validation failed for {arm}")
     output.write_text(json.dumps(notebook, indent=1) + "\n", encoding="utf-8")

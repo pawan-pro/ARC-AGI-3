@@ -56,3 +56,25 @@ already in use. The bottom-right notebook remains unchanged and will be pushed
 as soon as either active arm releases a slot.
 
 No competition submission was made.
+
+## Partial Live Result
+
+The top and middle arms completed with the exact 69-action prefix plus one
+probe, zero tokens, no game over, and no level transition.
+
+```text
+top probe:    color 14 -> 15; 164 pixels changed
+middle probe: color 14 -> 15; 128 pixels changed
+```
+
+These are not ordinary one-cell color cycles. Each magenta cell is a regional
+operator that changes a structured group of cells.
+
+The first two bottom-right launch attempts failed before gameplay because
+Kaggle mounted the competition at `/kaggle/input/arc-prize-2026-arc-agi-3`
+but the inherited notebook expected
+`/kaggle/input/competitions/arc-prize-2026-arc-agi-3`. Both failures occurred
+while installing `arc-agi`; neither reached the validated prefix or probe.
+
+The bottom-right notebook now resolves either Kaggle mount layout. The probe
+coordinate and all game logic remain unchanged.
