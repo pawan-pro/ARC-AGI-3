@@ -1,0 +1,153 @@
+{
+  "experiment": "EXP-DUCK-033",
+  "structural_pass": true,
+  "operator_cells": {
+    "top": [
+      14,
+      24
+    ],
+    "middle": [
+      30,
+      24
+    ],
+    "bottom_right": [
+      46,
+      40
+    ]
+  },
+  "changed_pixel_counts": {
+    "top": 164,
+    "middle": 128,
+    "bottom_right": 164
+  },
+  "logical_masks": {
+    "top": [
+      [
+        6,
+        24
+      ],
+      [
+        14,
+        16
+      ],
+      [
+        14,
+        32
+      ],
+      [
+        22,
+        24
+      ]
+    ],
+    "middle": [
+      [
+        22,
+        24
+      ],
+      [
+        30,
+        16
+      ],
+      [
+        30,
+        32
+      ]
+    ],
+    "bottom_right": [
+      [
+        38,
+        40
+      ],
+      [
+        46,
+        32
+      ],
+      [
+        46,
+        48
+      ],
+      [
+        54,
+        40
+      ]
+    ]
+  },
+  "top_middle_overlap": [
+    [
+      22,
+      24
+    ]
+  ],
+  "all_single_probes": {
+    "level_completed": false,
+    "game_over": false,
+    "actions": 70,
+    "tokens": 0
+  },
+  "interpretation": "The magenta cells are deterministic regional toggle operators. Their masks form a three-bit state space with eight combinations.",
+  "next_gate": {
+    "experiment": "EXP-DUCK-034",
+    "method": "guarded_gray_code_operator_search",
+    "actions": [
+      {
+        "step": 1,
+        "click": "top",
+        "state": [
+          "top"
+        ]
+      },
+      {
+        "step": 2,
+        "click": "middle",
+        "state": [
+          "top",
+          "middle"
+        ]
+      },
+      {
+        "step": 3,
+        "click": "top",
+        "state": [
+          "middle"
+        ]
+      },
+      {
+        "step": 4,
+        "click": "bottom_right",
+        "state": [
+          "middle",
+          "bottom_right"
+        ]
+      },
+      {
+        "step": 5,
+        "click": "top",
+        "state": [
+          "top",
+          "middle",
+          "bottom_right"
+        ]
+      },
+      {
+        "step": 6,
+        "click": "middle",
+        "state": [
+          "top",
+          "bottom_right"
+        ]
+      },
+      {
+        "step": 7,
+        "click": "top",
+        "state": [
+          "bottom_right"
+        ]
+      }
+    ],
+    "stop_rules": [
+      "stop immediately on level completion",
+      "abort on any pixel-level prediction mismatch",
+      "abort on game over"
+    ]
+  }
+}

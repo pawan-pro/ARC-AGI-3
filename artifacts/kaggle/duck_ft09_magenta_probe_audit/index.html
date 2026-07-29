@@ -1,0 +1,50 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EXP-DUCK-033 Magenta Operator Audit</title><style>
+:root { color-scheme:dark;--bg:#101315;--panel:#191e21;--line:#455159;
+--text:#f4f7f8;--muted:#aeb9bf;--green:#58d3a0;--yellow:#ffd166 }
+* { box-sizing:border-box } body { margin:0;background:var(--bg);color:var(--text);
+font:16px/1.55 system-ui,sans-serif } header,main { width:min(1280px,calc(100% - 32px));margin:auto }
+header { padding:38px 0 28px } h1 { margin:0;font-size:clamp(2rem,5vw,3.8rem);letter-spacing:0 }
+h2 { margin:4px 0 10px;letter-spacing:0 } p,figcaption,li span { color:var(--muted) }
+.badges { display:flex;gap:8px;flex-wrap:wrap } .badge { border:1px solid var(--line);padding:7px 11px;border-radius:4px }
+.pass { color:var(--green) } section { display:grid;grid-template-columns:.8fr 1fr 1fr;gap:16px;border-top:1px solid var(--line);padding:28px 0 }
+figure { margin:0;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px }
+img { width:100%;image-rendering:pixelated;border:1px solid var(--line) } figcaption { padding-top:7px }
+.eyebrow { color:var(--green);font-weight:700;text-transform:uppercase } code { color:var(--yellow);overflow-wrap:anywhere }
+.plan { display:block } ol { display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0;list-style:none }
+li { border:1px solid var(--line);background:var(--panel);padding:12px;border-radius:4px } li span { display:block }
+@media(max-width:850px) { section { grid-template-columns:1fr } ol { grid-template-columns:1fr 1fr } }
+</style></head><body><header><h1>Magenta cells are regional operators</h1>
+<p>Each private run began from the same untouched level 5 and clicked one
+magenta cell exactly once. A single click changed a structured group, not one
+ordinary cell.</p><div class="badges"><span class="badge pass">3/3 exact probes</span>
+<span class="badge pass">Mechanic identified</span><span class="badge">Competition submission: NO</span></div>
+</header><main><section><div class="copy"><p class="eyebrow">Shared start</p>
+<h2>Untouched level 5</h2><p>All three arms reached this board through the
+same validated 69-action prefix.</p></div><figure><img src="untouched.png">
+<figcaption>Common initial board</figcaption></figure><div></div></section>
+<section><div class="copy"><p class="eyebrow">Top operator</p>
+<h2>164 pixels changed</h2>
+<p>Logical cells toggled: <code>(6, 24), (14, 16), (14, 32), (22, 24)</code></p>
+<p>Level gain: 0 · Game over: no · Tokens: 0</p></div>
+<figure><img src="top-after.png"><figcaption>Observed board after one click</figcaption></figure>
+<figure><img src="top-diff.png"><figcaption>Only changed pixels are colored</figcaption></figure>
+</section><section><div class="copy"><p class="eyebrow">Middle operator</p>
+<h2>128 pixels changed</h2>
+<p>Logical cells toggled: <code>(22, 24), (30, 16), (30, 32)</code></p>
+<p>Level gain: 0 · Game over: no · Tokens: 0</p></div>
+<figure><img src="middle-after.png"><figcaption>Observed board after one click</figcaption></figure>
+<figure><img src="middle-diff.png"><figcaption>Only changed pixels are colored</figcaption></figure>
+</section><section><div class="copy"><p class="eyebrow">Bottom Right operator</p>
+<h2>164 pixels changed</h2>
+<p>Logical cells toggled: <code>(38, 40), (46, 32), (46, 48), (54, 40)</code></p>
+<p>Level gain: 0 · Game over: no · Tokens: 0</p></div>
+<figure><img src="bottom_right-after.png"><figcaption>Observed board after one click</figcaption></figure>
+<figure><img src="bottom_right-diff.png"><figcaption>Only changed pixels are colored</figcaption></figure>
+</section>
+<section class="plan"><p class="eyebrow">Next falsifiable gate</p>
+<h2>Seven-step Gray-code search</h2><p>There are only eight combinations of
+three binary operators. This route visits every non-empty combination while
+changing one button at a time. Every observed board must match the XOR model.</p>
+<ol><li><strong>1.</strong> click top <span>state: top</span></li><li><strong>2.</strong> click middle <span>state: top + middle</span></li><li><strong>3.</strong> click top <span>state: middle</span></li><li><strong>4.</strong> click bottom right <span>state: middle + bottom_right</span></li><li><strong>5.</strong> click top <span>state: top + middle + bottom_right</span></li><li><strong>6.</strong> click middle <span>state: top + bottom_right</span></li><li><strong>7.</strong> click top <span>state: bottom_right</span></li></ol></section></main></body></html>
