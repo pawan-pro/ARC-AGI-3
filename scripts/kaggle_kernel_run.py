@@ -55,6 +55,18 @@ VARIANTS = {
         "metadata": PACKAGE_DIR / "kernel-metadata-ft09-level5-calibrated.json",
         "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_ft09_level5_calibrated/latest",
     },
+    "ft09-level5-probe-top": {
+        "metadata": PACKAGE_DIR / "kernel-metadata-ft09-level5-probe-top.json",
+        "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_ft09_level5_probe_top/latest",
+    },
+    "ft09-level5-probe-middle": {
+        "metadata": PACKAGE_DIR / "kernel-metadata-ft09-level5-probe-middle.json",
+        "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_ft09_level5_probe_middle/latest",
+    },
+    "ft09-level5-probe-bottom-right": {
+        "metadata": PACKAGE_DIR / "kernel-metadata-ft09-level5-probe-bottom-right.json",
+        "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_ft09_level5_probe_bottom_right/latest",
+    },
     "full-eval-overlap": {
         "metadata": PACKAGE_DIR / "kernel-metadata-full-eval-overlap.json",
         "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_full_eval_ft09_overlap/latest",
