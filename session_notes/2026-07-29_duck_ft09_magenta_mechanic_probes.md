@@ -43,4 +43,16 @@ cycles, return to the visual clue model rather than guessing more targets.
 
 ## Launch Status
 
-Pending static validation and private kernel launch.
+Static validation passed. Commit `5ab9039` contains the reproducible package.
+
+Kaggle accepted Version 1 of:
+
+- `jatalepawan/arc-agi-3-duck-ft09-level-5-probe-top`
+- `jatalepawan/arc-agi-3-duck-ft09-level-5-probe-middle`
+
+Both kernels were confirmed `RUNNING`. Kaggle rejected the simultaneous
+bottom-right launch because the account's maximum of two batch GPU sessions was
+already in use. The bottom-right notebook remains unchanged and will be pushed
+as soon as either active arm releases a slot.
+
+No competition submission was made.
