@@ -1,0 +1,67 @@
+{
+  "exempt_prefixes": [
+    "ft09"
+  ],
+  "games": [
+    {
+      "batches": 245,
+      "exempt": false,
+      "game_id": "dc22-fdcac232",
+      "live_cancelled_actions": 43,
+      "live_exact_no_change_interruptions": 15,
+      "live_interruptions": 15,
+      "live_terminal_interruptions": 1,
+      "multi_action_batches": 58
+    },
+    {
+      "batches": 329,
+      "exempt": false,
+      "game_id": "g50t-5849a774",
+      "live_cancelled_actions": 7,
+      "live_exact_no_change_interruptions": 4,
+      "live_interruptions": 4,
+      "multi_action_batches": 24
+    },
+    {
+      "batches": 92,
+      "exempt": false,
+      "game_id": "ka59-38d34dbb",
+      "live_cancelled_actions": 39,
+      "live_exact_no_change_interruptions": 7,
+      "live_interruptions": 7,
+      "multi_action_batches": 58
+    },
+    {
+      "batches": 153,
+      "exempt": false,
+      "game_id": "sk48-d8078629",
+      "live_cancelled_actions": 91,
+      "live_exact_no_change_interruptions": 29,
+      "live_interruptions": 29,
+      "multi_action_batches": 63,
+      "repeated_state_trailing_actions": 6,
+      "repeated_state_triggered_batches": 2
+    }
+  ],
+  "included_totals": {
+    "batches": 819,
+    "live_cancelled_actions": 180,
+    "live_exact_no_change_interruptions": 55,
+    "live_interruptions": 55,
+    "live_terminal_interruptions": 1,
+    "multi_action_batches": 203,
+    "repeated_state_trailing_actions": 6,
+    "repeated_state_triggered_batches": 2
+  },
+  "run_root": "artifacts/kaggle/duck_batch_feedback/latest",
+  "totals": {
+    "batches": 819,
+    "live_cancelled_actions": 180,
+    "live_exact_no_change_interruptions": 55,
+    "live_interruptions": 55,
+    "live_terminal_interruptions": 1,
+    "multi_action_batches": 203,
+    "repeated_state_trailing_actions": 6,
+    "repeated_state_triggered_batches": 2
+  }
+}

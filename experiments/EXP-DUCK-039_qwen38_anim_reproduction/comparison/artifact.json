@@ -1,0 +1,279 @@
+{
+  "surface": "report",
+  "manifest": {
+    "title": "Qwen runs side by side",
+    "blocks": [
+      {
+        "id": "section0",
+        "type": "markdown",
+        "body": "# Qwen runs side by side"
+      },
+      {
+        "id": "section1",
+        "type": "markdown",
+        "body": "## Executive Summary\n\nThe corrected run finished cleanly and was submitted, but performed worse offline: **5.88 versus 7.29**, a 19.3% decline. It completed 32 rather than 37 levels while taking 3,731 rather than 3,179 actions. No new official submission is recommended until the existing submission finishes scoring."
+      },
+      {
+        "id": "section2",
+        "type": "markdown",
+        "body": "## What is comparable\n\nBoth snapshots cover the same 25 public games. Score is the unweighted mean of final game scores; levels and actions are totals across games. These are offline results, not public leaderboard scores. The corrected notebook changes shutdown handling and cell order; it is not an intentional gameplay ablation.\n\n| Measure | Original run | Corrected run |\n|---|---:|---:|\n| Offline mean | 7.2913 | 5.8809 |\n| Levels completed | 37 | 32 |\n| Actions | 3,179 | 3,731 |\n| Shutdown check | Failed | Passed |\n| Official submission | Not submitted | Submitted; last checked pending |"
+      },
+      {
+        "id": "section3",
+        "type": "markdown",
+        "body": "## Regressions and gains are mixed\n\nTwelve games regressed, eight improved, and five were unchanged in score. The two biggest losses, ft09 and re86, contributed about -1.26 points to the mean, against a net decline of -1.41. Gains elsewhere offset additional losses. This pattern motivates trajectory inspection, not a claim that shutdown changes caused poorer decisions.\n\n| Game | Original score | Corrected score | Original levels | Corrected levels | Original actions | Corrected actions |\n|---|---:|---:|---:|---:|---:|---:|\n| ft09 | 36.08 | 18.39 | 4 | 3 | 129 | 136 |\n| re86 | 27.78 | 13.84 | 4 | 3 | 340 | 196 |\n| ka59 | 21.27 | 10.71 | 3 | 2 | 159 | 235 |\n| lp85 | 12.92 | 2.78 | 3 | 1 | 98 | 101 |\n| tu93 | 11.45 | 3.78 | 3 | 2 | 84 | 63 |\n| s5i5 | 8.33 | 1.78 | 2 | 1 | 95 | 178 |\n| g50t | 3.57 | 0.00 | 1 | 0 | 64 | 61 |\n| ls20 | 3.57 | 0.00 | 1 | 0 | 200 | 69 |\n| su15 | 4.81 | 1.37 | 2 | 1 | 83 | 261 |\n| wa30 | 2.22 | 0.00 | 1 | 0 | 186 | 315 |\n| cd82 | 5.88 | 4.68 | 2 | 2 | 109 | 147 |\n| sp80 | 0.67 | 0.00 | 1 | 0 | 207 | 396 |\n| r11l | 4.76 | 4.76 | 1 | 1 | 37 | 37 |\n| m0r0 | 0.00 | 0.00 | 0 | 0 | 70 | 74 |\n| sk48 | 0.00 | 0.00 | 0 | 0 | 76 | 89 |\n| sb26 | 2.78 | 2.78 | 1 | 1 | 148 | 177 |\n| tr87 | 0.00 | 0.00 | 0 | 0 | 70 | 25 |\n| ar25 | 7.96 | 8.33 | 2 | 2 | 115 | 229 |\n| lf52 | 0.64 | 1.82 | 1 | 1 | 75 | 83 |\n| bp35 | 0.00 | 1.70 | 0 | 1 | 16 | 63 |\n| vc33 | 18.92 | 21.43 | 3 | 3 | 87 | 96 |\n| dc22 | 4.76 | 13.90 | 1 | 2 | 92 | 187 |\n| cn04 | 3.91 | 13.22 | 1 | 2 | 38 | 79 |\n| tn36 | 0.00 | 10.71 | 0 | 2 | 416 | 128 |\n| sc25 | 0.00 | 11.03 | 0 | 2 | 185 | 306 |"
+      },
+      {
+        "id": "section4",
+        "type": "markdown",
+        "body": "## Recommended next steps\n\n1. Await the already-submitted corrected run's official score; do not submit a duplicate.\n2. Compare ft09 and re86 replays to identify the first materially different choices.\n3. Run an unchanged private repeat after access approval to estimate stability. It has not been launched.\n4. Only then test speculative decoding, memory settings, and compatible quantization variants separately."
+      },
+      {
+        "id": "section5",
+        "type": "markdown",
+        "body": "## Questions and limitations\n\nDid early exploratory choices, scheduling, or response variation alter progress? Two observations cannot establish a variance distribution or causal attribution. More actions did not imply more completed levels. Token counts are not compared because instrumentation differs. The original replay files are local; the additional corrected-run replay download was denied. This report compares saved metrics, not a completed side-by-side gameplay replay."
+      },
+      {
+        "id": "replays",
+        "type": "markdown",
+        "body": "## The runs diverge immediately, but early speed does not predict final success\n\nBoth games start from identical recorded boards, yet their first actions differ. In ft09 the original first clicks row 4, column 6; the corrected run clicks row 38, column 38. In re86 the original starts LEFT, the corrected run UP.\n\nFor ft09, the original completes its first three levels at cumulative actions 28, 40 and 101; the corrected run does so at 4, 11 and 73. Despite faster early progress, the corrected run stops after three completed levels, whereas the original completes a fourth at action 129. For re86, the first level finishes at 23 versus 21 actions, but the third finishes at 107 versus 167: the later corrected trajectory is less action-efficient.\n\nThese observations rule out identical action sequences and a simple uniform slowdown explanation. They do not identify sampling seeds or prove a model-quality change. Next inspect the fourth-level choices in ft09 and the second-level search in re86. Logged board-change flags are not used as causal evidence because instrumentation comparability is unverified."
+      }
+    ],
+    "sources": [],
+    "version": 1
+  },
+  "snapshot": {
+    "status": "ready",
+    "datasets": {
+      "comparison": [
+        {
+          "game": "ft09",
+          "old": 36.07856311027502,
+          "new": 18.394529507953024,
+          "old_levels": 4,
+          "new_levels": 3,
+          "old_actions": 129,
+          "new_actions": 136
+        },
+        {
+          "game": "re86",
+          "old": 27.77777777777778,
+          "new": 13.841145833333334,
+          "old_levels": 4,
+          "new_levels": 3,
+          "old_actions": 340,
+          "new_actions": 196
+        },
+        {
+          "game": "ka59",
+          "old": 21.267678387207006,
+          "new": 10.714285714285714,
+          "old_levels": 3,
+          "new_levels": 2,
+          "old_actions": 159,
+          "new_actions": 235
+        },
+        {
+          "game": "lp85",
+          "old": 12.918749132305983,
+          "new": 2.7777777777777777,
+          "old_levels": 3,
+          "new_levels": 1,
+          "old_actions": 98,
+          "new_actions": 101
+        },
+        {
+          "game": "tu93",
+          "old": 11.449626581313826,
+          "new": 3.7829599146471575,
+          "old_levels": 3,
+          "new_levels": 2,
+          "old_actions": 84,
+          "new_actions": 63
+        },
+        {
+          "game": "s5i5",
+          "old": 8.333333333333332,
+          "new": 1.7777777777777781,
+          "old_levels": 2,
+          "new_levels": 1,
+          "old_actions": 95,
+          "new_actions": 178
+        },
+        {
+          "game": "g50t",
+          "old": 3.571428571428571,
+          "new": 0,
+          "old_levels": 1,
+          "new_levels": 0,
+          "old_actions": 64,
+          "new_actions": 61
+        },
+        {
+          "game": "ls20",
+          "old": 3.571428571428571,
+          "new": 0,
+          "old_levels": 1,
+          "new_levels": 0,
+          "old_actions": 200,
+          "new_actions": 69
+        },
+        {
+          "game": "su15",
+          "old": 4.807781927287816,
+          "new": 1.3718820861678003,
+          "old_levels": 2,
+          "new_levels": 1,
+          "old_actions": 83,
+          "new_actions": 261
+        },
+        {
+          "game": "wa30",
+          "old": 2.2222222222222223,
+          "new": 0,
+          "old_levels": 1,
+          "new_levels": 0,
+          "old_actions": 186,
+          "new_actions": 315
+        },
+        {
+          "game": "cd82",
+          "old": 5.882569077013521,
+          "new": 4.678571428571429,
+          "old_levels": 2,
+          "new_levels": 2,
+          "old_actions": 109,
+          "new_actions": 147
+        },
+        {
+          "game": "sp80",
+          "old": 0.6696428571428571,
+          "new": 0,
+          "old_levels": 1,
+          "new_levels": 0,
+          "old_actions": 207,
+          "new_actions": 396
+        },
+        {
+          "game": "r11l",
+          "old": 4.761904761904762,
+          "new": 4.761904761904762,
+          "old_levels": 1,
+          "new_levels": 1,
+          "old_actions": 37,
+          "new_actions": 37
+        },
+        {
+          "game": "m0r0",
+          "old": 0,
+          "new": 0,
+          "old_levels": 0,
+          "new_levels": 0,
+          "old_actions": 70,
+          "new_actions": 74
+        },
+        {
+          "game": "sk48",
+          "old": 0,
+          "new": 0,
+          "old_levels": 0,
+          "new_levels": 0,
+          "old_actions": 76,
+          "new_actions": 89
+        },
+        {
+          "game": "sb26",
+          "old": 2.7777777777777777,
+          "new": 2.7777777777777777,
+          "old_levels": 1,
+          "new_levels": 1,
+          "old_actions": 148,
+          "new_actions": 177
+        },
+        {
+          "game": "tr87",
+          "old": 0,
+          "new": 0,
+          "old_levels": 0,
+          "new_levels": 0,
+          "old_actions": 70,
+          "new_actions": 25
+        },
+        {
+          "game": "ar25",
+          "old": 7.957437890565463,
+          "new": 8.333333333333332,
+          "old_levels": 2,
+          "new_levels": 2,
+          "old_actions": 115,
+          "new_actions": 229
+        },
+        {
+          "game": "lf52",
+          "old": 0.6384836014465644,
+          "new": 1.8181818181818181,
+          "old_levels": 1,
+          "new_levels": 1,
+          "old_actions": 75,
+          "new_actions": 83
+        },
+        {
+          "game": "bp35",
+          "old": 0,
+          "new": 1.7013888888888888,
+          "old_levels": 0,
+          "new_levels": 1,
+          "old_actions": 16,
+          "new_actions": 63
+        },
+        {
+          "game": "vc33",
+          "old": 18.923615402043172,
+          "new": 21.428571428571427,
+          "old_levels": 3,
+          "new_levels": 3,
+          "old_actions": 87,
+          "new_actions": 96
+        },
+        {
+          "game": "dc22",
+          "old": 4.761904761904762,
+          "new": 13.89925925925926,
+          "old_levels": 1,
+          "new_levels": 2,
+          "old_actions": 92,
+          "new_actions": 187
+        },
+        {
+          "game": "cn04",
+          "old": 3.9109002976190474,
+          "new": 13.222654141021488,
+          "old_levels": 1,
+          "new_levels": 2,
+          "old_actions": 38,
+          "new_actions": 79
+        },
+        {
+          "game": "tn36",
+          "old": 0,
+          "new": 10.714285714285714,
+          "old_levels": 0,
+          "new_levels": 2,
+          "old_actions": 416,
+          "new_actions": 128
+        },
+        {
+          "game": "sc25",
+          "old": 0,
+          "new": 11.025762980578676,
+          "old_levels": 0,
+          "new_levels": 2,
+          "old_actions": 185,
+          "new_actions": 306
+        }
+      ]
+    },
+    "generatedAt": "2026-09-14T10:37:20Z"
+  },
+  "sources": []
+}

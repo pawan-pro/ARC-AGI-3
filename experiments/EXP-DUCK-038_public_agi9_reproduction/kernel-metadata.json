@@ -1,0 +1,25 @@
+{
+  "id": "jatalepawan/arc3-duck-agi9-public-repro-20260903",
+  "title": "ARC3 Duck AGI9 Public Repro 20260903",
+  "code_file": "lb-1-17-arc-agi-3-qwen3-6-duck-full-code.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "keywords": [
+    "gpu"
+  ],
+  "dataset_sources": [
+    "driessmit1/arc3-vllm-h100-wheelhouse-v3",
+    "jeroencottaar/taaf-kaggle-source",
+    "driessmit1/vrfai-qwen3-6-27b-fp8-hf-snapshot"
+  ],
+  "kernel_sources": [],
+  "competition_sources": [
+    "arc-prize-2026-arc-agi-3"
+  ],
+  "model_sources": [],
+  "machine_shape": "NvidiaRtxPro6000"
+}

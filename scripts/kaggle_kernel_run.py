@@ -67,6 +67,30 @@ VARIANTS = {
         "metadata": PACKAGE_DIR / "kernel-metadata-ft09-level5-probe-bottom-right.json",
         "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_ft09_level5_probe_bottom_right/latest",
     },
+    "ft09-bounded-gray-reasoner": {
+        "metadata": PACKAGE_DIR / "kernel-metadata-ft09-bounded-gray-reasoner.json",
+        "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_ft09_bounded_gray_reasoner/latest",
+    },
+    "ft09-feedback-top-middle": {
+        "metadata": PACKAGE_DIR / "kernel-metadata-ft09-feedback-top-middle.json",
+        "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_ft09_feedback_top_middle/latest",
+    },
+    "ft09-feedback-middle-top": {
+        "metadata": PACKAGE_DIR / "kernel-metadata-ft09-feedback-middle-top.json",
+        "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_ft09_feedback_middle_top/latest",
+    },
+    "ft09-feedback-top-bottom-right": {
+        "metadata": PACKAGE_DIR / "kernel-metadata-ft09-feedback-top-bottom-right.json",
+        "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_ft09_feedback_top_bottom_right/latest",
+    },
+    "ft09-feedback-middle-bottom-right": {
+        "metadata": PACKAGE_DIR / "kernel-metadata-ft09-feedback-middle-bottom-right.json",
+        "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_ft09_feedback_middle_bottom_right/latest",
+    },
+    "ft09-all-three-objective": {
+        "metadata": PACKAGE_DIR / "kernel-metadata-ft09-all-three-objective.json",
+        "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_ft09_all_three_objective/latest",
+    },
     "full-eval-overlap": {
         "metadata": PACKAGE_DIR / "kernel-metadata-full-eval-overlap.json",
         "artifact_dir": REPO_ROOT / "artifacts/kaggle/duck_full_eval_ft09_overlap/latest",

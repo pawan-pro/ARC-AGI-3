@@ -1,0 +1,126 @@
+{
+  "experiment": "EXP-DUCK-034",
+  "structural_pass": true,
+  "checks": {
+    "one_target_game": true,
+    "validated_prefix_preserved": true,
+    "zero_llm_tokens": true,
+    "seven_action_budget": true,
+    "stopped_after_two_actions": true,
+    "first_known_effect_exact": true,
+    "second_action_guard_fired": true,
+    "single_corner_feedback_mismatch": true,
+    "no_terminal_failure": true,
+    "level_did_not_advance": true,
+    "no_rule_auto_promoted": true,
+    "exact_probe_order": true
+  },
+  "levels_completed": 4,
+  "actions_per_level": [
+    9,
+    7,
+    32,
+    21,
+    2,
+    0
+  ],
+  "tokens": 0,
+  "planned_actions": [
+    "ft09-level5-magenta-top",
+    "ft09-level5-magenta-middle",
+    "ft09-level5-magenta-top",
+    "ft09-level5-magenta-bottom_right",
+    "ft09-level5-magenta-top",
+    "ft09-level5-magenta-middle",
+    "ft09-level5-magenta-top"
+  ],
+  "executed_actions": 2,
+  "stop_reason": "prediction_mismatch",
+  "prediction_records": [
+    {
+      "step": 1,
+      "rule_id": "ft09-level5-magenta-top",
+      "action": {
+        "kind": "mouse",
+        "row": 14,
+        "col": 24
+      },
+      "before_sha256": "77716da8d4ce63eb642933c41a18902e2ef9987300d9b07f859e3b13e4a459fe",
+      "observed_sha256": "79d3b8b72472ea408445b04bc872019ffac04504b2c9936eb638c3a3f6ec6574",
+      "level_completed": false,
+      "game_over": false,
+      "run_complete": false,
+      "prediction_check": "match",
+      "mismatch_count": 0,
+      "mismatch_sample": []
+    },
+    {
+      "step": 2,
+      "rule_id": "ft09-level5-magenta-middle",
+      "action": {
+        "kind": "mouse",
+        "row": 30,
+        "col": 24
+      },
+      "before_sha256": "79d3b8b72472ea408445b04bc872019ffac04504b2c9936eb638c3a3f6ec6574",
+      "observed_sha256": "b3beee8de986c175ffc3988713df935626fb4d09192252d13cf444ef5f466f1d",
+      "level_completed": false,
+      "game_over": false,
+      "run_complete": false,
+      "prediction_check": "mismatch",
+      "mismatch_count": 1,
+      "mismatch_sample": [
+        [
+          63,
+          63,
+          12,
+          11
+        ]
+      ]
+    }
+  ],
+  "hypotheses": [
+    {
+      "hypothesis_id": "binary-xor",
+      "description": "Each operator swaps affected pixels between 14 and 15.",
+      "status": "rejected",
+      "verified_steps": 1,
+      "rejected_step": 2
+    },
+    {
+      "hypothesis_id": "monotone-set",
+      "description": "Each operator sets affected pixels from 14 to 15.",
+      "status": "rejected",
+      "verified_steps": 1,
+      "rejected_step": 2
+    }
+  ],
+  "rule_evidence": [
+    {
+      "rule_id": "ft09-level5-magenta-top",
+      "effect_pixels": 164,
+      "forward_verified_pixels": 164,
+      "reverse_verified_pixels": 0,
+      "successful_probes": 1,
+      "bidirectional_current_board": false
+    },
+    {
+      "rule_id": "ft09-level5-magenta-middle",
+      "effect_pixels": 128,
+      "forward_verified_pixels": 128,
+      "reverse_verified_pixels": 0,
+      "successful_probes": 0,
+      "bidirectional_current_board": false
+    },
+    {
+      "rule_id": "ft09-level5-magenta-bottom_right",
+      "effect_pixels": 164,
+      "forward_verified_pixels": 164,
+      "reverse_verified_pixels": 0,
+      "successful_probes": 0,
+      "bidirectional_current_board": false
+    }
+  ],
+  "interpretation": "The regional binary-XOR prediction matched all modeled operator pixels through action 2, while an additional combination-dependent corner pixel changed from 12 to 11. The strict full-board guard correctly stopped the run. Level 5 did not advance.",
+  "next_gate": "Repeat only top-then-middle from a clean level-5 start to test whether the (63,63) 12->11 feedback is deterministic. Do not resume the remaining Gray-code actions yet."
+}

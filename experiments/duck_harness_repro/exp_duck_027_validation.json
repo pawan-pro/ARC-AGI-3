@@ -1,0 +1,19 @@
+{
+  "checks": {
+    "exact_47_action_route": true,
+    "level1_success": true,
+    "level2_success": true,
+    "level3_success": true,
+    "one_target_game": true,
+    "three_levels": true,
+    "zero_analysis_events": true
+  },
+  "details": {
+    "actions": 47,
+    "analysis_events": 0,
+    "levels_completed": 3,
+    "solver_note": "tu93_route=success; level=3; helper_actions=19; tu93_route=success; level=2; helper_actions=10; tu93_route=success; level=1; helper_actions=18"
+  },
+  "recommended_integration": true,
+  "structural_pass": true
+}

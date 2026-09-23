@@ -1,0 +1,39 @@
+[{"stream_name":"stderr","time":4.078646837,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":4.079278747,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":4.079280827,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":4.079282017,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":4.384975795,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":4.385004365,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":4.385006095,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":4.385007135,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":5.079459091,"data":"PUBLIC25_VLLM_PROFILE name=kv5-bf16-mtp3-c8-cg32 env={\"TAAF_VLLM_ENABLE_PREFIX_CACHING\": \"0\", \"TAAF_VLLM_KV_CACHE_DTYPE\": \"auto\", \"TAAF_VLLM_KV_CACHE_MEMORY_BYTES\": \"5368709120\", \"TAAF_VLLM_MAX_CUDAGRAPH_CAPTURE_SIZE\": \"32\", \"TAAF_VLLM_MAX_NUM_BATCHED_TOKENS\": \"8192\", \"TAAF_VLLM_MAX_NUM_SEQS\": \"8\", \"TAAF_VLLM_MTP_TOKENS\": \"3\", \"TAAF_VLLM_OMP_THREADS\": \"1\"}\n"}
+,{"stream_name":"stdout","time":5.0797246,"data":"taaf.kaggle: TRUE_SUBMISSION=False\n"}
+,{"stream_name":"stderr","time":5.208973186,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":5.208978116,"data":"  File \"\u003cstring\u003e\", line 1, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":5.208980076,"data":"  File \"/usr/local/lib/python3.12/dist-packages/papermill/execute.py\", line 131, in execute_notebook\n"}
+,{"stream_name":"stderr","time":5.209031496,"data":"    raise_for_execution_errors(nb, output_path)\n"}
+,{"stream_name":"stderr","time":5.209051586,"data":"  File \"/usr/local/lib/python3.12/dist-packages/papermill/execute.py\", line 251, in raise_for_execution_errors\n"}
+,{"stream_name":"stderr","time":5.209082066,"data":"    raise error\n"}
+,{"stream_name":"stderr","time":5.209119786,"data":"papermill.exceptions.PapermillExecutionError: \n"}
+,{"stream_name":"stderr","time":5.209121116,"data":"---------------------------------------------------------------------------\n"}
+,{"stream_name":"stderr","time":5.209122456,"data":"Exception encountered at \"In [2]\":\n"}
+,{"stream_name":"stderr","time":5.209123676,"data":"---------------------------------------------------------------------------\n"}
+,{"stream_name":"stderr","time":5.209125016,"data":"NameError                                 Traceback (most recent call last)\n"}
+,{"stream_name":"stderr","time":5.209126346,"data":"/tmp/ipykernel_65/1875872190.py in \u003ccell line: 0\u003e()\n"}
+,{"stream_name":"stderr","time":5.209127926,"data":"      1 # Shutdown-only derivative: allow the driver a bounded drain interval.\n"}
+,{"stream_name":"stderr","time":5.209129266,"data":"      2 # Preserve the upstream process ownership checks and failure gate.\n"}
+,{"stream_name":"stderr","time":5.209130436,"data":"----\u003e 3 _teardown_source = (BUNDLE_DIR / \"serving_teardown.py\").read_text()\n"}
+,{"stream_name":"stderr","time":5.209131786,"data":"      4 _old_gpu_query = \"    gpu_after = gpu_rows()\\n\"\n"}
+,{"stream_name":"stderr","time":5.209133186,"data":"      5 _new_gpu_query = \"\"\"    gpu_drain_started = time.monotonic()\n"}
+,{"stream_name":"stderr","time":5.209134506,"data":"\n"}
+,{"stream_name":"stderr","time":5.209138556,"data":"NameError: name 'BUNDLE_DIR' is not defined\n"}
+,{"stream_name":"stderr","time":5.209139556,"data":"\n"}
+,{"stream_name":"stderr","time":6.31173605,"data":"/usr/local/lib/python3.12/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":6.31175293,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":6.39116667,"data":"/usr/local/lib/python3.12/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":6.39117841,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":6.728022913,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":6.864159406,"data":"[NbConvertApp] Writing 43491 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":8.014674515,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":8.422237143,"data":"[NbConvertApp] Writing 367504 bytes to __results__.html\n"}
+]
